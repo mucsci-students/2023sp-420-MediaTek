@@ -2,6 +2,7 @@ import time
 import re
 import IdentifyBaseWord as np
 import wordlist as wl
+import Commands
 
 #gameState 0 means the game is not being played
 gameState = 0
@@ -25,8 +26,8 @@ if(playGame == "yes"):
     gameState = 1
 
 while(gameState == 1):
-    print("Commands should always we started with -, an example would be -help")
-    print("All input without - are considered guesses")
+    #print("Commands should always we started with !, an example would be !help")
+    #print("All input without ! are considered guesses")
     userInput = input("Please enter a guess/command: ")
     userInput.lower()
     hasNum = bool(re.search(r'\d', userInput))
@@ -45,12 +46,11 @@ while(gameState == 1):
 
     #will rewrite this into pattern matching later, should've thought of this from the start but slipped my mind lol.
     #run the guess function
-    if '-' not in userInput:
+    if '!' not in userInput:
         print("Running the guess function")
     
     match userInput:
-        case "-new puzzle":
-            print("User entered the new puzzle command")
+        case "!newpuzzle":
             isAuto = input("Do you want the puzzle to be randomly generated?")
             isAuto.lower()
             while (isAuto != 'yes') and (isAuto != 'no'):
@@ -65,25 +65,24 @@ while(gameState == 1):
                 print("User letters are: " + str(np.bguserLetters))
                 print("Required letter is: *" + str(np.bgreqLetter))
                 wl.generateWordList(np.bgreqLetter,np.bguserLetters)
-        case "-show puzzle":
-            print("User entered the show puzzle command")
-        case "-show words":
-            print("User entered the show words command")
-        case "-shuffle":
-            print("User entered the shuffle  command")
-        case "-save current":
-            print("User entered the save current command")
-        case "-save puzzle":
-            print("User entered the save puzzle command")
-        case "-load puzzle":
-            print("user entered the load command")
-        case "-status":
-            print("user entered the status command")
-        case "-help":
-            print("user entered the help command")
-        case "-exit":
-            print("user entered the exit command")
-
+        case "!showpuzzle":
+            Commands.showPuzzle()
+        case "!guess":
+            Commands.guess()
+        case "!showfoundwords":
+            Commands.showFoundWords()
+        case "!shuffle":
+            Commands.shuffle()
+        case "!savepuzzle":
+            Commands.savePuzzle()
+        case "!loadpuzzle":
+            Commands.loadPuzzle()
+        case "!showstatus":
+            Commands.showStatus()
+        case "!help":
+            Commands.help()
+        case "!exit":
+            Commands.exitCommand()
 
 
     
