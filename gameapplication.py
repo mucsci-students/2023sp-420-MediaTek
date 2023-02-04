@@ -3,26 +3,55 @@ import re
 import IdentifyBaseWord as np
 import wordlist as wl
 import Commands
+import random
 
 #gameState 0 means the game is not being played
 gameState = 0
+checkAuto = 0
+checkBase = 0
+gaUserLetters = None
+gaReqLetter = None
+
+def shuffleAuto(userLetters):
+    #SHUFFLE ALGO
+    #replace the brackets within the user letters string
+    replaceString = userLetters.replace("[","").replace("]","")
+    #convert it to a list
+    toList = list(replaceString)
+    #use shuffle with the list to change the positions of the letters.
+    random.shuffle(toList)
+    #afterwards convert list to a string.
+    shuffledLetters = ''.join(toList)
+    print(shuffledLetters)
+    return shuffledLetters
+
+
+
+def shuffleBase(userLetters):
+    #SHUFFLE ALGO
+    replaceString = userLetters.replace("[","").replace("]","")
+    toList = list(replaceString)
+    random.shuffle(toList)
+    shuffledLetters = ''.join(toList)
+    print(shuffledLetters)
+    return shuffledLetters
 
 
 print("Hello welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 playGame = input("Would you like to play our game? enter yes or no: ")
 
-while (playGame != 'yes') and (playGame != 'no'):
+while (playGame.lower() != 'yes') and (playGame.lower() != 'no'):
     print("Invalid input please enter yes or no!")
     playGame = input("Would you like to play our game? enter yes or no\n")
     if(playGame == "yes" or playGame == "no"):
         break
 
-if(playGame == "no"):
+if(playGame.lower() == "no"):
     print("Ok, goodbye!")
     time.sleep(2.5)
     exit()
-if(playGame == "yes"):
+if(playGame.lower() == "yes"):
     gameState = 1
 
 while(gameState == 1):
@@ -60,11 +89,23 @@ while(gameState == 1):
                 print("User letters are: " + str(np.userLetters))
                 print("Required letter is: *" + str(np.reqLetter))
                 wl.generateWordList(np.reqLetter,np.userLetters)
+                gaUserLetters = str(np.userLetters)
+                gaReqLetter = str(np.reqLetter)
+                print("Game apps user letters: " + gaUserLetters)
+                print("Game apps req letter: " + gaReqLetter)
+                checkAuto = 1
+                checkBase = 0
             elif (isAuto == 'no'):
                 np.baseGame() 
                 print("User letters are: " + str(np.bguserLetters))
                 print("Required letter is: *" + str(np.bgreqLetter))
                 wl.generateWordList(np.bgreqLetter,np.bguserLetters)
+                gaUserLetters = str(np.bguserLetters)
+                gaReqLetter = str(np.bgreqLetter)
+                print("Game apps user letters: " + gaUserLetters)
+                print("Game apps req letter: " + gaReqLetter)
+                checkAuto = 0
+                checkBase = 1
         case "!showpuzzle":
             Commands.showPuzzle()
         case "!guess":
@@ -72,7 +113,12 @@ while(gameState == 1):
         case "!showfoundwords":
             Commands.showFoundWords()
         case "!shuffle":
-            Commands.shuffle()
+            if(checkAuto == 1):
+                gaUserLetters = shuffleAuto(gaUserLetters)
+                print("After SHUFFLING these are the letters!: " + gaUserLetters)
+            if(checkBase == 1):
+                gaUserLetters = shuffleBase(gaUserLetters)
+                print("After SHUFFLING these are the letters!: " + gaUserLetters)
         case "!savepuzzle":
             Commands.savePuzzle()
         case "!loadpuzzle":
@@ -85,7 +131,6 @@ while(gameState == 1):
             Commands.exitCommand()
 
 
-    
     
 
 
