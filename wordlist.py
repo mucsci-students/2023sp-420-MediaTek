@@ -11,6 +11,8 @@
 # imports the json library
 import json
 # Actual function itself
+#words that user has guessed correctly
+userWordList = []
 def generateWordList (reqLetter, userLetter):
     fullwordlist = list()
     counter = 0
@@ -44,8 +46,8 @@ def generateWordList (reqLetter, userLetter):
             # print(word)
             userunique.append(word)
             counter = counter + 1
-    print(userunique)
     print(counter)
+    return userunique
     
 # Checks a word for required letters.
 def checkLetters(word, unique):
@@ -58,3 +60,10 @@ def checkLetters(word, unique):
     return value
     
 #generateWordList("e", "aerilud")
+
+def storeWordList(theList):
+    return theList
+
+
+def checkGuess(userInput):
+    getList = list()
