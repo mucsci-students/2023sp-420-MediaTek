@@ -2,6 +2,7 @@ import time
 import re
 import IdentifyBaseWord as np
 import wordlist as wl
+import guess
 import Commands
 import random
 
@@ -9,8 +10,10 @@ import random
 gameState = 0
 checkAuto = 0
 checkBase = 0
-gaUserLetters = None
-gaReqLetter = None
+getTotal = 0
+puzzleStarted = 0
+gaUserLetters = "empty"
+gaReqLetter = "empty"
 
 def shuffleAuto(userLetters):
     #SHUFFLE ALGO
@@ -25,8 +28,6 @@ def shuffleAuto(userLetters):
     print(shuffledLetters)
     return shuffledLetters
 
-
-
 def shuffleBase(userLetters):
     #SHUFFLE ALGO
     replaceString = userLetters.replace("[","").replace("]","")
@@ -36,6 +37,86 @@ def shuffleBase(userLetters):
     print(shuffledLetters)
     return shuffledLetters
 
+def userGuess(userInput, userList):
+    totalPoints = 0
+    print(userList)
+    #search if what the user types exists within the list
+    if gaReqLetter in userInput:
+        if userInput in userList:
+            #create set from user input
+            toSet = set(userInput)
+            #determine length of set to be later to check for 7 unique characters (if a pangram)
+            length = len(userInput)
+            #store into user word bank
+            wl.userWordList.append(userInput)
+            #print statements for testing
+            print("found!")
+            print(userInput)
+            print(userList)
+            print("user word list:")
+            print(wl.userWordList)
+            #remove the word from the word bank.
+            userList.remove(userInput)
+            #generates user points based on the length, if it's a pangram then add an additional 7 points.
+            match length:
+                case 4:
+                    totalPoints += length
+                case 5:
+                    totalPoints += length
+                case 6:
+                    totalPoints += length
+                case 7:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+                case 8:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+                case 9:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+                case 10:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+                case 11:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+                case 12:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+                case 13:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+                case 14:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+                case 15:
+                    if(len(toSet) == 7):
+                        totalPoints += (length + 7)
+                    else:
+                        totalPoints += length
+        else:
+            print("not found!")
+            print(userInput)
+            print(userList)
+    else:
+        print("hey you didn't use the required letter!")
+    return totalPoints
 
 print("Hello welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
@@ -61,25 +142,29 @@ while(gameState == 1):
     userInput.lower()
     hasNum = bool(re.search(r'\d', userInput))
     if (hasNum == True):
-        userInput = input("No numbers allowed please reenter a guess/command: ")
+        userInput = input("No numbers/special characters besides ! allowed please reenter a guess/command: ")
         hasNum = bool(re.search(r'\d', userInput))
         while(hasNum != False):
             userInput = input("No numbers allowed please reenter a guess/command: ")
             hasNum = bool(re.search(r'\d', userInput))
+
     
     #exit it put below all commands until their functions are implemented
-    while(len(userInput) < 4):
-        userInput = input("Input must be >= 4, please reenter a guess/command: ")
-
-
+    while(len(userInput) < 4) or (len(userInput) > 15):
+        userInput = input("Input must be >= 4 and <= 15, please reenter a guess/command: ")
 
     #will rewrite this into pattern matching later, should've thought of this from the start but slipped my mind lol.
     #run the guess function
     if '!' not in userInput:
-        print("Running the guess function")
-    
+        if(puzzleStarted == 1):
+            points = userGuess(userInput,getList)
+            getTotal += points
+            print(getTotal)
+        else:
+            print("No word bank has been generated yet!")
     match userInput:
         case "!newpuzzle":
+            puzzleStarted = 1
             isAuto = input("Do you want the puzzle to be randomly generated?")
             isAuto.lower()
             while (isAuto != 'yes') and (isAuto != 'no'):
@@ -88,20 +173,17 @@ while(gameState == 1):
                 gaUserLetters, gaReqLetter = np.autoGame()
                 print("Game apps user letters: " + gaUserLetters)
                 print("Game apps req letter: " + gaReqLetter)
-                #print("User letters are: " + str(np.userLetters))
-                #print("Required letter is: *" + str(np.reqLetter))
-                wl.generateWordList(gaReqLetter,gaUserLetters)
-                #gaUserLetters = str(np.userLetters)
-                #gaReqLetter = str(np.reqLetter)
+                getList = wl.generateWordList(gaReqLetter,gaUserLetters)
+                print(getList)
                 checkAuto = 1
                 checkBase = 0
             elif (isAuto == 'no'):
-                gaUserLetters, gaReqLetter = np.baseGame() 
-                #print("User letters are: " + str(np.bguserLetters))
-                #print("Required letter is: *" + str(np.bgreqLetter))
-                wl.generateWordList(gaReqLetter,gaUserLetters)
-                #gaUserLetters = str(np.bguserLetters)
-                #gaReqLetter = str(np.bgreqLetter)
+                gaUserLetters, gaReqLetter = np.baseGame()
+                #if these values are empty that means their pangram doesn't exist, rerun function until a valid one is entered.
+                while(gaUserLetters == "empty") and (gaReqLetter == "empty"):
+                    gaUserLetters,gaReqLetter = np.baseGame()
+                getList = wl.generateWordList(gaReqLetter,gaUserLetters)
+                print(getList)
                 print("Game apps user letters: " + gaUserLetters)
                 print("Game apps req letter: " + gaReqLetter)
                 checkAuto = 0
@@ -129,15 +211,17 @@ while(gameState == 1):
             Commands.help()
         case "!exit":
             Commands.exitCommand()
-
-
     
 
 
+#!save command: prompt user to enter a name for the file
+# create a json file with that name
+# then store data into it.
 
+#!load command: prompt user to enter a name for the file
+#load data back into program
 
-
-
-
-
-
+#store required letter
+#store userLetters
+#store user words guessed
+#store word bank
