@@ -10,10 +10,10 @@
 '''
 # imports the json library
 import json
-
 # Actual function itself
 def generateWordList (reqLetter, userLetter):
     fullwordlist = list()
+    counter = 0
     
     # Start with getting every word in the wordlist json.
     with open('wordbank.json', "r") as wordbank:
@@ -43,8 +43,9 @@ def generateWordList (reqLetter, userLetter):
         if word.count(reqLetter) >= 1:
             # print(word)
             userunique.append(word)
-    
+            counter = counter + 1
     print(userunique)
+    print(counter)
     
 # Checks a word for required letters.
 def checkLetters(word, unique):

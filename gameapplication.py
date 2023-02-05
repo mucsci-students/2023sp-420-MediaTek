@@ -85,23 +85,23 @@ while(gameState == 1):
             while (isAuto != 'yes') and (isAuto != 'no'):
                isAuto = input("Invalid input please enter yes or no!: ")
             if(isAuto == 'yes'):
-                np.autoGame()
-                print("User letters are: " + str(np.userLetters))
-                print("Required letter is: *" + str(np.reqLetter))
-                wl.generateWordList(np.reqLetter,np.userLetters)
-                gaUserLetters = str(np.userLetters)
-                gaReqLetter = str(np.reqLetter)
+                gaUserLetters, gaReqLetter = np.autoGame()
                 print("Game apps user letters: " + gaUserLetters)
                 print("Game apps req letter: " + gaReqLetter)
+                #print("User letters are: " + str(np.userLetters))
+                #print("Required letter is: *" + str(np.reqLetter))
+                wl.generateWordList(gaReqLetter,gaUserLetters)
+                #gaUserLetters = str(np.userLetters)
+                #gaReqLetter = str(np.reqLetter)
                 checkAuto = 1
                 checkBase = 0
             elif (isAuto == 'no'):
-                np.baseGame() 
-                print("User letters are: " + str(np.bguserLetters))
-                print("Required letter is: *" + str(np.bgreqLetter))
-                wl.generateWordList(np.bgreqLetter,np.bguserLetters)
-                gaUserLetters = str(np.bguserLetters)
-                gaReqLetter = str(np.bgreqLetter)
+                gaUserLetters, gaReqLetter = np.baseGame() 
+                #print("User letters are: " + str(np.bguserLetters))
+                #print("Required letter is: *" + str(np.bgreqLetter))
+                wl.generateWordList(gaReqLetter,gaUserLetters)
+                #gaUserLetters = str(np.bguserLetters)
+                #gaReqLetter = str(np.bgreqLetter)
                 print("Game apps user letters: " + gaUserLetters)
                 print("Game apps req letter: " + gaReqLetter)
                 checkAuto = 0

@@ -14,8 +14,8 @@ pangram_files = ['7letterpangram.json','8letterpangram.json','9letterpangram.jso
 '14letterpangram.json','15letterpangram.json']
 
 def autoGame():
-    global userLetters
-    global reqLetter
+    userLetters = None
+    reqLetter = None
     print("running the function")
     #random variable to choose from a random pangram list
     randNum = random.randint(0,8)
@@ -95,10 +95,11 @@ def autoGame():
     print(test)
     userLetters = re.sub(r'[^a-zA-z]+','', str(test))
     print(userLetters)
+    return userLetters, reqLetter
     
 def baseGame():
-    global bguserLetters
-    global bgreqLetter
+    bguserLetters = None
+    bgreqLetter = None
     getWords = list()
 
         #"word": "abhenry"
@@ -107,8 +108,8 @@ def baseGame():
     userInput = input("Please give a valid pangram: ")
     userInput.lower()
     
-    while(len(userInput) <= 7):
-        userInput = input("Input must be >= 7, please reenter a guess/command: ")
+    while(len(userInput) < 7):
+        userInput = input("Input must be > 6, please reenter a guess/command: ")
     
     getLength = len(userInput)
     #use pattern matching to load the file based on the length of the pangram the user gives.
@@ -128,6 +129,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
@@ -142,6 +144,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
@@ -156,6 +159,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
@@ -170,6 +174,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
@@ -184,6 +189,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
@@ -198,6 +204,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
@@ -212,6 +219,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
@@ -226,6 +234,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
@@ -240,6 +249,7 @@ def baseGame():
                 bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
                 randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
                 bgreqLetter = bguserLetters[randReqLetterNum]
+                return bguserLetters, bgreqLetter
             else: 
                 print("uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 baseGame()
