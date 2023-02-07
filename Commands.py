@@ -1,4 +1,7 @@
 import sys
+import IdentifyBaseWord as np
+import savegame
+import loadgame
 
 
 
@@ -32,8 +35,8 @@ def guess():
 def shuffle():
     print()
 
-def savePuzzle():
-    print()
+def savePuzzle(userLetters, requiredLetter, guessedWords, wordBank, totalPoints):
+    savegame.savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints)
 
 def loadPuzzle():
     print()
