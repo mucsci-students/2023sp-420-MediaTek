@@ -39,8 +39,7 @@ def savePuzzle(userLetters, requiredLetter, guessedWords, wordBank, totalPoints)
     savegame.savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints)
 
 def loadPuzzle():
-    loadList = loadgame.loadgame()
-    return loadList
+    print()
 
 def showStatus():
     print()
