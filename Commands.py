@@ -50,7 +50,7 @@ def exitCommand():
     while(userInput != "yes") and (userInput != "no"):
         userInput = input("Please enter a yes OR no: ")
     if(userInput == "yes"):
-        #save command
+        savePuzzle()
         print("saved")
     elif(userInput == "no"):
         #Exit
