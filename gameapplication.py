@@ -2,9 +2,10 @@ import time
 import re
 import IdentifyBaseWord as np
 import wordlist as wl
-import guess
 import Commands
 import random
+import json
+import loadgame
 
 #gameState 0 means the game is not being played
 gameState = 0
@@ -14,6 +15,27 @@ getTotal = 0
 puzzleStarted = 0
 gaUserLetters = "empty"
 gaReqLetter = "empty"
+getList = list()
+
+# loads game files from savegame.json and organizes them in a list.
+def gameLoad():
+    # open the json file and load its contents
+    loadGame = list()
+    with open('savegame.json', "r") as save:
+        loaded = json.load(save)
+    # for each element in a file, make it a separate entry in the list.
+    for l in loaded:
+        loadGame.append(l)
+    
+    # assign values based on the position of each element in the list.
+    gaUserLetters = loadgame.loadUserLetters(loadGame[0])
+    gaReqLetter = loadgame.loadRequiredLetter(loadGame[1])
+    wl.userWordList = loadgame.loadGuessedWords(loadGame[2])
+    getList = loadgame.loadWordBank(loadGame[3])
+    getTotal = loadgame.loadTotalPoints(loadGame[4])
+    
+    #return everything in the end.
+    return gaUserLetters, gaReqLetter, wl.userWordList, getList, int(getTotal)
 
 def shuffleAuto(userLetters):
     #SHUFFLE ALGO
@@ -202,9 +224,11 @@ while(gameState == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
                 print("After SHUFFLING these are the letters!: " + gaUserLetters)
         case "!savepuzzle":
-            Commands.savePuzzle()
+            Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
         case "!loadpuzzle":
-            Commands.loadPuzzle()
+            gaUserLetter, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad()
+            puzzleStarted = 1
+            print(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
         case "!showstatus":
             Commands.showStatus()
         case "!help":
