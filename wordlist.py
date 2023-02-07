@@ -27,7 +27,6 @@ def generateWordList (reqLetter, userLetter):
     unique = list()
     for i in userLetter:
         unique.extend(i)
-    # print(unique)
     
     # Get a list of every word that contains only the user's letters.
     userwordlist = list()
