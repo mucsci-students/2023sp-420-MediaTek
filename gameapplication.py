@@ -16,6 +16,7 @@ puzzleStarted = 0
 gaUserLetters = "empty"
 gaReqLetter = "empty"
 getList = list()
+isLoaded = 0
 
 # loads game files from savegame.json and organizes them in a list.
 def gameLoad():
@@ -186,9 +187,17 @@ while(gameState == 1):
             print("No word bank has been generated yet!")
     match userInput:
         case "!newpuzzle":
-            puzzleStarted = 1
-            isAuto = input("Do you want the puzzle to be randomly generated?")
+            if (puzzleStarted == 1):
+                wantSave = input("Hey, you ha ve a puzzle in progress! Do you want to save? ")
+                if(wantSave.lower() == "yes"):
+                    print("Alright saving your game! ")
+                    Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
+                    time.sleep(1)
+                else:
+                    print("Ok, lets generate a new puzzle! ")
+            isAuto = input("Do you want the puzzle to be randomly generated? ")
             isAuto.lower()
+            puzzleStarted = 1
             while (isAuto != 'yes') and (isAuto != 'no'):
                isAuto = input("Invalid input please enter yes or no!: ")
             if(isAuto == 'yes'):
@@ -199,7 +208,6 @@ while(gameState == 1):
                 print(getList)
                 checkAuto = 1
                 checkBase = 0
-                wl.userWordList.clear()
             elif (isAuto == 'no'):
                 gaUserLetters, gaReqLetter = np.baseGame()
                 #if these values are empty that means their pangram doesn't exist, rerun function until a valid one is entered.
@@ -211,6 +219,9 @@ while(gameState == 1):
                 print("Game apps req letter: " + gaReqLetter)
                 checkAuto = 0
                 checkBase = 1
+            wl.userWordList.clear()
+            getTotal = 0
+            isLoaded = 0
         case "!showpuzzle":
             Commands.showPuzzle()
         case "!guess":
@@ -224,11 +235,17 @@ while(gameState == 1):
             if(checkBase == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
                 print("After SHUFFLING these are the letters!: " + gaUserLetters)
+            if(isLoaded == 1):
+                gaUserLetters = shuffleBase(gaUserLetters)
+                print("After SHUFFLING these are the letters!: " + gaUserLetters)
         case "!savepuzzle":
             Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
         case "!loadpuzzle":
-            gaUserLetter, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad()
+            gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad()
             puzzleStarted = 1
+            isLoaded = 1
+            checkBase = 0
+            checkAuto = 0
             print(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
         case "!showstatus":
             Commands.showStatus()
