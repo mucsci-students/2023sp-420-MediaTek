@@ -7,15 +7,30 @@ import random
 import json
 import loadgame
 
+
 #gameState 0 means the game is not being played
+#variable will keep the game going basically.
 gameState = 0
+
+#I don't fully remember why I chose to do it this way.
+#if the user chose to automatically generate a puzzle
 checkAuto = 0
+
+#if the user chose to give a word to the puzzle
 checkBase = 0
+
+#Tracks total number of points the user has earned through correct guesses
 getTotal = 0
+
+#used to store if a puzzle has been started or not.
 puzzleStarted = 0
+
+#set the variables to empty to solve some really weird TypeError with None, not sure if this was the best way to do this.
 gaUserLetters = "empty"
 gaReqLetter = "empty"
 getList = list()
+
+#tracks if a puzzle was loaded or not.
 isLoaded = 0
 
 # loads game files from savegame.json and organizes them in a list.
@@ -145,24 +160,29 @@ print("Hello welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 playGame = input("Would you like to play our game? enter yes or no: ")
 
+#While loop will check whether or not the user wants to play our game.
 while (playGame.lower() != 'yes') and (playGame.lower() != 'no'):
     print("Invalid input please enter yes or no!")
     playGame = input("Would you like to play our game? enter yes or no\n")
     if(playGame == "yes" or playGame == "no"):
         break
-
+#If no, then exit the program.
 if(playGame.lower() == "no"):
     print("Ok, goodbye!")
     time.sleep(2.5)
     exit()
+#If yes then the game begins!
 if(playGame.lower() == "yes"):
     gameState = 1
 
+#big while loop for our game.
 while(gameState == 1):
     #print("Commands should always we started with !, an example would be !help")
     #print("All input without ! are considered guesses")
     userInput = input("Please enter a guess/command: ")
     userInput.lower()
+    #searches the user input for any digits, would like to get this working for special characters but it wasn't.
+    #if it has a number we don't want to take the input, ask again!
     hasNum = bool(re.search(r'\d', userInput))
     if (hasNum == True):
         userInput = input("No numbers/special characters besides ! allowed please reenter a guess/command: ")
@@ -176,7 +196,7 @@ while(gameState == 1):
     while(len(userInput) < 4) or (len(userInput) > 15):
         userInput = input("Input must be >= 4 and <= 15, please reenter a guess/command: ")
 
-    #will rewrite this into pattern matching later, should've thought of this from the start but slipped my mind lol.
+    #checks whether or not the users input is a command or not by checking for !.
     #run the guess function
     if '!' not in userInput:
         if(puzzleStarted == 1):
@@ -185,8 +205,13 @@ while(gameState == 1):
             print(getTotal)
         else:
             print("No word bank has been generated yet!")
+    #pattern matching to match the users input to the available commands
+    #I should find a way to add some type of fall through case possibly case _: since a base case doesn't exist for pattern matching in python?
     match userInput:
         case "!newpuzzle":
+            #This if statement will check if a puzzle has been started
+            #This is so after the user enters the puzzle command again after the first time, or if they loaded a puzzle
+            #Prompt to ask them if they want to save the game
             if (puzzleStarted == 1):
                 wantSave = input("Hey, you ha ve a puzzle in progress! Do you want to save? ")
                 if(wantSave.lower() == "yes"):
@@ -195,15 +220,20 @@ while(gameState == 1):
                     time.sleep(1)
                 else:
                     print("Ok, lets generate a new puzzle! ")
+            #Checks if the user wants to automatically generate the puzzle or not, regardless of their choice a puzzle is started.
             isAuto = input("Do you want the puzzle to be randomly generated? ")
             isAuto.lower()
             puzzleStarted = 1
+
+            #Checks the users choice.
             while (isAuto != 'yes') and (isAuto != 'no'):
                isAuto = input("Invalid input please enter yes or no!: ")
             if(isAuto == 'yes'):
+                #generate the user letters and required letters
                 gaUserLetters, gaReqLetter = np.autoGame()
                 print("Game apps user letters: " + gaUserLetters)
                 print("Game apps req letter: " + gaReqLetter)
+                #generate the unique word list.
                 getList = wl.generateWordList(gaReqLetter,gaUserLetters)
                 print(getList)
                 checkAuto = 1
@@ -219,8 +249,11 @@ while(gameState == 1):
                 print("Game apps req letter: " + gaReqLetter)
                 checkAuto = 0
                 checkBase = 1
+            #clear the users guessed word list if they generate a new puzzle.
             wl.userWordList.clear()
+            #set the total to 0
             getTotal = 0
+            #set isLoaded to false
             isLoaded = 0
         case "!showpuzzle":
             Commands.showPuzzle()
@@ -229,6 +262,8 @@ while(gameState == 1):
         case "!showfoundwords":
             Commands.showFoundWords()
         case "!shuffle":
+            #I HAVE NO IDEA WHY I MADE 2 SHUFFLE FUNCTIONS BUT I DID.
+            #SHUFFLES THE LETTERS BASED ON THEIR CHOICE. 
             if(checkAuto == 1):
                 gaUserLetters = shuffleAuto(gaUserLetters)
                 print("After SHUFFLING these are the letters!: " + gaUserLetters)
@@ -241,9 +276,13 @@ while(gameState == 1):
         case "!savepuzzle":
             Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
         case "!loadpuzzle":
+            #load the data from the save json file
             gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad()
+            #set that a puzzle is started.
             puzzleStarted = 1
+            #set that a puzzle is loaded.
             isLoaded = 1
+            #dont care about these 2 in this state.
             checkBase = 0
             checkAuto = 0
             print(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
