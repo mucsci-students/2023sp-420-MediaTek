@@ -33,6 +33,8 @@ def gameLoad():
     wl.userWordList = loadgame.loadGuessedWords(loadGame[2])
     getList = loadgame.loadWordBank(loadGame[3])
     getTotal = loadgame.loadTotalPoints(loadGame[4])
+    
+    #return everything in the end.
     return gaUserLetters, gaReqLetter, wl.userWordList, getList, int(getTotal)
 
 def shuffleAuto(userLetters):
