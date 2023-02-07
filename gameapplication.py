@@ -199,6 +199,7 @@ while(gameState == 1):
                 print(getList)
                 checkAuto = 1
                 checkBase = 0
+                wl.userWordList.clear()
             elif (isAuto == 'no'):
                 gaUserLetters, gaReqLetter = np.baseGame()
                 #if these values are empty that means their pangram doesn't exist, rerun function until a valid one is entered.
