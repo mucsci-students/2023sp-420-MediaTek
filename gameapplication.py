@@ -17,13 +17,17 @@ gaUserLetters = "empty"
 gaReqLetter = "empty"
 getList = list()
 
+# loads game files from savegame.json and organizes them in a list.
 def gameLoad():
+    # open the json file and load its contents
     loadGame = list()
     with open('savegame.json', "r") as save:
         loaded = json.load(save)
+    # for each element in a file, make it a separate entry in the list.
     for l in loaded:
         loadGame.append(l)
     
+    # assign values based on the position of each element in the list.
     gaUserLetters = loadgame.loadUserLetters(loadGame[0])
     gaReqLetter = loadgame.loadRequiredLetter(loadGame[1])
     wl.userWordList = loadgame.loadGuessedWords(loadGame[2])
