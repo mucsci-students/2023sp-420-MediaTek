@@ -48,11 +48,12 @@ def exitCommand():
     print("Whoa, slow down buddy! You're about to lose all of your epic progress, would you like to save your game first? yes/no")
     userInput = input()
     while(userInput != "yes") and (userInput != "no"):
-        userInput = input("Please enter a yes OR no: ")
+        userInput = input("Please enter \"yes\" or \"no:\": ")
     if(userInput == "yes"):
         savePuzzle()
-        print("saved")
+        print("Puzzle saved! Goodbye!")
     elif(userInput == "no"):
         #Exit
+        print("Okay! See you on the other side!")
         exit()
     sys.exit()

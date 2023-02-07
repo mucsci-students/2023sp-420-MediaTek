@@ -59,7 +59,3 @@ def checkLetters(word, unique):
 
 def storeWordList(theList):
     return theList
-
-
-def checkGuess(userInput):
-    getList = list()
