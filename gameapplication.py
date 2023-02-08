@@ -16,6 +16,7 @@ puzzleStarted = 0
 gaUserLetters = "empty"
 gaReqLetter = "empty"
 getList = list()
+showRank = ""
 
 # loads game files from savegame.json and organizes them in a list.
 def gameLoad():
@@ -80,7 +81,7 @@ def userGuess(userInput, userList):
             #remove the word from the word bank.
             userList.remove(userInput)
             #generates user points based on the length, if it's a pangram then add an additional 7 points.
-            match length:
+            match length: 
                 case 4:
                     totalPoints += length
                 case 5:
@@ -140,13 +141,41 @@ def userGuess(userInput, userList):
         print("hey you didn't use the required letter!")
     return totalPoints
 
+#function for rank, currently assigns ranks based on static point values but will be updated to work based on percentages of total points from userunique (word bank for a puzzle)
+def gameRank(getTotal):
+    #variable to store ranks
+    puzzleRank = ""
+    #for a game in progress, matches point values to ranks
+    if(puzzleStarted == 1):
+        match getTotal:
+            case 0:
+                puzzleRank = "Beginner"
+            case 15:
+                puzzleRank = "Novice"
+            case 30:
+                puzzleRank = "Advanced"
+            case 65:
+                puzzleRank = "Expert"
+            case 150:
+                puzzleRank = "Master"
+    #messages for when a user reaches a new rank
+    if (getTotal == 15):
+        print("Moving up! You are now a novice.")
+    elif (getTotal == 30):
+        print("You're now advanced, congrats!")
+    elif (getTotal == 65):
+        print("You've reached expert status. Keep going!")
+    elif (getTotal == 150):
+        print("You're a spelling bee master! Can you guess all of the remaining words?")
+    return puzzleRank
+
 print("Hello welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 playGame = input("Would you like to play our game? enter yes or no: ")
 
 while (playGame.lower() != 'yes') and (playGame.lower() != 'no'):
     print("Invalid input please enter yes or no!")
-    playGame = input("Would you like to play our game? enter yes or no\n")
+    playGame = input("Would you like to play our game? enter yes or no: \n")
     if(playGame == "yes" or playGame == "no"):
         break
 
@@ -187,7 +216,7 @@ while(gameState == 1):
     match userInput:
         case "!newpuzzle":
             puzzleStarted = 1
-            isAuto = input("Do you want the puzzle to be randomly generated?")
+            isAuto = input("Do you want the puzzle to be randomly generated? ")
             isAuto.lower()
             while (isAuto != 'yes') and (isAuto != 'no'):
                isAuto = input("Invalid input please enter yes or no!: ")
@@ -231,7 +260,8 @@ while(gameState == 1):
             puzzleStarted = 1
             print(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
         case "!showstatus":
-            Commands.showStatus()
+            showRank = gameRank(getTotal)
+            print(showRank)
         case "!help":
             Commands.help()
         case "!exit":
