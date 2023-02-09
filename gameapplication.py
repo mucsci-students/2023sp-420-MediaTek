@@ -297,8 +297,11 @@ while(gameState == 1):
             puzzleStarted = 1
             print("Puzzle loaded!")
         case "!showstatus":
-            showRank = gameRank(showRank)
-            print(showRank)
+            if (puzzleStarted == 0):
+                print("Can't show a status for a puzzle that isn't in progress!")
+            else:
+                showRank = gameRank(showRank)
+                print(showRank)
         case "!help":
             Commands.help()
         case "!exit":
