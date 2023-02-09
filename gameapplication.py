@@ -173,8 +173,7 @@ def gameRank(puzzleRank):
     #messages for when a user reaches a new rank
     return puzzleRank
     
-print(puzzleTotal)
-print("Hello welcome to MediaTek's Spelling bee!")
+print("Hello! Welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 playGame = input("Would you like to play our game? (yes/no): ")
 
