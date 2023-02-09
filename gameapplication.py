@@ -29,6 +29,8 @@ puzzleStarted = 0
 gaUserLetters = "empty"
 gaReqLetter = "empty"
 getList = list()
+showRank = ""
+puzzleTotal = 0
 
 #tracks if a puzzle was loaded or not.
 isLoaded = 0
@@ -151,7 +153,28 @@ def userGuess(userInput, userList):
         print("Hey! you didn't use the required letter!")
     return totalPoints
 
-print("Hello! Welcome to MediaTek's Spelling Bee!")
+
+#function for rank, currently assigns ranks based on static point values but will be updated to work based on percentages of total points from userunique (word bank for a puzzle)
+def gameRank(puzzleRank):
+    #variable to store ranks
+    puzzleRank = ""
+    #for a game in progress, matches point values to ranks
+    #redo so that we take words from userunique, get point values (can yoink code above ^) for total value, use that value to do like getTotal < value * .10 (ten percent?) etc... 
+    if (getTotal < 10):
+        puzzleRank = "Beginner"
+    elif (getTotal >= 10) and (getTotal < 30):
+        puzzleRank = "Novice"
+    elif (getTotal >= 30) and (getTotal < 65):
+        puzzleRank = "Advanced"
+    elif (getTotal >= 65) and (getTotal < 150):    
+        puzzleRank = "Expert"
+    else:    
+        puzzleRank = "Master"
+    #messages for when a user reaches a new rank
+    return puzzleRank
+    
+print(puzzleTotal)
+print("Hello welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 playGame = input("Would you like to play our game? (yes/no): ")
 
@@ -275,7 +298,8 @@ while(gameState == 1):
             puzzleStarted = 1
             print("Puzzle loaded!")
         case "!showstatus":
-            Commands.showStatus()
+            showRank = gameRank(showRank)
+            print(showRank)
         case "!help":
             Commands.help()
         case "!exit":
