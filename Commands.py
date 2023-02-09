@@ -1,5 +1,6 @@
 import sys
 import IdentifyBaseWord as np
+import wordlist as wl
 import savegame
 import loadgame
 
@@ -27,7 +28,7 @@ def showPuzzle():
     print()
 
 def showFoundWords():
-    print()
+    print(*wl.userWordList)
 
 def guess():
     print()
