@@ -87,7 +87,7 @@ def userGuess(userInput, userList):
             #store into user word bank
             wl.userWordList.append(userInput)
             #print statements for testing
-            print("Word found!")
+            print("Word accepted!")
             #    print(userInput)
             #    print(userList)
             #    print("user word list:")

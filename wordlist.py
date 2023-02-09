@@ -44,7 +44,6 @@ def generateWordList (reqLetter, userLetter):
         if word.count(reqLetter) >= 1:
             userunique.append(word)
             counter = counter + 1
-    print(counter)
     rankWordList = userunique
     return userunique
     
