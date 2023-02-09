@@ -28,7 +28,6 @@ def generateWordList (reqLetter, userLetter):
     unique = list()
     for i in userLetter:
         unique.extend(i)
-    # print(unique)
     
     # Get a list of every word that contains only the user's letters.
     userwordlist = list()
@@ -36,7 +35,6 @@ def generateWordList (reqLetter, userLetter):
         # Use a separate function to check letters.
         if checkLetters(word, unique) == 0:
             # If there are no dissallowed characters, add it.
-            # print(word)
             userwordlist.append(word)
     
     # Get a list of every word that contains the required letter from the user word list.
@@ -44,7 +42,6 @@ def generateWordList (reqLetter, userLetter):
     for word in userwordlist:
         # If the required letter exists in the word, add it.
         if word.count(reqLetter) >= 1:
-            # print(word)
             userunique.append(word)
             counter = counter + 1
     print(counter)
@@ -61,11 +58,6 @@ def checkLetters(word, unique):
     # return the value.
     return value
     
-#generateWordList("e", "aerilud")
 
 def storeWordList(theList):
     return theList
-
-
-def checkGuess(userInput):
-    getList = list()
