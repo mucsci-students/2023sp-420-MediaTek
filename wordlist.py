@@ -13,6 +13,7 @@ import json
 # Actual function itself
 #words that user has guessed correctly
 userWordList = []
+rankWordList = []
 def generateWordList (reqLetter, userLetter):
     fullwordlist = list()
     counter = 0
@@ -47,6 +48,7 @@ def generateWordList (reqLetter, userLetter):
             userunique.append(word)
             counter = counter + 1
     print(counter)
+    rankWordList = userunique
     return userunique
     
 # Checks a word for required letters.
