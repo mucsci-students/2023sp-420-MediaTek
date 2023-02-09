@@ -70,6 +70,10 @@ def userGuess(userInput, userList):
             wl.userWordList.append(userInput)
             #print statements for testing
             print("Word found!")
+            #    print(userInput)
+            #    print(userList)
+            #    print("user word list:")
+            #    print(wl.userWordList)
             #remove the word from the word bank.
             userList.remove(userInput)
             #generates user points based on the length, if it's a pangram then add an additional 7 points.
@@ -126,20 +130,18 @@ def userGuess(userInput, userList):
                     else:
                         totalPoints += length
         else:
-            print("Word not found! Try again!")
+            print("Sorry! Couldn't find that word.")
     else:
-        print("Hey! You didn't use the required letter!")
-    
-    print("Guessed words: " + str(wl.userWordList))
+        print("Hey! you didn't use the required letter!")
     return totalPoints
 
-print("Hello welcome to MediaTek's Spelling bee!")
+print("Hello! Welcome to MediaTek's Spelling Bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
-playGame = input("Would you like to play our game? Enter \"yes\" or \"no\": ")
+playGame = input("Would you like to play our game? (yes/no): ")
 
 while (playGame.lower() != 'yes') and (playGame.lower() != 'no'):
-    print("Invalid input! Please enter \"yes\" or \"no!\": ")
-    playGame = input("Would you like to play our game? Enter \"yes\" or \"no\": ")
+    print("Invalid input please enter yes or no!")
+    playGame = input("Would you like to play our game? (yes/no): ")
     if(playGame == "yes" or playGame == "no"):
         break
 
@@ -151,8 +153,6 @@ if(playGame.lower() == "yes"):
     gameState = 1
 
 while(gameState == 1):
-    #print("Commands should always we started with !, an example would be !help")
-    #print("All input without ! are considered guesses")
     userInput = input("Please enter a guess or command: ")
     userInput.lower()
     hasNum = bool(re.search(r'\d', userInput))
@@ -174,13 +174,24 @@ while(gameState == 1):
         if(puzzleStarted == 1):
             points = userGuess(userInput,getList)
             getTotal += points
-            print("Points earned: " + str(getTotal))
-            print("User letters: " + gaUserLetters)
-            print("Required letter: " + gaReqLetter)
         else:
             print("No word bank has been generated yet!")
     match userInput:
         case "!newpuzzle":
+            #This if statement will check if a puzzle has been started
+            #This is so after the user enters the puzzle command again after the first time, or if they loaded a puzzle
+            #Prompt to ask them if they want to save the game
+            if (puzzleStarted == 1):
+                wantSave = input("Hey, you have a puzzle in progress! Do you want to save? (yes/no): ")
+                if(wantSave.lower() == "yes"):
+                    print("Alright! saving your game! ")
+                    Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
+                    time.sleep(1)
+                else:
+                    print("Ok, lets generate a new puzzle! ")
+            #Checks if the user wants to automatically generate the puzzle or not, regardless of their choice a puzzle is started.
+            isAuto = input("Do you want the puzzle to be randomly generated?: ")
+            isAuto.lower()
             puzzleStarted = 1
             isAuto = input("Do you want the puzzle to be randomly generated?: ")
             isAuto.lower()
@@ -188,8 +199,11 @@ while(gameState == 1):
                isAuto = input("Invalid input! Enter \"yes\" or \"no\": ")
             if(isAuto == 'yes'):
                 gaUserLetters, gaReqLetter = np.autoGame()
-                print("User letters: " + gaUserLetters)
+                print("Your letters: " + gaUserLetters)
                 print("Required letter: " + gaReqLetter)
+                print("Words guessed: " + wl.userWordList)
+                print("Total points: " + getTotal)
+                #generate the unique word list.
                 getList = wl.generateWordList(gaReqLetter,gaUserLetters)
                 checkAuto = 1
                 checkBase = 0
@@ -200,7 +214,7 @@ while(gameState == 1):
                 while(gaUserLetters == "empty") and (gaReqLetter == "empty"):
                     gaUserLetters,gaReqLetter = np.baseGame()
                 getList = wl.generateWordList(gaReqLetter,gaUserLetters)
-                print("User letters: " + gaUserLetters)
+                print("Your letters: " + gaUserLetters)
                 print("Required letter: " + gaReqLetter)
                 checkAuto = 0
                 checkBase = 1
@@ -213,14 +227,13 @@ while(gameState == 1):
         case "!shuffle":
             if(checkAuto == 1):
                 gaUserLetters = shuffleAuto(gaUserLetters)
-                print("Thwomp! Shuffled!")
-                print("User letters: " + gaUserLetters)
-                print("Required letter: " + gaReqLetter)
+                print("These are the letters after shuffling: " + gaUserLetters)
             if(checkBase == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
-                print("Thwomp! Shuffled!")
-                print("User letters: " + gaUserLetters)
-                print("Required letter: " + gaReqLetter)
+                print("These are the letters after shuffling: " + gaUserLetters)
+            if(isLoaded == 1):
+                gaUserLetters = shuffleBase(gaUserLetters)
+                print("These are the letters after shuffling: " + gaUserLetters)
         case "!savepuzzle":
             Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
             print("Puzzle saved!")

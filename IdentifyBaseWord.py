@@ -74,8 +74,8 @@ def autoGame():
     #some weird out of bounds bug that happens, unsure how to fix as of right now.  
     randReqLetterNum = random.randint(0,(len(userLetters)-1))
     reqLetter = userLetters[randReqLetterNum]
-    #print ("USERS REQUIED LETTER : ****" + reqLetter + "****")
-    #print ("LETTERS AVAILABLE FOR USE: " + userLetters)
+    #    print ("USERS REQUIED LETTER : ****" + reqLetter + "****")
+    #    print ("LETTERS AVAILABLE FOR USE: " + userLetters)
     test = list(userLetters)
     random.shuffle(test)
     userLetters = str(test)
