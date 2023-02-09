@@ -247,8 +247,8 @@ while(gameState == 1):
                 gaUserLetters, gaReqLetter = np.autoGame()
                 print("Your letters: " + gaUserLetters)
                 print("Required letter: " + gaReqLetter)
-                print("Words guessed: " + wl.userWordList)
-                print("Total points: " + getTotal)
+                print("Words guessed: " + str(wl.userWordList))
+                print("Total points: " + str(getTotal))
                 #generate the unique word list.
                 getList = wl.generateWordList(gaReqLetter,gaUserLetters)
                 checkAuto = 1
@@ -270,9 +270,10 @@ while(gameState == 1):
             #set isLoaded to false
             isLoaded = 0
         case "!showpuzzle":
-            Commands.showPuzzle()
-        case "!guess":
-            Commands.guess()
+            print("Your letters: " + gaUserLetters)
+            print("Required letter: " + gaReqLetter)
+            print("Words guessed: " + str(wl.userWordList))
+            print("Total points: " + str(getTotal))
         case "!showfoundwords":
             Commands.showFoundWords()
         case "!shuffle":
@@ -280,12 +281,15 @@ while(gameState == 1):
             #SHUFFLES THE LETTERS BASED ON THEIR CHOICE. 
             if(checkAuto == 1):
                 gaUserLetters = shuffleAuto(gaUserLetters)
+                print("Thwomp! Shuffled!")
                 print("These are the letters after shuffling: " + gaUserLetters)
             if(checkBase == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
+                print("Thwomp! Shuffled!")
                 print("These are the letters after shuffling: " + gaUserLetters)
             if(isLoaded == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
+                print("Thwomp! Shuffled!")
                 print("These are the letters after shuffling: " + gaUserLetters)
         case "!savepuzzle":
             Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
@@ -295,6 +299,9 @@ while(gameState == 1):
             gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad()
             #set that a puzzle is started.
             puzzleStarted = 1
+            isLoaded = 1
+            checkBase = 0
+            checkAuto = 0
             print("Puzzle loaded!")
         case "!showstatus":
             if (puzzleStarted == 0):
@@ -305,7 +312,7 @@ while(gameState == 1):
         case "!help":
             Commands.help()
         case "!exit":
-            Commands.exitCommand()
+            Commands.exitCommand(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
     
 
 
