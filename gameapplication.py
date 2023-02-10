@@ -192,9 +192,10 @@ if(playGame.lower() == "no"):
 if(playGame.lower() == "yes"):
     gameState = 1
 
+print("All commands start with '!', please type !help to see a list of commands.")
 #big while loop for our game.
 while(gameState == 1):
-    userInput = input("Please enter a guess or command: ")
+    userInput = input("Please enter a guess or command, commands start with '!': ")
     userInput.lower()
     #searches the user input for any digits, would like to get this working for special characters but it wasn't.
     #if it has a number we don't want to take the input, ask again!
@@ -282,15 +283,15 @@ while(gameState == 1):
             if(checkAuto == 1):
                 gaUserLetters = shuffleAuto(gaUserLetters)
                 print("Thwomp! Shuffled!")
-                print("These are the letters after shuffling: " + gaUserLetters)
+                print("These are the letters after shuffling: " + "[" + gaUserLetters + "]")
             if(checkBase == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
                 print("Thwomp! Shuffled!")
-                print("These are the letters after shuffling: " + gaUserLetters)
+                print("These are the letters after shuffling: " + "[" + gaUserLetters + "]")
             if(isLoaded == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
                 print("Thwomp! Shuffled!")
-                print("These are the letters after shuffling: " + gaUserLetters)
+                print("These are the letters after shuffling: " + "[" + gaUserLetters + "]")
         case "!savepuzzle":
             Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
             print("Puzzle saved!")
@@ -308,9 +309,20 @@ while(gameState == 1):
                 print("Can't show a status for a puzzle that isn't in progress!")
             else:
                 showRank = gameRank(showRank)
-                print(showRank)
+                print("Rank: " + showRank)
+                print("Points: " + str(getTotal))
+                print("Words remaining: " + str(len(getList)))
         case "!help":
-            Commands.help()
+            if (puzzleStarted == 0):
+               print('''
+               Valid list of commands currently:
+               !newpuzzle: Generates a new puzzle. If you are generating a puzzle from a chosen pangram, enter said pangram along with the command.
+               !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
+               !help: You just typed this command. Congrats.
+               !exit: Exits the game. You will be asked if you're sure OR want to save your game.
+               ''')
+            else:
+                Commands.help()
         case "!exit":
             Commands.exitCommand(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
     
