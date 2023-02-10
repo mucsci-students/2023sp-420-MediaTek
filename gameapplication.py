@@ -57,8 +57,9 @@ def gameLoad():
         
         #return everything in the end.
         return gaUserLetters, gaReqLetter, wl.userWordList, getList, int(getTotal)
-    except FileNotFoundError():
+    except FileNotFoundError:
         print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
+        return None, None, None, None, None
     
 
 def shuffleAuto(userLetters):
@@ -304,6 +305,9 @@ while(gameState == 1):
         case "!loadpuzzle":
             #load the data from the save json file
             gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad()
+            #Error check
+            if (gaUserLetters == None):
+                continue
             #set that a puzzle is started.
             puzzleStarted = 1
             isLoaded = 1
