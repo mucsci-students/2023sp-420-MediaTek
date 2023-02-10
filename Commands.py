@@ -12,7 +12,6 @@ def help():
 !newpuzzle: Generates a new puzzle. If you are generating a puzzle from a chosen pangram, enter said pangram along with the command.
 !showpuzzle: Displays the current puzzle.
 !showfoundwords: Lists all of the correctly guessed words.
-!guess: Type this command with a word you would like to guess.
 !shuffle: Shuffles the given letters in a random arangement (except the required letter which stays in the center).
 !savepuzzle: Saves your puzzle to your local machine.
 !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
