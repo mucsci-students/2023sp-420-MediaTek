@@ -39,21 +39,27 @@ isLoaded = 0
 def gameLoad():
     # open the json file and load its contents
     loadGame = list()
-    with open('savegame.json', "r") as save:
-        loaded = json.load(save)
-    # for each element in a file, make it a separate entry in the list.
-    for l in loaded:
-        loadGame.append(l)
+    inputFile = input("Enter the name of the file you want to load: ")
+    try:
+        with open(inputFile + ".json", "r") as save:
+            loaded = json.load(save)
+        
+        # for each element in a file, make it a separate entry in the list.
+        for l in loaded:
+            loadGame.append(l)
+        
+        # assign values based on the position of each element in the list.
+        gaUserLetters = loadgame.loadUserLetters(loadGame[0])
+        gaReqLetter = loadgame.loadRequiredLetter(loadGame[1])
+        wl.userWordList = loadgame.loadGuessedWords(loadGame[2])
+        getList = loadgame.loadWordBank(loadGame[3])
+        getTotal = loadgame.loadTotalPoints(loadGame[4])
+        
+        #return everything in the end.
+        return gaUserLetters, gaReqLetter, wl.userWordList, getList, int(getTotal)
+    except FileNotFoundError():
+        print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
     
-    # assign values based on the position of each element in the list.
-    gaUserLetters = loadgame.loadUserLetters(loadGame[0])
-    gaReqLetter = loadgame.loadRequiredLetter(loadGame[1])
-    wl.userWordList = loadgame.loadGuessedWords(loadGame[2])
-    getList = loadgame.loadWordBank(loadGame[3])
-    getTotal = loadgame.loadTotalPoints(loadGame[4])
-    
-    #return everything in the end.
-    return gaUserLetters, gaReqLetter, wl.userWordList, getList, int(getTotal)
 
 def shuffleAuto(userLetters):
     #SHUFFLE ALGO
@@ -191,6 +197,7 @@ if(playGame.lower() == "no"):
 #If yes then the game begins!
 if(playGame.lower() == "yes"):
     gameState = 1
+    Commands.help()
 
 #big while loop for our game.
 while(gameState == 1):
