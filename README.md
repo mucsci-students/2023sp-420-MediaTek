@@ -2,25 +2,30 @@
 <h1 align="center"><img src="https://preview.redd.it/pwpks2a80bj31.gif?width=800&auto=webp&s=48bfc3ad55d7d05c07ff193152deac92c9bb090e" alt="minecraft bee" width="200" height="200 />
 <h2 align="center">Welcome to MediaTek's Spelling Bee Game!</h2>
   
-  <h3 align="left">Setup and Installation</h3>
+  <h3 align="left">Setup and Installation</h3><br />
   
-  <p align="left">For our game to run on your computer, ensure you have the following installed:
+  <p align="left">
+  For our game to run on your computer, ensure you have the following installed:
   <ul>
     <li>Latest version of Python, found <a href="https://www.python.org/downloads/">here</a></li>
   </ul><br />
   To install the game on your computer, do the following:
-  <ul>
-  <li>Download the most recent version of the repository</li>
-  </ul>
+  <ul><br />
+    <li>Download the most recent version of the repository</li>
+  </ul><br />
   </p>
   <h3>Commands</h3>
-  <p>For a list of commands, see below!
+  <p>For a list of commands and their functionality, see below!
   <ul>
-  <li><code>!help</code></li>
-  <li><code>!showpuzzle</code></li>
-  <li><code>!status</code></li>
-  <li><code>!newpuzzle</code></li>
-  <li><code>!exit</code></li>
+  <li><code>!newpuzzle</code></li>  Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
+  <li><code>!showpuzzle</code></li>  Displays the current puzzle.
+  <li><code>!showfoundwords</code></li>  Lists all of the correctly guessed words.
+  <li><code>!shuffle</code></li>  Shuffles the given letters in a random arangement (except the required letter which stays in the center).
+  <li><code>!savepuzzle</code></li>  Saves your puzzle to your local machine.
+  <li><code>!loadpuzzle</code></li>  Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
+  <li><code>!showstatus</code></li>  Shows your current status.
+  <li><code>!help</code></li>  Displays the list of commands currently accessible.
+  <li><code>!exit</code></li>  Exits the game. You will be asked if you want to save your puzzle to not lose progress.
   </ul>
   </p><br />
   <br />
