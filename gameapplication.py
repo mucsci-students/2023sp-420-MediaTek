@@ -256,8 +256,9 @@ while(gameState == 1):
             if (puzzleStarted == 1):
                 wantSave = input("Hey, you have a puzzle in progress! Do you want to save? (yes/no): ")
                 if(wantSave.lower() == "yes"):
+                    inputFile = input("Please choose a name for the file: ")
                     print("Alright! saving your game! ")
-                    Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
+                    Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
                     time.sleep(1)
                 else:
                     print("Ok, lets generate a new puzzle! ")
