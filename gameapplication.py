@@ -273,10 +273,6 @@ while(gameState == 1):
             if(isAuto == 'yes'):
                 #generate the user letters and required letters
                 gaUserLetters, gaReqLetter = np.autoGame()
-                print("Your letters: " + gaUserLetters)
-                print("Required letter: " + gaReqLetter)
-                print("Words guessed: " + str(wl.userWordList))
-                print("Total points: " + str(getTotal))
                 #generate the unique word list.
                 getList = wl.generateWordList(gaReqLetter,gaUserLetters)
                 checkAuto = 1
@@ -287,8 +283,6 @@ while(gameState == 1):
                 while(gaUserLetters == "empty") and (gaReqLetter == "empty"):
                     gaUserLetters,gaReqLetter = np.baseGame()
                 getList = wl.generateWordList(gaReqLetter,gaUserLetters)
-                print("Your letters: " + gaUserLetters)
-                print("Required letter: " + gaReqLetter)
                 checkAuto = 0
                 checkBase = 1
             #clear the users guessed word list if they generate a new puzzle.
@@ -297,6 +291,10 @@ while(gameState == 1):
             getTotal = 0
             #set isLoaded to false
             isLoaded = 0
+            print("Your letters: " + gaUserLetters)
+            print("Required letter: " + gaReqLetter)
+            print("Words guessed: " + str(wl.userWordList))
+            print("Total points: " + str(getTotal))
         case "!showpuzzle":
             print("Your letters: " + gaUserLetters)
             print("Required letter: " + gaReqLetter)
