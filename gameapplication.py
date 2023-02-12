@@ -299,7 +299,8 @@ while(gameState == 1):
                 print("Thwomp! Shuffled!")
                 print("These are the letters after shuffling: " + gaUserLetters)
         case "!savepuzzle":
-            Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
+            inputFile = input("Please enter a name for the file: ")
+            Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
             print("Puzzle saved!")
         case "!loadpuzzle":
             inputFile = input("Enter the name of the file you want to load: ")
