@@ -36,10 +36,9 @@ puzzleTotal = 0
 isLoaded = 0
 
 # loads game files from savegame.json and organizes them in a list.
-def gameLoad():
+def gameLoad(inputFile):
     # open the json file and load its contents
     loadGame = list()
-    inputFile = input("Enter the name of the file you want to load: ")
     try:
         with open(inputFile + ".json", "r") as save:
             loaded = json.load(save)
@@ -303,8 +302,9 @@ while(gameState == 1):
             Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
             print("Puzzle saved!")
         case "!loadpuzzle":
+            inputFile = input("Enter the name of the file you want to load: ")
             #load the data from the save json file
-            gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad()
+            gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad(inputFile)
             #Error check
             if (gaUserLetters == None):
                 continue
