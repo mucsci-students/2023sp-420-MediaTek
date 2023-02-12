@@ -6,6 +6,7 @@ import Commands
 import random
 import json
 import loadgame
+import sys
 
 
 #gameState 0 means the game is not being played
@@ -321,9 +322,12 @@ while(gameState == 1):
                 print("Thwomp! Shuffled!")
                 print("These are the letters after shuffling: " + "[" + gaUserLetters + "]")
         case "!savepuzzle":
-            inputFile = input("Please enter a name for the file: ")
-            Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
-            print("Puzzle saved!")
+            if (puzzleStarted == 0):
+                print("No puzzle to save!")
+            else:
+                inputFile = input("Please enter a name for the file: ")
+                Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
+                print("Puzzle saved!")
         case "!loadpuzzle":
             inputFile = input("Enter the name of the file you want to load: ")
             #load the data from the save json file
@@ -357,5 +361,21 @@ Valid list of commands currently:
             else:
                 Commands.help()
         case "!exit":
-            Commands.exitCommand(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
+            if (puzzleStarted == 0):
+                sys.exit()
+            else:
+                print("Whoa, slow down buddy! You're about to lose all of your epic progress, would you like to save your game first? yes/no")
+                userInput = input()
+                while(userInput != "yes") and (userInput != "no"):
+                    userInput = input("Please enter \"yes\" or \"no:\": ")
+                if(userInput == "yes"):
+                    inputFile = input("Please enter a name for the file: ")
+                    Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
+                    print("Puzzle saved! Goodbye!")
+                    sys.exit()
+                elif(userInput == "no"):
+                    #Exit
+                    print("Okay! See you on the other side!")
+                    sys.exit()
+
     
