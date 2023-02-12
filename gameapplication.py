@@ -7,6 +7,7 @@ import random
 import json
 import loadgame
 import sys
+import os
 
 
 #gameState 0 means the game is not being played
@@ -40,26 +41,22 @@ isLoaded = 0
 def gameLoad(inputFile):
     # open the json file and load its contents
     loadGame = list()
-    try:
-        with open(inputFile + ".json", "r") as save:
-            loaded = json.load(save)
-        
-        # for each element in a file, make it a separate entry in the list.
-        for l in loaded:
-            loadGame.append(l)
-        
-        # assign values based on the position of each element in the list.
-        gaUserLetters = loadgame.loadUserLetters(loadGame[0])
-        gaReqLetter = loadgame.loadRequiredLetter(loadGame[1])
-        wl.userWordList = loadgame.loadGuessedWords(loadGame[2])
-        getList = loadgame.loadWordBank(loadGame[3])
-        getTotal = loadgame.loadTotalPoints(loadGame[4])
-        
-        #return everything in the end.
-        return gaUserLetters, gaReqLetter, wl.userWordList, getList, int(getTotal)
-    except FileNotFoundError:
-        print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
-        return None, None, None, None, None
+    with open(inputFile + ".json", "r") as save:
+        loaded = json.load(save)
+    
+    # for each element in a file, make it a separate entry in the list.
+    for l in loaded:
+        loadGame.append(l)
+    
+    # assign values based on the position of each element in the list.
+    gaUserLetters = loadgame.loadUserLetters(loadGame[0])
+    gaReqLetter = loadgame.loadRequiredLetter(loadGame[1])
+    wl.userWordList = loadgame.loadGuessedWords(loadGame[2])
+    getList = loadgame.loadWordBank(loadGame[3])
+    getTotal = loadgame.loadTotalPoints(loadGame[4])
+    
+    #return everything in the end.
+    return gaUserLetters, gaReqLetter, wl.userWordList, getList, int(getTotal)
     
 
 def shuffleAuto(userLetters):
@@ -329,18 +326,21 @@ while(gameState == 1):
                 Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
                 print("Puzzle saved!")
         case "!loadpuzzle":
+            #Get the user's input and check to make sure the file exists
             inputFile = input("Enter the name of the file you want to load: ")
-            #load the data from the save json file
-            gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad(inputFile)
-            #Error check
-            if (gaUserLetters == None):
-                continue
-            #set that a puzzle is started.
-            puzzleStarted = 1
-            isLoaded = 1
-            checkBase = 0
-            checkAuto = 0
-            print("Puzzle loaded!")
+            checkFile = inputFile + ".json"
+            if (os.path.exists(checkFile)):
+                #load the data from the save json file
+                gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal = gameLoad(inputFile)
+                #set that a puzzle is started.
+                puzzleStarted = 1
+                isLoaded = 1
+                checkBase = 0
+                checkAuto = 0
+                print("Puzzle loaded!")
+            else:
+                #Tell the user the file doesn't exist
+                print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
         case "!showstatus":
             if (puzzleStarted == 0):
                 print("Can't show a status for a puzzle that isn't in progress!")
