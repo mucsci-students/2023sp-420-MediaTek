@@ -198,7 +198,7 @@ if(playGame.lower() == "no"):
 #If yes then the game begins!
 if(playGame.lower() == "yes"):
     gameState = 1
-    Commands.help()
+    Commands.commandsStart()
 
 print("All commands start with '!', please type !help to see a list of commands.")
 #big while loop for our game.
@@ -326,27 +326,14 @@ while(gameState == 1):
         case "!help":
             if (puzzleStarted == 0):
                print('''
-               Valid list of commands currently:
-               !newpuzzle: Generates a new puzzle. If you are generating a puzzle from a chosen pangram, enter said pangram along with the command.
-               !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
-               !help: You just typed this command. Congrats.
-               !exit: Exits the game. You will be asked if you're sure OR want to save your game.
+Valid list of commands currently:
+    !newpuzzle: Generates a new puzzle. If you are generating a puzzle from a chosen pangram, enter said pangram along with the command.
+    !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
+    !help: You just typed this command. Congrats.
+    !exit: Exits the game. You will be asked if you want to save your puzzle to not lose progress.
                ''')
             else:
                 Commands.help()
         case "!exit":
             Commands.exitCommand(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
     
-
-
-#!save command: prompt user to enter a name for the file
-# create a json file with that name
-# then store data into it.
-
-#!load command: prompt user to enter a name for the file
-#load data back into program
-
-#store required letter
-#store userLetters
-#store user words guessed
-#store word bank
