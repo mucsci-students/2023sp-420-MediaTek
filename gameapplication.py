@@ -291,6 +291,7 @@ while(gameState == 1):
             getTotal = 0
             #set isLoaded to false
             isLoaded = 0
+            # Print new puzzle information
             print("Your letters: " + gaUserLetters)
             print("Required letter: " + gaReqLetter)
             print("Words guessed: " + str(wl.userWordList))
