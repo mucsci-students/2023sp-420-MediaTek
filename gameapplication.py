@@ -6,6 +6,7 @@ import Commands
 import random
 import json
 import loadgame
+import sys
 
 
 #gameState 0 means the game is not being played
@@ -72,6 +73,13 @@ def shuffleAuto(userLetters):
     #afterwards convert list to a string.
     shuffledLetters = ''.join(toList)
     return shuffledLetters
+
+#unit test function for shuffleAuto
+def shuffleTest():
+    if (shuffleAuto('abcdefg') == 'abcdefg'):
+        print('Test Failed!')
+    else:
+        print('Test Passed')
 
 def shuffleBase(userLetters):
     #SHUFFLE ALGO
@@ -159,9 +167,14 @@ def userGuess(userInput, userList):
         print("Hey! you didn't use the required letter!")
     return totalPoints
 
+#unit test function for user guess
+def userGuessTest():
+    gaReqLetter = 'o'
+    if (userGuess('can', ['can', 'green'])):
+        print("Guess Test Failed!")
 
 #function for rank, currently assigns ranks based on static point values but will be updated to work based on percentages of total points from userunique (word bank for a puzzle)
-def gameRank(puzzleRank):
+def gameRank(puzzleRank, getTotal):
     #variable to store ranks
     puzzleRank = ""
     #for a game in progress, matches point values to ranks
@@ -178,7 +191,16 @@ def gameRank(puzzleRank):
         puzzleRank = "Master"
     #messages for when a user reaches a new rank
     return puzzleRank
-    
+
+#unit test function for game rank
+def gameRankTest():
+    getTotal = 151
+    puzzleRank = ""
+    if (gameRank(puzzleRank, getTotal) == "Master"):
+        print("Rank Test Passed!")
+    else:
+        print("Rank Test Failed!")
+
 print("Hello! Welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 playGame = input("Would you like to play our game? (yes/no): ")
@@ -197,11 +219,12 @@ if(playGame.lower() == "no"):
 #If yes then the game begins!
 if(playGame.lower() == "yes"):
     gameState = 1
-    Commands.help()
+    Commands.commandsStart()
 
+print("All commands start with '!', please type !help to see a list of commands.")
 #big while loop for our game.
 while(gameState == 1):
-    userInput = input("Please enter a guess or command: ")
+    userInput = input("Please enter a guess or command, commands start with '!': ")
     userInput.lower()
     #searches the user input for any digits, would like to get this working for special characters but it wasn't.
     #if it has a number we don't want to take the input, ask again!
@@ -290,19 +313,22 @@ while(gameState == 1):
             if(checkAuto == 1):
                 gaUserLetters = shuffleAuto(gaUserLetters)
                 print("Thwomp! Shuffled!")
-                print("These are the letters after shuffling: " + gaUserLetters)
+                print("These are the letters after shuffling: " + "[" + gaUserLetters + "]")
             if(checkBase == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
                 print("Thwomp! Shuffled!")
-                print("These are the letters after shuffling: " + gaUserLetters)
+                print("These are the letters after shuffling: " + "[" + gaUserLetters + "]")
             if(isLoaded == 1):
                 gaUserLetters = shuffleBase(gaUserLetters)
                 print("Thwomp! Shuffled!")
-                print("These are the letters after shuffling: " + gaUserLetters)
+                print("These are the letters after shuffling: " + "[" + gaUserLetters + "]")
         case "!savepuzzle":
-            inputFile = input("Please enter a name for the file: ")
-            Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
-            print("Puzzle saved!")
+            if (puzzleStarted == 0):
+                print("No puzzle to save!")
+            else:
+                inputFile = input("Please enter a name for the file: ")
+                Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
+                print("Puzzle saved!")
         case "!loadpuzzle":
             inputFile = input("Enter the name of the file you want to load: ")
             #load the data from the save json file
@@ -317,23 +343,40 @@ while(gameState == 1):
             checkAuto = 0
             print("Puzzle loaded!")
         case "!showstatus":
-            showRank = gameRank(showRank)
-            print(showRank)
+            if (puzzleStarted == 0):
+                print("Can't show a status for a puzzle that isn't in progress!")
+            else:
+                showRank = gameRank(showRank, getTotal)
+                print("Rank: " + showRank)
+                print("Points: " + str(getTotal))
+                print("Words remaining: " + str(len(getList)))
         case "!help":
-            Commands.help()
+            if (puzzleStarted == 0):
+               print('''
+Valid list of commands currently:
+    !newpuzzle: Generates a new puzzle. If you are generating a puzzle from a chosen pangram, enter said pangram along with the command.
+    !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
+    !help: You just typed this command. Congrats.
+    !exit: Exits the game. You will be asked if you want to save your puzzle to not lose progress.
+               ''')
+            else:
+                Commands.help()
         case "!exit":
-            Commands.exitCommand(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal)
+            if (puzzleStarted == 0):
+                sys.exit()
+            else:
+                print("Whoa, slow down buddy! You're about to lose all of your epic progress, would you like to save your game first? yes/no")
+                userInput = input()
+                while(userInput != "yes") and (userInput != "no"):
+                    userInput = input("Please enter \"yes\" or \"no:\": ")
+                if(userInput == "yes"):
+                    inputFile = input("Please enter a name for the file: ")
+                    Commands.savePuzzle(gaUserLetters, gaReqLetter, wl.userWordList, getList, getTotal, inputFile)
+                    print("Puzzle saved! Goodbye!")
+                    sys.exit()
+                elif(userInput == "no"):
+                    #Exit
+                    print("Okay! See you on the other side!")
+                    sys.exit()
+
     
-
-
-#!save command: prompt user to enter a name for the file
-# create a json file with that name
-# then store data into it.
-
-#!load command: prompt user to enter a name for the file
-#load data back into program
-
-#store required letter
-#store userLetters
-#store user words guessed
-#store word bank
