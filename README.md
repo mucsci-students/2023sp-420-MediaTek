@@ -14,8 +14,12 @@
   To install and run the game on your computer, do the following:
   <ul><br />
     <li>Download the most recent version of the repository</li>
-    <li>Open your Command Prompt and open the directory of the game folder using <code>C:\Users\name\2023sp-420-MediaTek</code>
-    <li>Once inside the directory, type <code>py gameapplication.py</code> to run!
+    <li>For Windows OS:</li>
+        Open your Command Prompt and open the directory of the game folder using <code>cd C:\Users\name\2023sp-420-MediaTek</code>.
+        Once inside the directory, type <code>py gameapplication.py</code> OR <code>python3 gameapplication.py</code> to run!</li>
+    <li>For Mac OS:</li>
+        Open your Terminal and type <code>cd 2023sp-420-MediaTek</code>, ensuring you are in the correct directory where the folder is located first.
+        Once inside, type <code>python3 gameapplication.py</code> OR <code>py gameapplication.py</code> to run!</li>
   </ul><br />
   </p>
   <h3>Commands</h3>
