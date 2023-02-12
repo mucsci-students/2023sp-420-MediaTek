@@ -74,6 +74,13 @@ def shuffleAuto(userLetters):
     shuffledLetters = ''.join(toList)
     return shuffledLetters
 
+#unit test function for shuffleAuto
+def shuffleTest():
+    if (shuffleAuto('abcdefg') == 'abcdefg'):
+        print('Test Failed!')
+    else:
+        print('Test Passed')
+
 def shuffleBase(userLetters):
     #SHUFFLE ALGO
     replaceString = userLetters.replace("[","").replace("]","")
@@ -160,9 +167,14 @@ def userGuess(userInput, userList):
         print("Hey! you didn't use the required letter!")
     return totalPoints
 
+#unit test function for user guess
+def userGuessTest():
+    gaReqLetter = 'o'
+    if (userGuess('can', ['can', 'green'])):
+        print("Guess Test Failed!")
 
 #function for rank, currently assigns ranks based on static point values but will be updated to work based on percentages of total points from userunique (word bank for a puzzle)
-def gameRank(puzzleRank):
+def gameRank(puzzleRank, getTotal):
     #variable to store ranks
     puzzleRank = ""
     #for a game in progress, matches point values to ranks
@@ -179,7 +191,16 @@ def gameRank(puzzleRank):
         puzzleRank = "Master"
     #messages for when a user reaches a new rank
     return puzzleRank
-    
+
+#unit test function for game rank
+def gameRankTest():
+    getTotal = 151
+    puzzleRank = ""
+    if (gameRank(puzzleRank, getTotal) == "Master"):
+        print("Rank Test Passed!")
+    else:
+        print("Rank Test Failed!")
+
 print("Hello! Welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 playGame = input("Would you like to play our game? (yes/no): ")
@@ -319,7 +340,7 @@ while(gameState == 1):
             if (puzzleStarted == 0):
                 print("Can't show a status for a puzzle that isn't in progress!")
             else:
-                showRank = gameRank(showRank)
+                showRank = gameRank(showRank, getTotal)
                 print("Rank: " + showRank)
                 print("Points: " + str(getTotal))
                 print("Words remaining: " + str(len(getList)))
