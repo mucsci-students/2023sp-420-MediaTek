@@ -36,8 +36,8 @@ def guess():
 def shuffle():
     print()
 
-def savePuzzle(userLetters, requiredLetter, guessedWords, wordBank, totalPoints):
-    savegame.savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints)
+def savePuzzle(userLetters, requiredLetter, guessedWords, wordBank, totalPoints, inputFile):
+    savegame.savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints, inputFile)
 
 def loadPuzzle():
     print()
