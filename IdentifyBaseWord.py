@@ -97,6 +97,34 @@ def baseGame():
         userInput = input("Input must be at least 7 characters long! Please reenter a guess/command: ")
     
     getLength = len(userInput)
+    if (getLength >= 7) and (getLength <= 15):
+        fileName = str(getLength) + "letterpangram.json"
+        with open (fileName, "r") as file:
+            data = json.load(file)
+        for word in data:
+            getWords.append(str(word["word"]))
+        if userInput in getWords:
+            letterSet = set(userInput)
+            letterSetString = str(letterSet)
+            bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
+            randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
+            bgreqLetter = bguserLetters[randReqLetterNum]
+            return bguserLetters, bgreqLetter
+        else: 
+            print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
+            #bguserLetters = "empty"
+            #bgreqLetter = "empty"
+            return "empty","empty"
+    else:
+        print("invalid length, ensure the length of input is 7-15")
+        return "empty","empty"
+
+
+
+
+
+    '''
+    
     #use pattern matching to load the file based on the length of the pangram the user gives.
     match getLength:
         #each case is exactly the same but the length determines what file gets loaded.
@@ -240,4 +268,5 @@ def baseGame():
             else: 
                 print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
                 return "empty","empty"
+    '''
 
