@@ -96,13 +96,19 @@ def baseGame():
     while(len(userInput) < 7):
         userInput = input("Input must be at least 7 characters long! Please reenter a guess/command: ")
     
+    #get length of input
     getLength = len(userInput)
+    #input must be between 7 and 15
     if (getLength >= 7) and (getLength <= 15):
+        #convert length into string and concatenate with the string
         fileName = str(getLength) + "letterpangram.json"
         with open (fileName, "r") as file:
             data = json.load(file)
+        #append words in the file to a list
         for word in data:
             getWords.append(str(word["word"]))
+        #check if user input is within the list
+        #if so it's a pangram.
         if userInput in getWords:
             letterSet = set(userInput)
             letterSetString = str(letterSet)
@@ -110,18 +116,14 @@ def baseGame():
             randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
             bgreqLetter = bguserLetters[randReqLetterNum]
             return bguserLetters, bgreqLetter
+        #so when the pangram they enter doesn't exist
         else: 
             print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-            #bguserLetters = "empty"
-            #bgreqLetter = "empty"
             return "empty","empty"
+    #if they enter an invalid length
     else:
         print("invalid length, ensure the length of input is 7-15")
         return "empty","empty"
-
-
-
-
 
     '''
     
