@@ -1,6 +1,7 @@
 import json
 import random
 import re
+import wordstuff as ws
 '''
 Note for team: to properly run this program, you must have the file in the same directory as your json files. Also make sure your json files match my pangram_files name
 Current bug: Bugs out at line 91 sometimes, I couldn't reproduce it but it was some type of out of bounds error something to do with the index.
@@ -101,20 +102,16 @@ def baseGame():
     #input must be between 7 and 15
     if (getLength >= 7) and (getLength <= 15):
         #convert length into string and concatenate with the string
-        fileName = str(getLength) + "letterpangram.json"
-        with open (fileName, "r") as file:
-            data = json.load(file)
-        #append words in the file to a list
-        for word in data:
-            getWords.append(str(word["word"]))
         #check if user input is within the list
         #if so it's a pangram.
-        if userInput in getWords:
+        if ws.checkWord(userInput):
             letterSet = set(userInput)
             letterSetString = str(letterSet)
             bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
             randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
             bgreqLetter = bguserLetters[randReqLetterNum]
+            print(bguserLetters)
+            print(bgreqLetter)
             return bguserLetters, bgreqLetter
         #so when the pangram they enter doesn't exist
         else: 
@@ -125,150 +122,4 @@ def baseGame():
         print("invalid length, ensure the length of input is 7-15")
         return "empty","empty"
 
-    '''
-    
-    #use pattern matching to load the file based on the length of the pangram the user gives.
-    match getLength:
-        #each case is exactly the same but the length determines what file gets loaded.
-        case 7:
-            #open file from pangram list above
-            with open(pangram_files[0], "r") as file:
-                data = json.load(file)
-            #store each word inside of the json file into a getWords list.
-            for word in data:
-                getWords.append(str(word["word"]))
-            #checks to see if what the user inputs actually exists within getWords.
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                #bguserLetters = "empty"
-                #bgreqLetter = "empty"
-                return "empty","empty"
-        case 8:
-            with open(pangram_files[1], "r") as file:
-                data = json.load(file)
-            for word in data:
-                getWords.append(str(word["word"]))
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                return "empty","empty"
-        case 9:
-            with open(pangram_files[2], "r") as file:
-                data = json.load(file)
-            for word in data:
-                getWords.append(str(word["word"]))
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                return "empty","empty"
-        case 10:
-            with open(pangram_files[3], "r") as file:
-                data = json.load(file)
-            for word in data:
-                getWords.append(str(word["word"]))
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                return "empty","empty"
-        case 11:
-            with open(pangram_files[4], "r") as file:
-                data = json.load(file)
-            for word in data:
-                getWords.append(str(word["word"]))
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                return "empty","empty"
-        case 12:
-            with open(pangram_files[5], "r") as file:
-                data = json.load(file)
-            for word in data:
-                getWords.append(str(word["word"]))
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                return "empty","empty"
-        case 13:
-            with open(pangram_files[6], "r") as file:
-                data = json.load(file)
-            for word in data:
-                getWords.append(str(word["word"]))
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                return "empty","empty"
-        case 14:
-            with open(pangram_files[7], "r") as file:
-                data = json.load(file)
-            for word in data:
-                getWords.append(str(word["word"]))
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                return "empty","empty"
-        case 15:
-            with open(pangram_files[8], "r") as file:
-                data = json.load(file)
-            for word in data:
-                getWords.append(str(word["word"]))
-            if userInput in getWords:
-                letterSet = set(userInput)
-                letterSetString = str(letterSet)
-                bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
-                randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
-                bgreqLetter = bguserLetters[randReqLetterNum]
-                return bguserLetters, bgreqLetter
-            else: 
-                print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-                return "empty","empty"
-    '''
-
+#baseGame()
