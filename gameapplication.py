@@ -106,58 +106,13 @@ def userGuess(userInput, userList):
             #remove the word from the word bank.
             userList.remove(userInput)
             #generates user points based on the length, if it's a pangram then add an additional 7 points.
-            match length:
-                case 4:
+            if length == 4:
+                totalPoints += 1
+            else:
+                if(len(toSet) == 7):
+                    totalPoints += (length + 7)
+                else:
                     totalPoints += length
-                case 5:
-                    totalPoints += length
-                case 6:
-                    totalPoints += length
-                case 7:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
-                case 8:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
-                case 9:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
-                case 10:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
-                case 11:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
-                case 12:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
-                case 13:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
-                case 14:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
-                case 15:
-                    if(len(toSet) == 7):
-                        totalPoints += (length + 7)
-                    else:
-                        totalPoints += length
         else:
             print("Sorry! Couldn't find that word.")
     else:
