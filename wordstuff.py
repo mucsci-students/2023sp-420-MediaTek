@@ -32,12 +32,16 @@ For the random function, if it's possible to return the word that's randomly cho
 
 #for base game
 def checkWord(userInput):
+    con = sqlite3.connect('wordbank.db')
+    cursor = con.cursor()
     #sql query to find the word
     cursor.execute("SELECT * FROM dict WHERE word=:word", {'word': userInput})
     #Because fetchone, fetches the next row returns this to a variable.
     test = cursor.fetchone()
     #check if it's none, if so return false.
     if (test == None):
+        con.commit()
+        con.close()
         return False
     #turn the tuple into a string
     else:
@@ -46,8 +50,12 @@ def checkWord(userInput):
             str = str + item
     #check if the string and user input matches.
     if str == userInput:
+        con.commit()
+        con.close()
         return True
     else:
+        con.commit()
+        con.close()
         return False
 
 

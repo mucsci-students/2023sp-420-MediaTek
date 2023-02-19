@@ -2,6 +2,7 @@ import json
 import random
 import re
 import wordstuff as ws
+import pangramdb as pgdb
 '''
 Note for team: to properly run this program, you must have the file in the same directory as your json files. Also make sure your json files match my pangram_files name
 Current bug: Bugs out at line 91 sometimes, I couldn't reproduce it but it was some type of out of bounds error something to do with the index.
@@ -18,43 +19,15 @@ def autoGame():
     userLetters = None
     reqLetter = None
     #random variable to choose from a random pangram list
-    randNum = random.randint(0,8)
     #use random variable to load json file into data variable.
     #using pattern matching
     #matches randNum to the cases: pretty much similar to a switch statement but I read online switch statements don't exist in python.
-    match randNum:
-        case 0:
-            with open(pangram_files[0], "r") as file:
-                data = json.load(file)
-        case 1:
-            with open(pangram_files[1], "r") as file:
-                data = json.load(file)
-        case 2:
-            with open(pangram_files[2], "r") as file:
-                data = json.load(file)
-        case 3:
-            with open(pangram_files[3], "r") as file:
-                data = json.load(file)
-        case 4:
-            with open(pangram_files[4], "r") as file:
-                data = json.load(file)
-        case 5:
-            with open(pangram_files[5], "r") as file:
-                data = json.load(file)
-        case 6:
-            with open(pangram_files[6], "r") as file:
-                data = json.load(file)
-        case 7:
-            with open(pangram_files[7], "r") as file:
-                data = json.load(file)
-        case 8:
-            with open(pangram_files[8], "r") as file:
-                data = json.load(file)
-    #store a random word from one of the files above into a variable
-    randomPangram = random.choice(data)
 
-    #typecast variable into a string, and store the VALUE of the key "word"
-    userPangram = str(randomPangram["word"])
+    #store a random word from one of the files above into a variable
+    #randomPangram = pgdb.randomBase
+
+    #set pangram equal to the returned value from randomBase, type casted into string just in case unsure if needed.
+    userPangram = str(pgdb.randomBase())
 
 
     #added this for extra testing.
