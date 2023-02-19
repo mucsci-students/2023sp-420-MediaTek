@@ -30,8 +30,10 @@ def randomBase():
     for item in randomPangram:
         str = str + item
     print(str)
+    #return randomly chosen pangram
+    return str
 
 
 #SQLITE functions, neccessary
 con.commit() 
-con.close()
+#con.close()
