@@ -1,7 +1,7 @@
 import sqlite3
 import json
-con = sqlite3.connect('pangrams.db')
-cursor = con.cursor()
+#con = sqlite3.connect('pangrams.db')
+#cursor = con.cursor()
 
 #SQLITE initializes table. do not need to run again since the table is already created !!!
 #cursor.execute('''CREATE TABLE pangrams (pangram TEXT)''')
@@ -24,6 +24,8 @@ for test2 in displayWords:
     
 # function to choose a random pangram for use as the base word in a puzzle
 def randomBase():
+    con = sqlite3.connect('pangrams.db')
+    cursor = con.cursor()
     cursor.execute("SELECT * FROM pangrams ORDER BY RANDOM() LIMIT 1;")
     randomPangram = cursor.fetchone()
     str = ''
@@ -31,9 +33,12 @@ def randomBase():
         str = str + item
     print(str)
     #return randomly chosen pangram
+    con.commit()
+    con.close()
     return str
 
 
-#SQLITE functions, neccessary
-con.commit() 
-#con.close()
+
+#test = randomBase()
+#while len(test) != 15:
+    #test = randomBase()
