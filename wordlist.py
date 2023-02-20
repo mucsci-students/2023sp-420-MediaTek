@@ -10,6 +10,8 @@
 '''
 # imports the json library
 import json
+# imports the sql library
+import sqlite3
 # Actual function itself
 #words that user has guessed correctly
 userWordList = []
@@ -19,10 +21,14 @@ def generateWordList (reqLetter, userLetter):
     counter = 0
     
     # Start with getting every word in the wordlist json.
-    with open('wordbank.json', "r") as wordbank:
-        roughwordlist = json.load(wordbank)
-    for word in roughwordlist:
-        fullwordlist.append(str(word["word"]))
+    con = sqlite3.connect('wordbank.db')
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM dict")
+    # This next part took me 20 minutes :(
+    draftwordlist = cursor.fetchall()
+    fullwordlist = list()
+    for i in draftwordlist:
+        fullwordlist.append(i[0])
     
     # Split the userLetter string into a list.
     unique = list()
@@ -60,3 +66,5 @@ def checkLetters(word, unique):
 
 def storeWordList(theList):
     return theList
+
+generateWordList("e", "whisket")
