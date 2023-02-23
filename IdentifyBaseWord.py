@@ -12,8 +12,7 @@ Author: Austin An, Noah Barger
 #will implement this in at a later time, but pretty sure below code will just be in this functions scope.
 
 #create variable to store pangram files in.
-pangram_files = ['7letterpangram.json','8letterpangram.json','9letterpangram.json','10letterpangram.json','11letterpangram.json','12letterpangram.json','13letterpangram.json',
-'14letterpangram.json','15letterpangram.json']
+
 
 def autoGame():
     userLetters = None
