@@ -54,6 +54,7 @@ class model:
         self.p1.guessedList = loadgame.loadGuessedWords(loadGame[2])
         self.p1.getList = loadgame.loadWordBank(loadGame[3])
         self.p1.points = loadgame.loadTotalPoints(loadGame[4])
+        self.p1.puzzleStarted = 1
 
     def test1(self,userInput):
         self.p1.gaUserLetters = userInput  
@@ -169,6 +170,10 @@ class model:
             print("Hey! you didn't use the required letter!")
     def saveGame(self, inputFile):
         Commands.savePuzzle(self.p1.gaUserLetters, self.p1.gaReqLetter, self.p1.guessedList, self.p1.getList, self.p1.points, inputFile)
+    def startCommands(self):
+        Commands.commandsStart()
+    def helpCommand(self):
+        Commands.help()
     
 
     #This needs to be rewritten.
@@ -176,7 +181,7 @@ class model:
         #variable to store ranks
         #for a game in progress, matches point values to ranks
         #redo so that we take words from userunique, get point values (can yoink code above ^) for total value, use that value to do like getTotal < value * .10 (ten percent?) etc...
-        calculatePercentage = (self.p1.points/self.p1.puzzleTotal)
+        calculatePercentage = ((self.p1.points/self.p1.puzzleTotal) * 100)
         if calculatePercentage >= 0 and calculatePercentage <= 20:
             self.p1.showRank = "Beginner"
         elif calculatePercentage > 20 and calculatePercentage <= 40:
