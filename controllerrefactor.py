@@ -35,8 +35,8 @@ class controller:
     #UPDATE
     #these functions will update the game state/variables of the puzzle
     #as of right now trying to limit the amount of states we need, but an important one is puzzleStarted.
-    def controllerShuffleAuto(self,userLetters):
-        return self.model.shuffleAuto(userLetters)
+    def controllerShuffleAuto(self):
+        return self.model.shuffleAuto()
         
     def controllerShuffleBase(self,userLetters):
         return self.model.shuffleBase(userLetters)
@@ -61,6 +61,10 @@ class controller:
         self.model.gameLoad(inputFile)
     def controllerNewGame(self):
         self.model.resetGame()
+    def controllerStartCommands(self):
+        self.model.startCommands()
+    def controllerHelpCommand(self):
+        self.model.helpCommand()
 
 
     #Checks to see if the string only contains letters and !
@@ -71,7 +75,7 @@ class controller:
             return False
     #For when starting the game
     def ensureYesOrNo(self):
-        userInput = input("Would you like to play the game? (yes/no)")
+        userInput = input("Would you like to play the game? (yes/no): ")
         while (userInput.lower() != 'yes') and (userInput.lower() != 'no'):
             print("Invalid input please enter yes or no!")
             userInput = input("Would you like to play our game? (yes/no): ")
