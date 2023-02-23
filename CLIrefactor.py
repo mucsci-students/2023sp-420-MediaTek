@@ -21,6 +21,18 @@ class view:
 
     def startGame(self):
         self.controller.ensureYesOrNo()
+        print('''
+
+The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. Letters may be repeated but words must be 4 to 15 letters.
+Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. You are free to use your own pangram to create a personalized puzzle!
+
+Try entering one of the following commands to start playing or exit the program:
+    !newpuzzle: Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
+    !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
+    !help: Displays the list of commands currently accessible.
+    !exit: Exits the game.
+          ''')
+
         while (True):
             userInput = input("Please enter a guess or command, commands start with '!': ")
             checkInput = self.controller.checkInput(userInput)

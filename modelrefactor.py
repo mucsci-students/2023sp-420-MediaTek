@@ -139,7 +139,7 @@ class model:
     def userGuess(self, userInput):
         totalPoints = 0
         #search if what the user types exists within the list
-        print(self.p1.getList)
+        #print(self.p1.getList)
         if self.p1.gaReqLetter in userInput:
             if userInput in self.p1.getList:
                 #create set from user input

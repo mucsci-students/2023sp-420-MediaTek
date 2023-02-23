@@ -35,8 +35,8 @@ class controller:
     #UPDATE
     #these functions will update the game state/variables of the puzzle
     #as of right now trying to limit the amount of states we need, but an important one is puzzleStarted.
-    def controllerShuffleAuto(self,userLetters):
-        return self.model.shuffleAuto(userLetters)
+    def controllerShuffleAuto(self):
+        return self.model.shuffleAuto()
         
     def controllerShuffleBase(self,userLetters):
         return self.model.shuffleBase(userLetters)
