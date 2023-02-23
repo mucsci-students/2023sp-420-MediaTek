@@ -51,6 +51,8 @@ def generateWordList (reqLetter, userLetter):
             userunique.append(word)
             counter = counter + 1
     rankWordList = userunique
+    #print("generateWordList:")
+    #print(userunique)
     return userunique
     
 # Checks a word for required letters.
@@ -67,4 +69,5 @@ def checkLetters(word, unique):
 def storeWordList(theList):
     return theList
 
-generateWordList("e", "whisket")
+#generateWordList("e", "whisket")
+#generateWordList("a", "abdomen")
