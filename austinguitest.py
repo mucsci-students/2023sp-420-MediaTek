@@ -4,8 +4,6 @@ import math
 import random
 import copy
 
-
-
 class view():
     def __init__(self, parent, ctrl):
         self.controller = ctrl.controller()
@@ -25,8 +23,12 @@ class view():
         self.backButton = tk.Button(self.parent, text = "Backspace", command=self.backspace)
         self.backButton.pack(padx=60,pady=20)
 
+
+        #display variables
         self.hexagonLetters = []
         self.reqLetter = ""
+        self.rank = tk.StringVar()
+        self.points = tk.IntVar()
 
         #creatad a list box which will show the found words
         self.listBox = tk.Listbox(self.parent)
@@ -36,31 +38,46 @@ class view():
         #empty state for the buttons
 
     def clicker(self):
-            print(self.controller.controllerGetLetters())
+        print(self.controller.controllerGetLetters())
     def sendInput(self,text):
         self.e.insert(tk.END,text)
     def clearInput(self):
         self.e.delete(0,tk.END)
     def clearListbox(self):
         self.listBox.delete(0,tk.END)
-
     def backspace(self):
         self.e.delete(len(self.e.get())-1, tk.END)
 
 
 
     #callc user guess from controller, this probably shoulve be moved into controller later
-    def makeGuess(self):
+    def makeGuess(self,*args):
          input = self.e.get()
          #made it so userGuess returns true/false so that way we only insert valid words into the listbox.
          if self.controller.controllerUserGuess(input) == True:
               self.listBox.insert(tk.END,input)
+         self.points.set(self.controller.controllerGetPoints())
+         self.rank.set(self.controller.controllerGetPuzzleRank())
+         #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
+         print(self.controller.controllerGetPuzzleRank())
          self.clearInput()
          
     #this function will have all the necessary things for the game to be played like mainly to redraw the hexagons
     #as of right now trying to get new puzzle auto working with it and making a correct guess.
     #and then display the guessed words on the screen somewhere.
     def gameplay(self):
+
+        self.pointLabel = tk.Label(self.parent, textvariable = self.points)
+        self.pointLabel.place(x=100,y=50)
+
+
+        #not sure why this doesnt show up at all
+        #spent too much time on it.
+        self.rankLabel = tk.Label(self.parent, textvariable  = self.rank)
+        self.rankLabel.place(x=150,y=75)
+
+        self.e.bind("<Return>",self.makeGuess)
+
         #clear listbox everytime it's run
         self.clearListbox()
         #must clear the letters once a new puzzle is generated
@@ -93,6 +110,7 @@ class view():
         self.btn6.place(x=200,y=20)
         self.btn7 = tk.Button(self.parent,text = self.reqLetter, command = lambda: self.sendInput(self.reqLetter))
         self.btn7.place(x=220,y=20)
+
 
 
 
