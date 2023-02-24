@@ -69,6 +69,14 @@ class controller:
         self.model.gameExit()
 
 
+    
+
+    def controllerToList(self,letters,viewList):
+        for x in letters:
+            viewList.append(x)
+        return viewList
+
+
     #Checks to see if the string only contains letters and !
     def checkInput(self,userInput):
         if re.match("^[a-zA-Z!]*$", userInput):
