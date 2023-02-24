@@ -192,3 +192,28 @@ class model:
             self.p1.showRank = "Expert"
         else:    
             self.p1.showRank = "Master"
+    
+    
+    # exits the game
+    def gameExit(self):
+        # if a puzzle is started, as if the user wants to save the game
+        if self.p1.puzzleStarted:
+            gamesave = input("Do you wish to save your game? (yes/no): ")
+            if gamesave == "yes":
+                # if so, save it
+                inputFile = input("Please enter a name for the save file: ")
+                self.saveGame(inputFile)
+                print("Pyzzle saved! Goodbye!")
+                exit()
+            elif gamesave == "no":
+                # if not, don't.
+                print("Okay! See you on the other side!")
+                exit()
+            else:
+                print("Please enter \"yes\" or \"no\"!")
+                self.gameExit()
+        # If a puzzle isn't loaded, just leave.
+        else:
+            print("Okay... bye.")
+            exit()
+                
