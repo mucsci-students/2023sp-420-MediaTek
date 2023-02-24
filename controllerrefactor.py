@@ -70,7 +70,7 @@ class controller:
 
 
     
-
+    #for hexagon letters in view
     def controllerToList(self,letters,viewList):
         for x in letters:
             viewList.append(x)
