@@ -164,10 +164,13 @@ class model:
                     else:
                         self.p1.points += length
                 self.gameRank()
+                return True
             else:
                 print("Sorry! Couldn't find that word.")
+                return False
         else:
             print("Hey! you didn't use the required letter!")
+            return False
     def saveGame(self, inputFile):
         Commands.savePuzzle(self.p1.gaUserLetters, self.p1.gaReqLetter, self.p1.guessedList, self.p1.getList, self.p1.points, inputFile)
     def startCommands(self):
