@@ -65,6 +65,8 @@ class controller:
         self.model.startCommands()
     def controllerHelpCommand(self):
         self.model.helpCommand()
+    def controllerGameExit(self):
+        self.model.gameExit()
 
 
     #Checks to see if the string only contains letters and !
@@ -80,7 +82,7 @@ class controller:
             print("Invalid input please enter yes or no!")
             userInput = input("Would you like to play our game? (yes/no): ")
         if userInput == "no":
-            exit()
+            self.controllerGameExit()
         else:
             return
         

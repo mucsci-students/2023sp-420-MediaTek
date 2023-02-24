@@ -104,7 +104,7 @@ Try entering one of the following commands to start playing or exit the program:
                        else:
                         self.controller.controllerHelpCommand()
                 case "!exit":
-                        exit()
+                        self.controller.controllerGameExit()
           
 view = view()
 view.startGame()
