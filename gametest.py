@@ -11,8 +11,8 @@ class gametest:
     self.testLetters = "whiskey"
     self.testReq = "e"
     
-    def modeltest(self):
-        # Test get list
+    #Test get list
+    def testGetList(self):
         self.testmodel.p1.gaUserLetters = self.testLetters
         self.testmodel.p1.gaReqLetter = self.testReq
         modellist = self.testmodel.wl.generateWordList(self.testmodel.p1.gaUserLetters, self.testmodel.p1.gaReqLetter)
@@ -21,12 +21,14 @@ class gametest:
         assert not len(explist) == 0
         assert modellist == explist
         
-        # Test auto game
+    # Test auto game
+    def testAutoGame(self):
         self.testLetters, self.testReq = self.testmodel.np.autoGame()
         assert not len(testLetters) == 0
         assert not len(testReq) == 0
         baseLetters, baseReq = base.autoGame()
         assert self.testLetters == baseLetters
         assert self.testReq == baseReq
-        
+    
+    
         
