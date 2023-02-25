@@ -77,6 +77,7 @@ class View:
         self.rank.set(self.controller.controllerGetPuzzleRank())
         #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
         print(self.controller.controllerGetPuzzleRank())
+        print(self.controller.controllerGetPoints())
         self.clearInput()
 
     # Function that creates a hexagon
@@ -136,14 +137,21 @@ class View:
     # as of right now trying to get new puzzle auto-working with it and making a correct guess.
     # and then display the guessed words on the screen somewhere.
     def gameplay(self):
+        self.controller.controllerNewGame()
         # clear listbox every time it's run
         self.clearListbox()
         # must clear the letters once a new puzzle is generated
         self.hexagonLetters.clear()
+
+        #gets points and rank from controller
+        self.points.set(self.controller.controllerGetPoints())
+        self.rank.set(self.controller.controllerGetPuzzleRank())
+
         # then we can run the function and pull the data from model->controller->view
         self.controller.controllerRunAutoGame()
         getLetters = self.controller.controllerGetLetters()
         getLetters = getLetters.replace("[", "").replace("]","")
+        
         #controller function to append letters into a list
         self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
         #print stmt's for testing
