@@ -185,9 +185,9 @@ class model:
         #for a game in progress, matches point values to ranks
         #redo so that we take words from userunique, get point values (can yoink code above ^) for total value, use that value to do like getTotal < value * .10 (ten percent?) etc...
         calculatePercentage = ((self.p1.points/self.p1.puzzleTotal) * 100)
-        if calculatePercentage >= 0 and calculatePercentage <= 20:
+        if calculatePercentage >= 0 and calculatePercentage <= 5:
             self.p1.showRank = "Beginner"
-        elif calculatePercentage > 20 and calculatePercentage <= 40:
+        elif calculatePercentage > 5 and calculatePercentage <= 40:
             self.p1.showRank = "Novice"
         elif calculatePercentage > 40 and calculatePercentage <= 60:
             self.p1.showRank = "Advanced"
