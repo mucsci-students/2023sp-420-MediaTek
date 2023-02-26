@@ -93,5 +93,32 @@ def baseGame():
     else:
         print("invalid length, ensure the length of input is 7-15")
         return "empty","empty"
+def baseGameGUI(userInput):
+    bguserLetters = None
+    bgreqLetter = None
+    #get length of input
+    getLength = len(userInput)
+    #input must be between 7 and 15
+    if (getLength >= 7) and (getLength <= 15):
+        #convert length into string and concatenate with the string
+        #check if user input is within the list
+        #if so it's a pangram.
+        if ws.checkWord(userInput):
+            letterSet = set(userInput)
+            letterSetString = str(letterSet)
+            bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
+            randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
+            bgreqLetter = bguserLetters[randReqLetterNum]
+            print(bguserLetters)
+            print(bgreqLetter)
+            return bguserLetters, bgreqLetter
+        #so when the pangram they enter doesn't exist
+        else: 
+            print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
+            return "empty","empty"
+    #if they enter an invalid length
+    else:
+        print("invalid length, ensure the length of input is 7-15")
+        return "empty","empty"
 
 #baseGame()
