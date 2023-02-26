@@ -114,11 +114,9 @@ def baseGameGUI(userInput):
             return bguserLetters, bgreqLetter
         #so when the pangram they enter doesn't exist
         else: 
-            print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-            return "empty","empty"
+            return "",""
     #if they enter an invalid length
     else:
-        print("invalid length, ensure the length of input is 7-15")
-        return "empty","empty"
+        return "",""
 
 #baseGame()
