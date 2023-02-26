@@ -67,6 +67,8 @@ class controller:
         self.model.helpCommand()
     def controllerGameExit(self):
         self.model.gameExit()
+    def controllerRunBaseGameGUI(self,userInput):
+        self.model.NewPuzzleBaseGUI(userInput)
 
 
     
