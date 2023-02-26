@@ -4,6 +4,7 @@ import math
 import random
 import copy
 from tkinter import *
+from tkinter import messagebox
 import time
 
 class View:
@@ -16,7 +17,8 @@ class View:
         # created an input box
         self.e = tk.Entry(self.parent, width=100, bg="white", fg="black")
         self.e.pack()
-        
+        self.saved = False
+
         # Variables that describe size of hexagon
         self.hex_radius = 30
         self.hex_width = math.sqrt(3) * self.hex_radius
@@ -36,8 +38,10 @@ class View:
         self.backButton.pack(pady=10, side='top')
         self.shuffleButton = tk.Button(self.parent, text="Shuffle", command=self.shuffle)
         self.shuffleButton.pack(pady=10, side='top')
-        self.exitButton = tk.Button(self.parent, text="Exit", command=main.destroy)
+        self.exitButton = tk.Button(self.parent, text="Exit", command=self.exitPuzzle)
         self.exitButton.pack(pady=10, side='bottom')
+        self.saveButton = tk.Button(self.parent, text="Save", command=self.savePuzzle)
+        self.saveButton.pack(pady=10, side='bottom')
 
         self.hexagonLetters = []
         self.reqLetter = ""
@@ -89,6 +93,21 @@ class View:
             y_i = y + radius * math.sin(math.radians(angle * i))
             points.append((x_i, y_i))
         canvas.create_polygon(points, fill=fill, outline=outline)
+
+    def savePuzzle(self):
+        self.saved = True
+        messagebox.showinfo("Saved", "Your work has been saved.")
+
+    def exitPuzzle(self):
+      if(self.saved == False):
+        if messagebox.askyesno("Save", "Do you want to save your work before exiting?"):
+
+          messagebox.showinfo("Saved", "Your work has been saved.")
+          main.destroy()
+        else:
+            main.destroy()
+      else:
+          main.destroy()
 
     #shuffle function which just shuffles the list of letters, deletes all the widgets on the canvas and remakes them
     def shuffle(self):
