@@ -114,8 +114,6 @@ class model:
     
     def NewPuzzleBaseGUI(self,userInput):
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGameGUI(userInput)
-        while (self.p1.gaUserLetters == "empty") and (self.p1.gaReqLetter == "empty"):
-             self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame()
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
         print(self.p1.getList)
