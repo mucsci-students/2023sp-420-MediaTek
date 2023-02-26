@@ -1,10 +1,12 @@
 import json
 
-def savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints, inputFile):
+def savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints, maxPoints, inputFile):
     try:
+        # If file exists, write to it.
         with open(inputFile + ".json", "w") as save:
-            json.dump([{'userLetters':userLetters}, {'requiredLetter':requiredLetter}, {'guessedWords':guessedWords}, {'wordBank':wordBank}, {'totalPoints':totalPoints}], save, indent=4)
+            json.dump({"RequiredLetter": requiredLetter, "PuzzleLetters": userLetters, "CurrentPoints": totalPoints, "MaxPoints": maxPoints, "GuessedWords": guessedWords, "WordList": wordBank}, save, indent=4)
     except FileNotFoundError():
+        # If not, create the file and them write.
         with open(inputFile + ".json", "x") as save:
-            json.dump([{'userLetters':userLetters}, {'requiredLetter':requiredLetter}, {'guessedWords':guessedWords}, {'wordBank':wordBank}, {'totalPoints':totalPoints}], save, indent=4)
+            json.dump({"RequiredLetter": requiredLetter, "PuzzleLetters": userLetters, "CurrentPoints": totalPoints, "MaxPoints": maxPoints, "GuessedWords": guessedWords, "WordList": wordBank}, save, indent=4)
         
