@@ -1,6 +1,6 @@
 import json
 
-def savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints, maxPoints, inputFile):
+def savegame(requiredLetter, userLetters, totalPoints, maxPoints, guessedWords, wordBank, inputFile):
     try:
         # If file exists, write to it.
         with open(inputFile + ".json", "w") as save:

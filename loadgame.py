@@ -2,18 +2,21 @@
 # Order: User Letters, Required Letter, Guessed Words, Word Bank, Total Points
 
 def loadUserLetters(save):
-    return str(save["userLetters"])
+    return str(save["PuzzleLetters"])
         
 def loadRequiredLetter(save):
-    return str(save["requiredLetter"])
+    return str(save["RequiredLetter"])
 
 # Unlike the previous two entities, the next two need to be stored as lists.
 def loadGuessedWords(save):
-    return list((save["guessedWords"]))
+    return list((save["GuessedWords"]))
 
 def loadWordBank(save):
-    return list((save["wordBank"]))
+    return list((save["WordList"]))
 
 # Total points needs to be stored as an integer value.
 def loadTotalPoints(save):
-    return int(save["totalPoints"])
+    return int(save["CurrentPoints"])
+
+def loadMaxPoints(save):
+    return int(save["MaxPoints"])
