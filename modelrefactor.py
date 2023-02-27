@@ -40,20 +40,46 @@ class model:
 
     def gameLoad(self, inputFile):
         # open the json file and load its contents
-        loadGame = list()
+        #loadGame = list()
         with open(inputFile + ".json", "r") as save:
             loaded = json.load(save)
+
+        print(loaded['RequiredLetter'])
+        #print(loaded['WordList'])
+
+        self.p1.gaReqLetter = loaded['RequiredLetter']
+        self.p1.gaUserLetters = loaded['PuzzleLetters']
+        self.p1.points = loaded['CurrentPoints']
+        self.p1.puzzleTotal = loaded['MaxPoints']
+        self.p1.guessedList = loaded['GuessedWords']
+        self.p1.getList = loaded['WordList']
+
+
+        print(self.p1.getList)
+        print(self.p1.gaReqLetter)
+        print(self.p1.gaUserLetters) 
+        print(self.p1.points)
+        print(self.p1.puzzleTotal) 
+        print(self.p1.guessedList)
+       
         
         # for each element in a file, make it a separate entry in the list.
+        '''
         for l in loaded:
             loadGame.append(l)
+        '''
         
         # assign values based on the position of each element in the list.
-        self.p1.gaUserLetters = loadgame.loadUserLetters(loadGame[0])
-        self.p1.gaReqLetter = loadgame.loadRequiredLetter(loadGame[1])
-        self.p1.guessedList = loadgame.loadGuessedWords(loadGame[2])
-        self.p1.getList = loadgame.loadWordBank(loadGame[3])
-        self.p1.points = loadgame.loadTotalPoints(loadGame[4])
+
+        '''
+        self.p1.gaReqLetter = loadgame.loadRequiredLetter(loadGame[0])
+        self.p1.gaUserLetters = loadgame.loadUserLetters(loadGame[1])
+        self.p1.points = loadgame.loadTotalPoints(loadGame[2])
+        self.p1.puzzleTotal = loadgame.loadMaxPoints(loadGame[3])
+        self.p1.guessedList = loadgame.loadGuessedWords(loadGame[4])
+        self.p1.getList = loadgame.loadWordBank(loadGame[5])
+        '''
+        
         self.p1.puzzleStarted = 1
 
     def test1(self,userInput):
@@ -178,7 +204,7 @@ class model:
             print("Hey! you didn't use the required letter!")
             return False
     def saveGame(self, inputFile):
-        Commands.savePuzzle(self.p1.gaUserLetters, self.p1.gaReqLetter, self.p1.guessedList, self.p1.getList, self.p1.points, inputFile)
+        Commands.savePuzzle(self.p1.gaReqLetter, self.p1.gaUserLetters, self.p1.points, self.p1.puzzleTotal, self.p1.guessedList, self.p1.getList,inputFile)
     def startCommands(self):
         Commands.commandsStart()
     def helpCommand(self):

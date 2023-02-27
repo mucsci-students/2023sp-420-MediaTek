@@ -53,6 +53,8 @@ def autoGame():
     random.shuffle(test)
     userLetters = str(test)
     userLetters = re.sub(r'[^a-zA-z]+','', str(test))
+    replaceString = userLetters.replace("[","").replace("]","")
+    userLetters = replaceString
     return userLetters, reqLetter
     
 def baseGame():
