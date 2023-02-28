@@ -5,6 +5,7 @@ import random
 import copy
 from tkinter import *
 from tkinter import messagebox
+from tkinter import simpledialog
 import time
 
 class View:
@@ -146,7 +147,23 @@ class View:
     # as of right now trying to get new puzzle auto-working with it and making a correct guess.
     # and then display the guessed words on the screen somewhere.
     def gameplay(self):
+        #checks if the puzzle state is 1
+        #then asks the user if they would like to save
+        #if there is some sort of userInput put in, check if it's yes then ask for fileName
+        #run save function, else in the end it will generate a new puzzle.
+        if(self.controller.controllerGetPuzzleState() == 1):
+            userinput = simpledialog.askstring("Would you like to save your game?",  "yes/no?")
+            if userinput:
+                if userinput.lower() == "yes":
+                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
+                    self.controller.controllerSaveGame(fileName)
+                else:
+                    print("Ok, lets generate a new puzzle! ")
+            else:
+                print("No input provided")
         self.controller.controllerNewGame()
+
+
         # clear listbox every time it's run
         self.clearListbox()
         # must clear the letters once a new puzzle is generated
@@ -217,11 +234,22 @@ class View:
         self.btn7 = tk.Button(self.canvas,text = self.reqLetter, width=1, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.reqLetter))
         self.btn7.place(x=238, y=155)
         self.btn7.configure(bg = "yellow")
+        self.controller.controllerUpdatePuzzleState1()
 
         #text for points and rank
         self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
         self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
     def gameplayBase(self):
+        if(self.controller.controllerGetPuzzleState() == 1):
+            userinput = simpledialog.askstring("Would you like to save your game?",  "yes/no?")
+            if userinput:
+                if userinput.lower() == "yes":
+                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
+                    self.controller.controllerSaveGame(fileName)
+                else:
+                    print("Ok, lets generate a new puzzle! ")
+            else:
+                print("No input provided")
         self.controller.controllerNewGame()
         input = self.e.get()
         # clear listbox every time it's run
@@ -290,6 +318,7 @@ class View:
             #text for points and rank
             self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
             self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+            self.controller.controllerUpdatePuzzleState1()
 
 
   
