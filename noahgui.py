@@ -35,6 +35,8 @@ class View:
         # created some buttons
         self.newPuzzleButton = tk.Button(self.parent, text="New Puzzle", command=self.gameplay)
         self.newPuzzleButton.pack(pady=10, side='top')
+        self.newPuzzleBaseButton = tk.Button(self.parent, text="New Puzzle Base", command=self.gameplayBase)
+        self.newPuzzleBaseButton.pack(pady=10, side='top')
         self.guessButton = tk.Button(self.parent, text="Enter", command=self.makeGuess)
         self.guessButton.pack(pady=10, side='top')
         self.backButton = tk.Button(self.parent, text="Delete", command=self.backspace)
@@ -44,7 +46,7 @@ class View:
         
         #GABE WROTE THIS START
         self.saveButton = tk.Button(self.parent, text="Save", command=self.savePuzzle)
-        self.saveButton.pack(pady=10, side='left')
+        self.saveButton.pack(pady = 10, side='left')
         self.loadButton = tk.Button(self.parent, text="Load", command=self.loadPuzzle)
         self.loadButton.pack(pady=10, side='right')
         self.exitButton = tk.Button(self.parent, text="Exit", command=self.exitPuzzle)
@@ -83,8 +85,14 @@ class View:
     def makeGuess(self, *args):
         input = self.e.get()
         #made it so userGuess returns true/false so that way we only insert valid words into the listbox.
-        if self.controller.controllerUserGuess(input) == True:
-            self.listBox.insert(tk.END,input)
+        if self.controller.checkInput(input) == True:
+            if self.controller.controllerUserGuess(input) == True:
+                self.listBox.insert(tk.END,input)
+            else:
+                messagebox.showinfo("Invalid Guess", "Please re-enter a guess.")
+        else:
+            messagebox.showinfo("Invalid input", "Letters only!")
+
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
         #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
@@ -119,8 +127,9 @@ class View:
             filename = simpledialog.askstring("Load Game", "Enter the name of the file to load:")
             if filename:
                 filename = filename.strip()
+            elif filename == None:
+                break
         return filename
-
     #GABE WROTE THIS
     def loadPuzzle(self):
         try:
@@ -187,7 +196,6 @@ class View:
                     self.canvas.create_text(200, 150,text = self.hexagonLetters[4],fill="black", font=('Helvetica 24 bold'))
                     hex6 = self.draw_hexagon(self.canvas, 300, 150, self.hex_radius, 'white', 'black')
                     self.canvas.create_text(300, 150,text = self.hexagonLetters[5],fill="black", font=('Helvetica 24 bold'))
-
                     #creates the buttons with the letters and input functionality
                     self.btn1 = tk.Button(self.canvas,text = self.hexagonLetters[0], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[0]))
                     self.btn1.place(x=233, y=215)
@@ -208,6 +216,7 @@ class View:
                     #text for points and rank
                     self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
                     self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+                    self.controller.controllerUpdatePuzzleState1()
                 else:
                     messagebox.showerror("Error", f"Error loading game: File does not exist")
         except Exception as e:
@@ -219,7 +228,7 @@ class View:
             answer = messagebox.askyesnocancel("Exit", "Do you want to save the game before exiting?")
             if answer is None:
                 # User clicked Cancel, do nothing
-                return
+                exit()
             elif answer:
                 # User clicked Yes, prompt to save and exit
                 self.savePuzzle()
@@ -276,6 +285,20 @@ class View:
     # as of right now trying to get new puzzle auto-working with it and making a correct guess.
     # and then display the guessed words on the screen somewhere.
     def gameplay(self):
+        #checks if the puzzle state is 1
+        #then asks the user if they would like to save
+        #if there is some sort of userInput put in, check if it's yes then ask for fileName
+        #run save function, else in the end it will generate a new puzzle.
+        if(self.controller.controllerGetPuzzleState() == 1):
+            userinput = simpledialog.askstring("Would you like to save your game?",  "yes/no?")
+            if userinput:
+                if userinput.lower() == "yes":
+                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
+                    self.controller.controllerSaveGame(fileName)
+                else:
+                    print("Ok, lets generate a new puzzle! ")
+            else:
+                print("No input provided")
         self.controller.controllerNewGame()
         # clear listbox every time it's run
         self.clearListbox()
@@ -350,6 +373,86 @@ class View:
         #text for points and rank
         self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
         self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+    def gameplayBase(self):
+        if(self.controller.controllerGetPuzzleState() == 1):
+            userinput = simpledialog.askstring("Would you like to save your game?",  "yes/no?")
+            if userinput:
+                if userinput.lower() == "yes":
+                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
+                    self.controller.controllerSaveGame(fileName)
+                else:
+                    print("Ok, lets generate a new puzzle! ")
+            else:
+                print("No input provided")
+        self.controller.controllerNewGame()
+        input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
+        # clear listbox every time it's run
+        self.clearListbox()
+        # must clear the letters once a new puzzle is generated
+        self.hexagonLetters.clear()
+
+        #gets points and rank from controller
+        self.points.set(self.controller.controllerGetPoints())
+        self.rank.set(self.controller.controllerGetPuzzleRank())
+
+        # then we can run the function and pull the data from model->controller->view
+        #run base game function and input function
+        self.controller.controllerRunBaseGameGUI(input)
+        getLetters = self.controller.controllerGetLetters()
+        getLetters = getLetters.replace("[", "").replace("]","")
+        if getLetters == "" or len(input) < 7 or len(input) > 15:
+            messagebox.showinfo("Invalid input!", "Ensure the input is an actual pangram (letters only) and the length is between 7-15")
+        else:
+            #controller function to append letters into a list
+            self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
+            #enables use of enter button on keyboard
+            self.e.bind("<Return>",self.makeGuess)
+            #adds the points
+            self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#F4F4F4')
+            self.pointLabel.place(x=265,y=40)
+            #adds the rank
+            self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#F4F4F4')
+            self.rankLabel.place(x=60,y=270)
+            #get required letter
+            self.reqLetter = self.controller.controllerGetReqLetter()
+            print(self.reqLetter)
+            #hoping this removes the required letter from the list.
+            self.hexagonLetters.remove(self.reqLetter)
+            #creates the hexagon shapes
+            self.hexReq = self.draw_hexagon(self.canvas, 250, 180, self.hex_radius, 'yellow', 'black')
+            self.canvas.create_text(250, 180,text = self.reqLetter,fill="black", font=('Helvetica 24 bold'))
+            hex1 = self.draw_hexagon(self.canvas, 250, 240, self.hex_radius, 'white', 'black')
+            self.canvas.create_text(250, 240,text = self.hexagonLetters[0],fill="black", font=('Helvetica 24 bold'))
+            hex2 = self.draw_hexagon(self.canvas, 250, 120, self.hex_radius, 'white', 'black')
+            self.canvas.create_text(250, 120,text = self.hexagonLetters[1],fill="black", font=('Helvetica 24 bold'))
+            hex3 = self.draw_hexagon(self.canvas, 300, 210, self.hex_radius, 'white', 'black')
+            self.canvas.create_text(300, 210,text = self.hexagonLetters[2],fill="black", font=('Helvetica 24 bold'))
+            hex4 = self.draw_hexagon(self.canvas, 200, 210, self.hex_radius, 'white', 'black')
+            self.canvas.create_text(200, 210,text = self.hexagonLetters[3],fill="black", font=('Helvetica 24 bold'))
+            hex5 = self.draw_hexagon(self.canvas, 200, 150, self.hex_radius, 'white', 'black')
+            self.canvas.create_text(200, 150,text = self.hexagonLetters[4],fill="black", font=('Helvetica 24 bold'))
+            hex6 = self.draw_hexagon(self.canvas, 300, 150, self.hex_radius, 'white', 'black')
+            self.canvas.create_text(300, 150,text = self.hexagonLetters[5],fill="black", font=('Helvetica 24 bold'))
+            #creates the buttons with the letters and input functionality
+            self.btn1 = tk.Button(self.canvas,text = self.hexagonLetters[0], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[0]))
+            self.btn1.place(x=233, y=215)
+            self.btn2 = tk.Button(self.canvas,text = self.hexagonLetters[1], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[1]))
+            self.btn2.place(x=232, y=95)
+            self.btn3 = tk.Button(self.canvas,text = self.hexagonLetters[2], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[2]))
+            self.btn3.place(x=283, y=185)
+            self.btn4 = tk.Button(self.canvas,text = self.hexagonLetters[3], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[3]))
+            self.btn4.place(x=182, y=185)
+            self.btn5 = tk.Button(self.canvas,text = self.hexagonLetters[4], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[4]))
+            self.btn5.place(x=182, y=125)
+            self.btn6 = tk.Button(self.canvas,text = self.hexagonLetters[5], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[5]))
+            self.btn6.place(x=285, y=125)
+            self.btn7 = tk.Button(self.canvas,text = self.reqLetter, width=1, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.reqLetter))
+            self.btn7.place(x=238, y=155)
+            self.btn7.configure(bg = "yellow")
+            #text for points and rank
+            self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
+            self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+            self.controller.controllerUpdatePuzzleState1()
 
 
   
