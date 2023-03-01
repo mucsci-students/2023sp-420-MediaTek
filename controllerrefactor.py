@@ -74,13 +74,19 @@ class controller:
     
     #for hexagon letters in view
     def controllerToList(self,letters,viewList):
-        for x in letters:
-            viewList.append(x)
-        return viewList
+            for x in letters:
+                viewList.append(x)
+            return viewList
+
 
 
     #Checks to see if the string only contains letters and !
-    def checkInput(self,userInput):
+    def checkInput(self,userInput, reqLetter):
+        if re.match("^[a-zA-Z!]*$", userInput) and reqLetter in userInput:
+            return True
+        else:
+            return False
+    def checkInputCLI(self,userInput):
         if re.match("^[a-zA-Z!]*$", userInput):
             return True
         else:

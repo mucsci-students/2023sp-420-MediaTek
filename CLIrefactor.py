@@ -35,10 +35,10 @@ Try entering one of the following commands to start playing or exit the program:
 
         while (True):
             userInput = input("Please enter a guess or command, commands start with '!': ")
-            checkInput = self.controller.checkInput(userInput)
+            checkInput = self.controller.checkInputCLI(userInput)
             while(checkInput == False):
                 userInput = input("Input can only contain [!, A-Z], please reenter: ")
-                checkInput = self.controller.checkInput(userInput)
+                checkInput = self.controller.checkInputCLI(userInput)
             while(len(userInput) < 4) or (len(userInput) > 15):
                 userInput = input("Input must be between 4 and 15 characters! Please reenter your input: ")
 
@@ -60,7 +60,6 @@ Try entering one of the following commands to start playing or exit the program:
                         else:
                             print("Ok, lets generate a new puzzle! ")
                     self.controller.controllerNewGame()
-                        
                     isAuto = input("Do you want it to be automatically generated?: ")
                     if (isAuto.lower() == "yes"):
                         self.controller.controllerRunAutoGame()
