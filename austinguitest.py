@@ -381,11 +381,14 @@ class View:
                     fileName = simpledialog.askstring("Please enter a file name", "File name: ")
                     self.controller.controllerSaveGame(fileName)
                 else:
-                    print("Ok, lets generate a new puzzle! ")
+                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
             else:
-                print("No input provided")
+                messagebox.showinfo("No information provided", "going to generate a new puzzle!")
         self.controller.controllerNewGame()
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
+        if (input == None):
+            messagebox.showinfo("Error no input", "you didn't enter anything!")
+            return
         # clear listbox every time it's run
         self.clearListbox()
         # must clear the letters once a new puzzle is generated
