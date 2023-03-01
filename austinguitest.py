@@ -76,6 +76,42 @@ class View:
 
     def clearListbox(self):
         self.listBox.delete(0, tk.END)
+
+    def drawPuzzleUI(self, reqLetter, hexagonLetters):
+                self.hexReq = self.draw_hexagon(self.canvas, 250, 180, self.hex_radius, 'yellow', 'black')
+                self.canvas.create_text(250, 180,text = reqLetter,fill="black", font=('Helvetica 24 bold'))
+                hex1 = self.draw_hexagon(self.canvas, 250, 240, self.hex_radius, 'white', 'black')
+                self.canvas.create_text(250, 240,text = hexagonLetters[0],fill="black", font=('Helvetica 24 bold'))
+                hex2 = self.draw_hexagon(self.canvas, 250, 120, self.hex_radius, 'white', 'black')
+                self.canvas.create_text(250, 120,text = hexagonLetters[1],fill="black", font=('Helvetica 24 bold'))
+                hex3 = self.draw_hexagon(self.canvas, 300, 210, self.hex_radius, 'white', 'black')
+                self.canvas.create_text(300, 210,text = hexagonLetters[2],fill="black", font=('Helvetica 24 bold'))
+                hex4 = self.draw_hexagon(self.canvas, 200, 210, self.hex_radius, 'white', 'black')
+                self.canvas.create_text(200, 210,text = hexagonLetters[3],fill="black", font=('Helvetica 24 bold'))
+                hex5 = self.draw_hexagon(self.canvas, 200, 150, self.hex_radius, 'white', 'black')
+                self.canvas.create_text(200, 150,text = hexagonLetters[4],fill="black", font=('Helvetica 24 bold'))
+                hex6 = self.draw_hexagon(self.canvas, 300, 150, self.hex_radius, 'white', 'black')
+                self.canvas.create_text(300, 150,text = hexagonLetters[5],fill="black", font=('Helvetica 24 bold'))
+                #creates the buttons with the letters and input functionality
+                self.btn1 = tk.Button(self.canvas,text = hexagonLetters[0], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[0]))
+                self.btn1.place(x=233, y=215)
+                self.btn2 = tk.Button(self.canvas,text = hexagonLetters[1], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[1]))
+                self.btn2.place(x=232, y=95)
+                self.btn3 = tk.Button(self.canvas,text = hexagonLetters[2], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[2]))
+                self.btn3.place(x=283, y=185)
+                self.btn4 = tk.Button(self.canvas,text = hexagonLetters[3], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[3]))
+                self.btn4.place(x=182, y=185)
+                self.btn5 = tk.Button(self.canvas,text = hexagonLetters[4], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[4]))
+                self.btn5.place(x=182, y=125)
+                self.btn6 = tk.Button(self.canvas,text = hexagonLetters[5], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[5]))
+                self.btn6.place(x=285, y=125)
+                self.btn7 = tk.Button(self.canvas,text = reqLetter, width=1, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
+                self.btn7.place(x=238, y=155)
+                self.btn7.configure(bg = "yellow")
+                #text for points and rank
+                self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
+                self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+
     
 
     def backspace(self):
@@ -139,22 +175,16 @@ class View:
                 if os.path.exists(checkFile):
                     self.controller.controllerGameLoad(filename)
                     messagebox.showinfo("Loaded", "Game loaded successfully!")
-                 
                     # clear listbox every time it's run
-                    
                     # must clear the letters once a new puzzle is generated
                     self.hexagonLetters.clear()
                     self.clearListbox()
-
                     #gets points and rank from controller
                     self.points.set(self.controller.controllerGetPoints())
                     self.rank.set(self.controller.controllerGetPuzzleRank())
-
                     # then we can run the function and pull the data from model->controller->view
-               
                     getLetters = self.controller.controllerGetLetters()
                     getLetters = getLetters.replace("[", "").replace("]","")
-                    
                     #controller function to append letters into a list
                     self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
                     thelist = self.controller.controllerGetGuessedWords().copy()
@@ -163,59 +193,21 @@ class View:
                     #print stmt's for testing
                     #print(self.hexagonLetters)
                     #print(self.controller.controllerGetWordList())
-
                     #enables use of enter button on keyboard
                     self.e.bind("<Return>",self.makeGuess)
-
                     #adds the points
                     self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#F4F4F4')
                     self.pointLabel.place(x=265,y=40)
-
-
                     #adds the rank
                     self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#F4F4F4')
                     self.rankLabel.place(x=60,y=270)
-
                     #get required letter
                     self.reqLetter = self.controller.controllerGetReqLetter()
                     print(self.reqLetter)
                     #hoping this removes the required letter from the list.
                     self.hexagonLetters.remove(self.reqLetter)
                     #creates the hexagon shapes
-                    self.hexReq = self.draw_hexagon(self.canvas, 250, 180, self.hex_radius, 'yellow', 'black')
-                    self.canvas.create_text(250, 180,text = self.reqLetter,fill="black", font=('Helvetica 24 bold'))
-                    hex1 = self.draw_hexagon(self.canvas, 250, 240, self.hex_radius, 'white', 'black')
-                    self.canvas.create_text(250, 240,text = self.hexagonLetters[0],fill="black", font=('Helvetica 24 bold'))
-                    hex2 = self.draw_hexagon(self.canvas, 250, 120, self.hex_radius, 'white', 'black')
-                    self.canvas.create_text(250, 120,text = self.hexagonLetters[1],fill="black", font=('Helvetica 24 bold'))
-                    hex3 = self.draw_hexagon(self.canvas, 300, 210, self.hex_radius, 'white', 'black')
-                    self.canvas.create_text(300, 210,text = self.hexagonLetters[2],fill="black", font=('Helvetica 24 bold'))
-                    hex4 = self.draw_hexagon(self.canvas, 200, 210, self.hex_radius, 'white', 'black')
-                    self.canvas.create_text(200, 210,text = self.hexagonLetters[3],fill="black", font=('Helvetica 24 bold'))
-                    hex5 = self.draw_hexagon(self.canvas, 200, 150, self.hex_radius, 'white', 'black')
-                    self.canvas.create_text(200, 150,text = self.hexagonLetters[4],fill="black", font=('Helvetica 24 bold'))
-                    hex6 = self.draw_hexagon(self.canvas, 300, 150, self.hex_radius, 'white', 'black')
-                    self.canvas.create_text(300, 150,text = self.hexagonLetters[5],fill="black", font=('Helvetica 24 bold'))
-                    #creates the buttons with the letters and input functionality
-                    self.btn1 = tk.Button(self.canvas,text = self.hexagonLetters[0], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[0]))
-                    self.btn1.place(x=233, y=215)
-                    self.btn2 = tk.Button(self.canvas,text = self.hexagonLetters[1], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[1]))
-                    self.btn2.place(x=232, y=95)
-                    self.btn3 = tk.Button(self.canvas,text = self.hexagonLetters[2], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[2]))
-                    self.btn3.place(x=283, y=185)
-                    self.btn4 = tk.Button(self.canvas,text = self.hexagonLetters[3], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[3]))
-                    self.btn4.place(x=182, y=185)
-                    self.btn5 = tk.Button(self.canvas,text = self.hexagonLetters[4], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[4]))
-                    self.btn5.place(x=182, y=125)
-                    self.btn6 = tk.Button(self.canvas,text = self.hexagonLetters[5], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[5]))
-                    self.btn6.place(x=285, y=125)
-                    self.btn7 = tk.Button(self.canvas,text = self.reqLetter, width=1, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.reqLetter))
-                    self.btn7.place(x=238, y=155)
-                    self.btn7.configure(bg = "yellow")
-
-                    #text for points and rank
-                    self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
-                    self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+                    self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
                     self.controller.controllerUpdatePuzzleState1()
                 else:
                     messagebox.showerror("Error", f"Error loading game: File does not exist")
@@ -243,43 +235,9 @@ class View:
         #self.canvas.delete(self.btn1)
         random.shuffle(self.hexagonLetters)
         self.canvas.delete("all")
-
         self.canvas.create_text(250, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
-
-        self.hexReq = self.draw_hexagon(self.canvas, 250, 180, self.hex_radius, 'yellow', 'black')
-        self.canvas.create_text(250, 180,text = self.reqLetter,fill="black", font=('Helvetica 24 bold'))
-        hex1 = self.draw_hexagon(self.canvas, 250, 240, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(250, 240,text = self.hexagonLetters[0],fill="black", font=('Helvetica 24 bold'))
-        hex2 = self.draw_hexagon(self.canvas, 250, 120, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(250, 120,text = self.hexagonLetters[1],fill="black", font=('Helvetica 24 bold'))
-        hex3 = self.draw_hexagon(self.canvas, 300, 210, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(300, 210,text = self.hexagonLetters[2],fill="black", font=('Helvetica 24 bold'))
-        hex4 = self.draw_hexagon(self.canvas, 200, 210, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(200, 210,text = self.hexagonLetters[3],fill="black", font=('Helvetica 24 bold'))
-        hex5 = self.draw_hexagon(self.canvas, 200, 150, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(200, 150,text = self.hexagonLetters[4],fill="black", font=('Helvetica 24 bold'))
-        hex6 = self.draw_hexagon(self.canvas, 300, 150, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(300, 150,text = self.hexagonLetters[5],fill="black", font=('Helvetica 24 bold'))
-
-        self.btn1 = tk.Button(self.canvas,text = self.hexagonLetters[0], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[0]))
-        self.btn1.place(x=233, y=215)
-        self.btn2 = tk.Button(self.canvas,text = self.hexagonLetters[1], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[1]))
-        self.btn2.place(x=232, y=95)
-        self.btn3 = tk.Button(self.canvas,text = self.hexagonLetters[2], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[2]))
-        self.btn3.place(x=283, y=185)
-        self.btn4 = tk.Button(self.canvas,text = self.hexagonLetters[3], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[3]))
-        self.btn4.place(x=182, y=185)
-        self.btn5 = tk.Button(self.canvas,text = self.hexagonLetters[4], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[4]))
-        self.btn5.place(x=182, y=125)
-        self.btn6 = tk.Button(self.canvas,text = self.hexagonLetters[5], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[5]))
-        self.btn6.place(x=285, y=125)
-        self.btn7 = tk.Button(self.canvas,text = self.reqLetter, width=1, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.reqLetter))
-        self.btn7.place(x=238, y=155)
-        self.btn7.configure(bg = "yellow")
-
-        self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
-        self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
-
+        self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
+    
 
     # this function will have all the necessary things for the game to be played, like mainly to redraw the hexagons
     # as of right now trying to get new puzzle auto-working with it and making a correct guess.
@@ -296,9 +254,10 @@ class View:
                     fileName = simpledialog.askstring("Please enter a file name", "File name: ")
                     self.controller.controllerSaveGame(fileName)
                 else:
-                    print("Ok, lets generate a new puzzle! ")
+                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
             else:
-                print("No input provided")
+                 messagebox.showinfo("No information provided", "idk123")
+                 return
         self.controller.controllerNewGame()
         # clear listbox every time it's run
         self.clearListbox()
@@ -338,41 +297,8 @@ class View:
         #hoping this removes the required letter from the list.
         self.hexagonLetters.remove(self.reqLetter)
         #creates the hexagon shapes
-        self.hexReq = self.draw_hexagon(self.canvas, 250, 180, self.hex_radius, 'yellow', 'black')
-        self.canvas.create_text(250, 180,text = self.reqLetter,fill="black", font=('Helvetica 24 bold'))
-        hex1 = self.draw_hexagon(self.canvas, 250, 240, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(250, 240,text = self.hexagonLetters[0],fill="black", font=('Helvetica 24 bold'))
-        hex2 = self.draw_hexagon(self.canvas, 250, 120, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(250, 120,text = self.hexagonLetters[1],fill="black", font=('Helvetica 24 bold'))
-        hex3 = self.draw_hexagon(self.canvas, 300, 210, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(300, 210,text = self.hexagonLetters[2],fill="black", font=('Helvetica 24 bold'))
-        hex4 = self.draw_hexagon(self.canvas, 200, 210, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(200, 210,text = self.hexagonLetters[3],fill="black", font=('Helvetica 24 bold'))
-        hex5 = self.draw_hexagon(self.canvas, 200, 150, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(200, 150,text = self.hexagonLetters[4],fill="black", font=('Helvetica 24 bold'))
-        hex6 = self.draw_hexagon(self.canvas, 300, 150, self.hex_radius, 'white', 'black')
-        self.canvas.create_text(300, 150,text = self.hexagonLetters[5],fill="black", font=('Helvetica 24 bold'))
-
-        #creates the buttons with the letters and input functionality
-        self.btn1 = tk.Button(self.canvas,text = self.hexagonLetters[0], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[0]))
-        self.btn1.place(x=233, y=215)
-        self.btn2 = tk.Button(self.canvas,text = self.hexagonLetters[1], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[1]))
-        self.btn2.place(x=232, y=95)
-        self.btn3 = tk.Button(self.canvas,text = self.hexagonLetters[2], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[2]))
-        self.btn3.place(x=283, y=185)
-        self.btn4 = tk.Button(self.canvas,text = self.hexagonLetters[3], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[3]))
-        self.btn4.place(x=182, y=185)
-        self.btn5 = tk.Button(self.canvas,text = self.hexagonLetters[4], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[4]))
-        self.btn5.place(x=182, y=125)
-        self.btn6 = tk.Button(self.canvas,text = self.hexagonLetters[5], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[5]))
-        self.btn6.place(x=285, y=125)
-        self.btn7 = tk.Button(self.canvas,text = self.reqLetter, width=1, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.reqLetter))
-        self.btn7.place(x=238, y=155)
-        self.btn7.configure(bg = "yellow")
-
-        #text for points and rank
-        self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
-        self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+        self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
+        self.controller.controllerUpdatePuzzleState1()
     def gameplayBase(self):
         if(self.controller.controllerGetPuzzleState() == 1):
             userinput = simpledialog.askstring("Would you like to save your game?",  "yes/no?")
@@ -381,20 +307,21 @@ class View:
                     fileName = simpledialog.askstring("Please enter a file name", "File name: ")
                     self.controller.controllerSaveGame(fileName)
                 else:
-                    print("Ok, lets generate a new puzzle! ")
+                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
             else:
-                print("No input provided")
+                messagebox.showinfo("No information provided", "going to generate a new puzzle!")
         self.controller.controllerNewGame()
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
+        if (input == None):
+            messagebox.showinfo("Error no input", "you didn't enter anything!")
+            return
         # clear listbox every time it's run
         self.clearListbox()
         # must clear the letters once a new puzzle is generated
         self.hexagonLetters.clear()
-
         #gets points and rank from controller
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
-
         # then we can run the function and pull the data from model->controller->view
         #run base game function and input function
         self.controller.controllerRunBaseGameGUI(input)
@@ -419,46 +346,11 @@ class View:
             #hoping this removes the required letter from the list.
             self.hexagonLetters.remove(self.reqLetter)
             #creates the hexagon shapes
-            self.hexReq = self.draw_hexagon(self.canvas, 250, 180, self.hex_radius, 'yellow', 'black')
-            self.canvas.create_text(250, 180,text = self.reqLetter,fill="black", font=('Helvetica 24 bold'))
-            hex1 = self.draw_hexagon(self.canvas, 250, 240, self.hex_radius, 'white', 'black')
-            self.canvas.create_text(250, 240,text = self.hexagonLetters[0],fill="black", font=('Helvetica 24 bold'))
-            hex2 = self.draw_hexagon(self.canvas, 250, 120, self.hex_radius, 'white', 'black')
-            self.canvas.create_text(250, 120,text = self.hexagonLetters[1],fill="black", font=('Helvetica 24 bold'))
-            hex3 = self.draw_hexagon(self.canvas, 300, 210, self.hex_radius, 'white', 'black')
-            self.canvas.create_text(300, 210,text = self.hexagonLetters[2],fill="black", font=('Helvetica 24 bold'))
-            hex4 = self.draw_hexagon(self.canvas, 200, 210, self.hex_radius, 'white', 'black')
-            self.canvas.create_text(200, 210,text = self.hexagonLetters[3],fill="black", font=('Helvetica 24 bold'))
-            hex5 = self.draw_hexagon(self.canvas, 200, 150, self.hex_radius, 'white', 'black')
-            self.canvas.create_text(200, 150,text = self.hexagonLetters[4],fill="black", font=('Helvetica 24 bold'))
-            hex6 = self.draw_hexagon(self.canvas, 300, 150, self.hex_radius, 'white', 'black')
-            self.canvas.create_text(300, 150,text = self.hexagonLetters[5],fill="black", font=('Helvetica 24 bold'))
-            #creates the buttons with the letters and input functionality
-            self.btn1 = tk.Button(self.canvas,text = self.hexagonLetters[0], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[0]))
-            self.btn1.place(x=233, y=215)
-            self.btn2 = tk.Button(self.canvas,text = self.hexagonLetters[1], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[1]))
-            self.btn2.place(x=232, y=95)
-            self.btn3 = tk.Button(self.canvas,text = self.hexagonLetters[2], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[2]))
-            self.btn3.place(x=283, y=185)
-            self.btn4 = tk.Button(self.canvas,text = self.hexagonLetters[3], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[3]))
-            self.btn4.place(x=182, y=185)
-            self.btn5 = tk.Button(self.canvas,text = self.hexagonLetters[4], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[4]))
-            self.btn5.place(x=182, y=125)
-            self.btn6 = tk.Button(self.canvas,text = self.hexagonLetters[5], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.hexagonLetters[5]))
-            self.btn6.place(x=285, y=125)
-            self.btn7 = tk.Button(self.canvas,text = self.reqLetter, width=1, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(self.reqLetter))
-            self.btn7.place(x=238, y=155)
-            self.btn7.configure(bg = "yellow")
-            #text for points and rank
-            self.canvas.create_text(220, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
-            self.canvas.create_text(30, 282, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+            self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
             self.controller.controllerUpdatePuzzleState1()
 
 
   
-
-
-
 # Runs the GUI
 main = tk.Tk()
 main.title("MediaTek's Spelling Bee!")
