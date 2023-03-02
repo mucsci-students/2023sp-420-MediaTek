@@ -17,6 +17,10 @@ class View:
         # created a frame
         self.myFrame = tk.Frame(parent, bg='#F4F4F4')
         self.myFrame.pack()
+        #creates background image!
+        self.bg = PhotoImage(file="combsbig.png", height=2000, width=2000)
+        self.img = Label(parent, image = self.bg)
+        self.img.place(x = 0,y = 0)
         # created an input box
         self.e = tk.Entry(self.parent, width=100, bg="white", fg="black")
         self.e.pack()
@@ -28,15 +32,15 @@ class View:
         self.hex_height = 2 * self.hex_radius
 
          # Creates a 500 x 500 canvas with a white background along with title
-        self.canvas = tk.Canvas(self.parent, width=500, height=300,bg='#F4F4F4')
+        self.canvas = tk.Canvas(self.parent, width=500, height=300,bg='#FFFFFF')
         self.canvas.create_text(250, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
         self.canvas.pack()
 
         # created some buttons
-        self.newPuzzleButton = tk.Button(self.parent, text="New Puzzle", command=self.gameplay)
-        self.newPuzzleButton.pack(pady=10, side='top')
-        self.newPuzzleBaseButton = tk.Button(self.parent, text="New Puzzle Base", command=self.gameplayBase)
-        self.newPuzzleBaseButton.pack(pady=10, side='top')
+        self.newPuzzleButton = tk.Button(self.parent, text="New Puzzle", command=self.gameplay, height=2, width=12)
+        self.newPuzzleButton.pack(pady=10, padx=50, side='left')
+        self.newPuzzleBaseButton = tk.Button(self.parent, text="New Puzzle Base", command=self.gameplayBase, height=2, width=12)
+        self.newPuzzleBaseButton.pack(pady=10, padx=50, side='right')
         self.guessButton = tk.Button(self.parent, text="Enter", command=self.makeGuess)
         self.guessButton.pack(pady=10, side='top')
         self.backButton = tk.Button(self.parent, text="Delete", command=self.backspace)
@@ -46,11 +50,11 @@ class View:
         
         #GABE WROTE THIS START
         self.saveButton = tk.Button(self.parent, text="Save", command=self.savePuzzle)
-        self.saveButton.pack(pady = 10, side='left')
+        self.saveButton.pack(padx = 100, side='left')
         self.loadButton = tk.Button(self.parent, text="Load", command=self.loadPuzzle)
-        self.loadButton.pack(pady=10, side='right')
-        self.exitButton = tk.Button(self.parent, text="Exit", command=self.exitPuzzle)
-        self.exitButton.pack(pady=10, side='bottom')
+        self.loadButton.pack(padx=100, side='right')
+        self.exitButton = tk.Button(self.parent, text="Exit", command=self.exitPuzzle, height=2, width=5)
+        self.exitButton.pack(pady=20, side='bottom')
         #GABE WROTE THIS END
 
         self.hexagonLetters = []
@@ -61,7 +65,7 @@ class View:
 
         # create a list box which will show the found words
         self.listBox = tk.Listbox(self.parent)
-        self.listBox.pack(pady=60)
+        self.listBox.pack(pady=30)
 
         self.test = 0
         # empty state for the buttons
@@ -128,7 +132,7 @@ class View:
             else:
                 messagebox.showinfo("Invalid Guess", "Please re-enter a guess.")
         else:
-            messagebox.showinfo("Invalid input", "Ensure each guess uses the requied letter, and consists of letters only.")
+            messagebox.showinfo("Invalid input", "Ensure each guess uses the required letter, and consists of letters only.")
 
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
@@ -240,11 +244,13 @@ class View:
 
     #shuffle function which just shuffles the list of letters, deletes all the widgets on the canvas and remakes them
     def shuffle(self):
-        #self.canvas.delete(self.btn1)
-        random.shuffle(self.hexagonLetters)
-        self.canvas.delete("all")
-        self.canvas.create_text(250, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
-        self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
+        if (self.controller.controllerGetPuzzleState() != 1):
+            return
+        else:
+            random.shuffle(self.hexagonLetters)
+            self.canvas.delete("all")
+            self.canvas.create_text(250, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
+            self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
     
 
     # this function will have all the necessary things for the game to be played, like mainly to redraw the hexagons
@@ -294,12 +300,12 @@ class View:
         self.e.bind("<Return>",self.makeGuess)
 
         #adds the points
-        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#F4F4F4')
+        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#FFFFFF')
         self.pointLabel.place(x=265,y=40)
 
 
         #adds the rank
-        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#F4F4F4')
+        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#FFFFFF')
         self.rankLabel.place(x=60,y=270)
 
         #get required letter
