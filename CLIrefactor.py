@@ -30,8 +30,8 @@ class view:
             print('''  
                         %s
                     %s       %s
-                        \033[1;33;1m%s
-                    \033[1;37;1m%s       %s
+                        \033[93m%s\033[0m
+                    %s       %s
                         %s      
             ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
 
