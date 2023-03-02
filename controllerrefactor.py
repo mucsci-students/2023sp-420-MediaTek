@@ -35,6 +35,9 @@ class controller:
     def controllerToHoneyComblist(self):
         self.model.lettersToList()
 
+    def controllerCheckPangram(self, input):
+        return self.model.checkPangram(input)
+
     #UPDATE
     #these functions will update the game state/variables of the puzzle
     #as of right now trying to limit the amount of states we need, but an important one is puzzleStarted.

@@ -66,6 +66,7 @@ class View:
         self.getLetters = ""
         self.rank = tk.StringVar()
         self.points = tk.IntVar()
+        self.check = None
 
         # create a list box which will show the found words
         self.listBox = tk.Listbox(self.parent)
@@ -341,10 +342,21 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         if (input == None):
             messagebox.showinfo("No input!", "Looks like you clicked cancel, don't worry the puzzle will stay as is.")
             return
+        self.check = self.controller.controllerCheckPangram(input)
+        print(self.controller.controllerCheckPangram(input))
+        print(self.check)
+        while(self.check == False):
+            input = simpledialog.askstring("Entered an invalid pangram", "Choose a pangram to use (7 unique letters)")
+            if input == None:
+                 return
+            self.check = self.controller.controllerCheckPangram(input)     
+            print(self.controller.controllerCheckPangram(input))
+            print(self.check)
         #then we can run the function and pull the data from model->controller->view
         #run base game function and input function
         if input == "" or len(input) < 7 or len(input) > 15:
             messagebox.showinfo("Invalid input!", "Ensure the input is an actual pangram (letters only) and the length is between 7-15")
+            return
         else:
             self.controller.controllerNewGame()
             self.controller.controllerRunBaseGameGUI(input)

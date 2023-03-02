@@ -95,10 +95,6 @@ Try entering one of the following commands to start playing or exit the program:
                         print("Req letters: " + self.controller.controllerGetReqLetter())
                         self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
-                    
-                
-                    
-                
                 case "!showpuzzle":
                         #lots of these are just printing stuff can be removed, just for testing purpsoe.
                         if (self.controller.controllerGetPuzzleState() == 0):

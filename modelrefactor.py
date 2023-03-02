@@ -156,6 +156,16 @@ class model:
         for x in removeReqLetter:
             self.p1.displayLetters.append(x)
 
+    #checks if the word is a pangram for the GUI.
+    def checkPangram(self,input):
+        toSet = set(input)
+        if (len(toSet) == 7):
+            ft = np.ws.checkWord(input)
+            return ft
+        else:
+            return False
+
+
 
 
     def shuffleAuto(self):

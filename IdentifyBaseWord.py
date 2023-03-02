@@ -120,5 +120,3 @@ def baseGameGUI(userInput):
     #if they enter an invalid length
     else:
         return "",""
-
-#baseGame()
