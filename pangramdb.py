@@ -31,7 +31,7 @@ def randomBase():
     str = ''
     for item in randomPangram:
         str = str + item
-    print(str)
+    #print(str)
     #return randomly chosen pangram
     con.commit()
     con.close()

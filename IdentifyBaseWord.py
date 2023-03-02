@@ -84,8 +84,8 @@ def baseGame():
             bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
             randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
             bgreqLetter = bguserLetters[randReqLetterNum]
-            print(bguserLetters)
-            print(bgreqLetter)
+            #print(bguserLetters)
+            #print(bgreqLetter)
             return bguserLetters, bgreqLetter
         #so when the pangram they enter doesn't exist
         else: 
@@ -111,8 +111,8 @@ def baseGameGUI(userInput):
             bguserLetters = re.sub(r'[^a-zA-z]+','', letterSetString)
             randReqLetterNum = random.randint(0,(len(bguserLetters)-1))
             bgreqLetter = bguserLetters[randReqLetterNum]
-            print(bguserLetters)
-            print(bgreqLetter)
+            #print(bguserLetters)
+            #print(bgreqLetter)
             return bguserLetters, bgreqLetter
         #so when the pangram they enter doesn't exist
         else: 

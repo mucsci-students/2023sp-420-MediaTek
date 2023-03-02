@@ -28,10 +28,13 @@ class controller:
         return self.model.getPuzzleRank()
     def controllerGetGameState(self):
         return self.model.getGameState()
+    def controllerGetHoneyCombList(self):
+        return self.model.getHoneyCombList()
     
 
-    
-    
+    def controllerToHoneyComblist(self):
+        self.model.lettersToList()
+
     #UPDATE
     #these functions will update the game state/variables of the puzzle
     #as of right now trying to limit the amount of states we need, but an important one is puzzleStarted.
@@ -77,6 +80,12 @@ class controller:
             for x in letters:
                 viewList.append(x)
             return viewList
+    
+    def controllerToListCLI(self,cliList):
+            letters = self.controllerGetLetters()
+            for x in letters:
+                cliList.append(x)
+            return cliList
 
 
 

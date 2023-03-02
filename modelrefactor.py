@@ -17,6 +17,8 @@ class player:
         self.gaUserLetters = ""
         self.gaReqLetter = ""
         self.gameState = 0
+        #this will be used for the CLI honeycomb.
+        self.displayLetters = []
         #self.checkAuto = 0
         #self.checkBase = 0
         self.points = 0
@@ -44,7 +46,7 @@ class model:
         with open(inputFile + ".json", "r") as save:
             loaded = json.load(save)
 
-        print(loaded['RequiredLetter'])
+        #print(loaded['RequiredLetter'])
         #print(loaded['WordList'])
 
         self.p1.gaReqLetter = loaded['RequiredLetter']
@@ -55,7 +57,7 @@ class model:
         self.p1.getList = loaded['WordList']
 
 
-        print(self.p1.getList)
+        #print(self.p1.getList)
         print(self.p1.gaReqLetter)
         print(self.p1.gaUserLetters) 
         print(self.p1.points)
@@ -104,6 +106,8 @@ class model:
         return self.p1.puzzleTotal
     def getPuzzleRank(self):
         return self.p1.showRank
+    def getHoneyCombList(self):
+        return self.p1.displayLetters
     
     #
     def updatePuzzleState1(self):
@@ -136,13 +140,22 @@ class model:
              self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame()
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
-        print(self.p1.getList)
     
     def NewPuzzleBaseGUI(self,userInput):
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGameGUI(userInput)
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
-        print(self.p1.getList)
+        #print(self.p1.getList)
+
+
+    def lettersToList(self):
+        #remove the required letter from the string.
+        self.p1.displayLetters.clear()
+        removeReqLetter = self.p1.gaUserLetters.replace(self.p1.gaReqLetter,'')
+        #store this new string into a list
+        for x in removeReqLetter:
+            self.p1.displayLetters.append(x)
+
 
 
     def shuffleAuto(self):
@@ -157,6 +170,7 @@ class model:
         shuffledLetters = ''.join(toList)
         self.p1.gaUserLetters = shuffledLetters
         #before abcdef, after fedcba
+        self.lettersToList()
         return self.p1.gaUserLetters
 
     def shuffleBase(self,userLetters):
@@ -166,6 +180,7 @@ class model:
         random.shuffle(toList)
         shuffledLetters = ''.join(toList)
         self.p1.gaUserLetters = shuffledLetters
+        self.lettersToList()
         return self.p1.gaUserLetters
 
     def userGuess(self, userInput):
