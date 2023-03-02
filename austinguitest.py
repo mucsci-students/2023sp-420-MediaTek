@@ -48,6 +48,8 @@ class View:
         self.backButton.pack(pady=10, side='top')
         self.shuffleButton = tk.Button(self.parent, text="Shuffle", command=self.shuffle)
         self.shuffleButton.pack(pady=10, side='top')
+        self.playInstructionButton = tk.Button(self.parent, text="How To Play", command=self.playInstructions)
+        self.playInstructionButton.pack(side='bottom', pady=10)
         
         #GABE WROTE THIS START
         self.saveButton = tk.Button(self.parent, text="Save", command=self.savePuzzle)
@@ -57,7 +59,7 @@ class View:
         self.exitButton = tk.Button(self.parent, text="Exit", command=self.exitPuzzle, height=2, width=5)
         self.exitButton.pack(pady=20, side='bottom')
         #GABE WROTE THIS END
-        self.playInstructionButton = tk.Button(self.parent, text="How To Play", command=self.playInstructions)
+        
 
         self.hexagonLetters = []
         self.reqLetter = ""
@@ -270,7 +272,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         #if there is some sort of userInput put in, check if it's yes then ask for fileName
         #run save function, else in the end it will generate a new puzzle.
         if(self.controller.controllerGetPuzzleState() == 1):
-            userinput = simpledialog.askstring("Would you like to save your game?",  "yes/no?")
+            userinput = simpledialog.askstring("Would you like to save your game?",  "Would you like to save? yes/no:")
             if userinput:
                 if userinput.lower() == "yes":
                     fileName = simpledialog.askstring("Please enter a file name", "File name: ")
@@ -278,7 +280,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
                 elif userinput.lower() == "no":
                     messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
                 else:
-                    messagebox.showinfo("Error", "Enter yes/no")
+                    messagebox.showinfo("Error", "Enter yes/no:")
                     return
             else:
                  messagebox.showinfo("No information provided", "Cancelled, try again")
