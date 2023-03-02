@@ -284,13 +284,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         if(self.controller.controllerGetPuzzleState() == 1):
             answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
             if answer == True:
-                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
-                    self.controller.controllerSaveGame(fileName)
-            elif answer == False:
-                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
+                    self.savePuzzle()
             else:
-                messagebox.showinfo("Error", "Choose yes or no!")
-                return
+                messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
         self.controller.controllerNewGame()
         # clear listbox every time it's run
         self.clearListbox()
@@ -337,16 +333,13 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         if(self.controller.controllerGetPuzzleState() == 1):
             answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
             if answer == True:
-                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
-                    self.controller.controllerSaveGame(fileName)
-            elif answer == False:
-                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
+                    self.savePuzzle()
             else:
-                messagebox.showinfo("Error", "Choose yes or no!")
-                return
+                messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
         #self.controller.controllerNewGame()
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
         if (input == None):
+            messagebox.showinfo("No input!", "Looks like you clicked cancel, don't worry the puzzle will stay as is.")
             return
         #then we can run the function and pull the data from model->controller->view
         #run base game function and input function
