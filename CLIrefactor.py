@@ -8,6 +8,7 @@ import loadgame
 import sys
 import os
 
+
 #create controller object
 '''
 controller = ctrl.controller()
@@ -18,10 +19,26 @@ class view:
     #while loop for the CLI.
     def __init__(self):
         self.controller = ctrl.controller()
+        #variable to store user letters into a list for displaying a honeycomb.
+        self.displayLetters = []
+
+
+    def showHoneyComb(self):
+        self.controller.controllerToHoneyComblist()
+        self.displayLetters = self.controller.controllerGetHoneyCombList()
+        print('''  
+                     %s
+                %s         %s
+                     \033[1;33;1m%s
+                \033[1;37;1m%s         %s
+                     %s      
+        ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+         
 
     def startGame(self):
         self.controller.ensureYesOrNo()
         print('''
+
 
 The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. Letters may be repeated but words must be 4 to 15 letters.
 Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. You are free to use your own pangram to create a personalized puzzle!
@@ -65,23 +82,31 @@ Try entering one of the following commands to start playing or exit the program:
                         self.controller.controllerRunAutoGame()
                         print("User letters: " + self.controller.controllerGetLetters())
                         print("Req letters: " + self.controller.controllerGetReqLetter())
+                        self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
                     if (isAuto.lower() == "no"):
                         self.controller.controllerRunBaseGame()
+                        print("User letters: " + self.controller.controllerGetLetters())
+                        print("Req letters: " + self.controller.controllerGetReqLetter())
+                        self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
+                
+                
+                    
                 
                 case "!showpuzzle":
                         #lots of these are just printing stuff can be removed, just for testing purpsoe.
                         print("Your letters: " + self.controller.controllerGetLetters())
                         print("Required letter: " + self.controller.controllerGetReqLetter())
                         print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
-                        print("Word Bank: " + str(self.controller.controllerGetWordList()))
                         print("User Points: " + str(self.controller.controllerGetPoints()))
                         print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
+                        self.showHoneyComb()
                 case "!showfoundwords":
                         print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
                 case "!shuffle":
                         self.controller.controllerShuffleAuto()
+                        self.showHoneyComb()
                         print("Your letters: " + self.controller.controllerGetLetters())
                 case "!savepuzzle":
                         inputFile = input("Please enter a name for the file: ")
