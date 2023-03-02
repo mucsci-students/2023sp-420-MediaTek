@@ -101,21 +101,33 @@ Try entering one of the following commands to start playing or exit the program:
                 
                 case "!showpuzzle":
                         #lots of these are just printing stuff can be removed, just for testing purpsoe.
-                        print("Your letters: " + self.controller.controllerGetLetters())
-                        print("Required letter: " + self.controller.controllerGetReqLetter())
-                        print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
-                        print("User Points: " + str(self.controller.controllerGetPoints()))
-                        print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
-                        self.showHoneyComb()
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            print("Your letters: " + self.controller.controllerGetLetters())
+                            print("Required letter: " + self.controller.controllerGetReqLetter())
+                            print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
+                            print("User Points: " + str(self.controller.controllerGetPoints()))
+                            print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
+                            self.showHoneyComb()
                 case "!showfoundwords":
-                        print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
                 case "!shuffle":
-                        self.controller.controllerShuffleAuto()
-                        self.showHoneyComb()
-                        print("Your letters: " + self.controller.controllerGetLetters())
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            self.controller.controllerShuffleAuto()
+                            self.showHoneyComb()
+                            print("Your letters: " + self.controller.controllerGetLetters())
                 case "!savepuzzle":
-                        inputFile = input("Please enter a name for the file: ")
-                        self.controller.controllerSaveGame(inputFile)
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            inputFile = input("Please enter a name for the file: ")
+                            self.controller.controllerSaveGame(inputFile)
                 case "!loadpuzzle":
                         inputFile = input("Enter the name of the file you want to load: ")
                         checkFile = inputFile + ".json"
@@ -128,7 +140,10 @@ Try entering one of the following commands to start playing or exit the program:
                             #Tell the user the file doesn't exist
                             print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
                 case "!showstatus":
-                        print("Rank: " + self.controller.controllerGetPuzzleRank())
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            print("Rank: " + self.controller.controllerGetPuzzleRank())
                 case "!help":
                        if(self.controller.controllerGetPuzzleState() == 0):
                         self.controller.controllerStartCommands()
