@@ -24,15 +24,17 @@ class view:
 
 
     def showHoneyComb(self):
-        self.controller.controllerToHoneyComblist()
-        self.displayLetters = self.controller.controllerGetHoneyCombList()
-        print('''  
-                     %s
-                %s         %s
-                     \033[1;33;1m%s
-                \033[1;37;1m%s         %s
-                     %s      
-        ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+
+            self.controller.controllerToHoneyComblist()
+            self.displayLetters = self.controller.controllerGetHoneyCombList()
+            print('''  
+                        %s
+                    %s       %s
+                        \033[1;33;1m%s
+                    \033[1;37;1m%s       %s
+                        %s      
+            ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+
          
 
     def startGame(self):
@@ -78,19 +80,22 @@ Try entering one of the following commands to start playing or exit the program:
                             print("Ok, lets generate a new puzzle! ")
                     self.controller.controllerNewGame()
                     isAuto = input("Do you want it to be automatically generated?: ")
+                    while isAuto.lower() != "yes" and isAuto.lower() != "no":
+                        isAuto = input("Do you want it to be automatically generated?: ")
+                    
                     if (isAuto.lower() == "yes"):
                         self.controller.controllerRunAutoGame()
                         print("User letters: " + self.controller.controllerGetLetters())
                         print("Req letters: " + self.controller.controllerGetReqLetter())
                         self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
-                    if (isAuto.lower() == "no"):
+                    elif isAuto.lower() == "no":
                         self.controller.controllerRunBaseGame()
                         print("User letters: " + self.controller.controllerGetLetters())
                         print("Req letters: " + self.controller.controllerGetReqLetter())
                         self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
-                
+                    
                 
                     
                 
@@ -117,6 +122,8 @@ Try entering one of the following commands to start playing or exit the program:
                         if (os.path.exists(checkFile)):
                             self.controller.controllerGameLoad(inputFile)
                             print("Puzzle loaded!")
+                            self.showHoneyComb()
+
                         else:
                             #Tell the user the file doesn't exist
                             print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
