@@ -20,6 +20,7 @@ class View:
         #creates background image!
         self.bg = PhotoImage(file="combsbig.png", height=2000, width=2000)
         self.img = Label(parent, image = self.bg)
+
         self.img.place(x = 0,y = 0)
         # created an input box
         self.e = tk.Entry(self.parent, width=100, bg="white", fg="black")
@@ -56,6 +57,7 @@ class View:
         self.exitButton = tk.Button(self.parent, text="Exit", command=self.exitPuzzle, height=2, width=5)
         self.exitButton.pack(pady=20, side='bottom')
         #GABE WROTE THIS END
+        self.playInstructionButton = tk.Button(self.parent, text="How To Play", command=self.playInstructions)
 
         self.hexagonLetters = []
         self.reqLetter = ""
@@ -241,6 +243,12 @@ class View:
                 main.destroy()
             except Exception as e:
                 messagebox.showerror("Error", f"Error exiting game: {e}")
+
+    #function for how to play button
+    def playInstructions(self):
+        messagebox.showinfo("How To Play", '''The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them (the middle letter!) being required for all created words. Letters may be repeated but words must be 4 to 15 letters.
+Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. You are free to use your own pangram to create a personalized puzzle by pressing the New Puzzle Base button!''')
+        
 
     #shuffle function which just shuffles the list of letters, deletes all the widgets on the canvas and remakes them
     def shuffle(self):
