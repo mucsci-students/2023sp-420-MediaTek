@@ -88,19 +88,12 @@ class View:
 
     def drawPuzzleUI(self, reqLetter, hexagonLetters):
                 self.hexReq = self.draw_hexagon(self.canvas, 250, 180, self.hex_radius, 'yellow', 'black')
-                self.canvas.create_text(250, 180,text = reqLetter,fill="black", font=('Helvetica 24 bold'))
                 hex1 = self.draw_hexagon(self.canvas, 250, 240, self.hex_radius, 'white', 'black')
-                self.canvas.create_text(250, 240,text = hexagonLetters[0],fill="black", font=('Helvetica 24 bold'))
                 hex2 = self.draw_hexagon(self.canvas, 250, 120, self.hex_radius, 'white', 'black')
-                self.canvas.create_text(250, 120,text = hexagonLetters[1],fill="black", font=('Helvetica 24 bold'))
                 hex3 = self.draw_hexagon(self.canvas, 300, 210, self.hex_radius, 'white', 'black')
-                self.canvas.create_text(300, 210,text = hexagonLetters[2],fill="black", font=('Helvetica 24 bold'))
                 hex4 = self.draw_hexagon(self.canvas, 200, 210, self.hex_radius, 'white', 'black')
-                self.canvas.create_text(200, 210,text = hexagonLetters[3],fill="black", font=('Helvetica 24 bold'))
                 hex5 = self.draw_hexagon(self.canvas, 200, 150, self.hex_radius, 'white', 'black')
-                self.canvas.create_text(200, 150,text = hexagonLetters[4],fill="black", font=('Helvetica 24 bold'))
                 hex6 = self.draw_hexagon(self.canvas, 300, 150, self.hex_radius, 'white', 'black')
-                self.canvas.create_text(300, 150,text = hexagonLetters[5],fill="black", font=('Helvetica 24 bold'))
                 #creates the buttons with the letters and input functionality
                 self.btn1 = tk.Button(self.canvas,text = hexagonLetters[0], background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[0]))
                 self.btn1.place(x=233, y=215)
@@ -329,7 +322,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
 
     def gameplayBase(self):
         if(self.controller.controllerGetPuzzleState() == 1):
-            userinput = simpledialog.askstring("Would you like to save your game?",  "yes/no?")
+            userinput = simpledialog.askstring("Would you like to save your game?",  "Would you like to save? yes/no:")
             if userinput:
                 if userinput.lower() == "yes":
                     fileName = simpledialog.askstring("Please enter a file name", "File name: ")

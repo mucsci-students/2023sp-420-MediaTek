@@ -58,11 +58,11 @@ class model:
 
 
         #print(self.p1.getList)
-        print(self.p1.gaReqLetter)
-        print(self.p1.gaUserLetters) 
-        print(self.p1.points)
-        print(self.p1.puzzleTotal) 
-        print(self.p1.guessedList)
+        print("Required Letter: " + self.p1.gaReqLetter)
+        print("User Letters: " + self.p1.gaUserLetters) 
+        print("Points Earned: " + str(self.p1.points))
+        print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
+        print("Guessed Words: " + str(self.p1.guessedList))
        
         
         # for each element in a file, make it a separate entry in the list.

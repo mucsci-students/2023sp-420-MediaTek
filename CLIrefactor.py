@@ -24,15 +24,17 @@ class view:
 
 
     def showHoneyComb(self):
-        self.controller.controllerToHoneyComblist()
-        self.displayLetters = self.controller.controllerGetHoneyCombList()
-        print('''  
-                     %s
-                %s         %s
-                     \033[1;33;1m%s
-                \033[1;37;1m%s         %s
-                     %s      
-        ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+
+            self.controller.controllerToHoneyComblist()
+            self.displayLetters = self.controller.controllerGetHoneyCombList()
+            print('''  
+                        %s
+                    %s       %s
+                        \033[1;33;1m%s
+                    \033[1;37;1m%s       %s
+                        %s      
+            ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+
          
 
     def startGame(self):
@@ -78,50 +80,70 @@ Try entering one of the following commands to start playing or exit the program:
                             print("Ok, lets generate a new puzzle! ")
                     self.controller.controllerNewGame()
                     isAuto = input("Do you want it to be automatically generated?: ")
+                    while isAuto.lower() != "yes" and isAuto.lower() != "no":
+                        isAuto = input("Do you want it to be automatically generated?: ")
+                    
                     if (isAuto.lower() == "yes"):
                         self.controller.controllerRunAutoGame()
                         print("User letters: " + self.controller.controllerGetLetters())
                         print("Req letters: " + self.controller.controllerGetReqLetter())
                         self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
-                    if (isAuto.lower() == "no"):
+                    elif isAuto.lower() == "no":
                         self.controller.controllerRunBaseGame()
                         print("User letters: " + self.controller.controllerGetLetters())
                         print("Req letters: " + self.controller.controllerGetReqLetter())
                         self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
-                
+                    
                 
                     
                 
                 case "!showpuzzle":
                         #lots of these are just printing stuff can be removed, just for testing purpsoe.
-                        print("Your letters: " + self.controller.controllerGetLetters())
-                        print("Required letter: " + self.controller.controllerGetReqLetter())
-                        print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
-                        print("User Points: " + str(self.controller.controllerGetPoints()))
-                        print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
-                        self.showHoneyComb()
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            print("Your letters: " + self.controller.controllerGetLetters())
+                            print("Required letter: " + self.controller.controllerGetReqLetter())
+                            print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
+                            print("User Points: " + str(self.controller.controllerGetPoints()))
+                            print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
+                            self.showHoneyComb()
                 case "!showfoundwords":
-                        print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
                 case "!shuffle":
-                        self.controller.controllerShuffleAuto()
-                        self.showHoneyComb()
-                        print("Your letters: " + self.controller.controllerGetLetters())
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            self.controller.controllerShuffleAuto()
+                            self.showHoneyComb()
+                            print("Your letters: " + self.controller.controllerGetLetters())
                 case "!savepuzzle":
-                        inputFile = input("Please enter a name for the file: ")
-                        self.controller.controllerSaveGame(inputFile)
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            inputFile = input("Please enter a name for the file: ")
+                            self.controller.controllerSaveGame(inputFile)
                 case "!loadpuzzle":
                         inputFile = input("Enter the name of the file you want to load: ")
                         checkFile = inputFile + ".json"
                         if (os.path.exists(checkFile)):
                             self.controller.controllerGameLoad(inputFile)
                             print("Puzzle loaded!")
+                            self.showHoneyComb()
+
                         else:
                             #Tell the user the file doesn't exist
                             print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
                 case "!showstatus":
-                        print("Rank: " + self.controller.controllerGetPuzzleRank())
+                        if (self.controller.controllerGetPuzzleState() == 0):
+                            print("No game started!")
+                        else:
+                            print("Rank: " + self.controller.controllerGetPuzzleRank())
                 case "!help":
                        if(self.controller.controllerGetPuzzleState() == 0):
                         self.controller.controllerStartCommands()
