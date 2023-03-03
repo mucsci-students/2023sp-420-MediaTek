@@ -128,6 +128,14 @@ class model:
                     self.p1.puzzleTotal += (length + 7)
                 else:
                     self.p1.puzzleTotal += length
+
+    def checkPangram(self,input):
+        toSet = set(input)
+        if (len(toSet) == 7):
+            ft = np.ws.checkWord(input)
+            return ft
+        else:
+            return False
     
     def NewPuzzleAuto(self):
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.autoGame()

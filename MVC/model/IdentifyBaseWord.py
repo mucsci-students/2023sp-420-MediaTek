@@ -67,6 +67,9 @@ def baseGame():
         #get user input, need to add checks like length, what if it isn't valid etc.
     userInput = input("Please give a valid pangram: ")
     userInput.lower()
+    getSet = set(userInput)
+    if len(getSet) != 7:
+        return "empty","empty"
     
     while(len(userInput) < 7):
         userInput = input("Input must be at least 7 characters long! Please reenter a guess/command: ")

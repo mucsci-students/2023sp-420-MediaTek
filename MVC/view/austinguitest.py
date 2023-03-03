@@ -26,9 +26,10 @@ class View:
 
         self.img.place(x = 0,y = 0)
         # created an input box
-        self.e = tk.Entry(self.parent, width=100, bg="white", fg="black")
+        self.e = tk.Entry(self.parent, width=100, bg="white", fg="black", validate ="key", validatecommand=(self.parent.register(self.checkKeys), "%S"))
         self.e.pack()
         self.saved = False
+        self.check = None
 
         # Variables that describe size of hexagon
         self.hex_radius = 30
@@ -76,6 +77,16 @@ class View:
 
         self.test = 0
         # empty state for the buttons
+
+    
+    def checkKeys(self,text):
+        if text == ["\b", ""]:
+            return True
+        letters = list(self.controller.controllerGetLetters())
+        for x in text:
+            if x not in letters:
+                return False
+        return True
 
     def clicker(self):
         print(self.controller.controllerGetLetters())
@@ -268,19 +279,11 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         #if there is some sort of userInput put in, check if it's yes then ask for fileName
         #run save function, else in the end it will generate a new puzzle.
         if(self.controller.controllerGetPuzzleState() == 1):
-            userinput = simpledialog.askstring("Would you like to save your game?",  "Would you like to save? yes/no:")
-            if userinput:
-                if userinput.lower() == "yes":
-                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
-                    self.controller.controllerSaveGame(fileName)
-                elif userinput.lower() == "no":
-                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
-                else:
-                    messagebox.showinfo("Error", "Enter yes/no:")
-                    return
+            answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
+            if answer == True:
+                self.savePuzzle()
             else:
-                 messagebox.showinfo("No information provided", "Cancelled, try again")
-                 return
+                messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
         self.controller.controllerNewGame()
         # clear listbox every time it's run
         self.clearListbox()
@@ -325,23 +328,28 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
 
     def gameplayBase(self):
         if(self.controller.controllerGetPuzzleState() == 1):
-            userinput = simpledialog.askstring("Would you like to save your game?",  "Would you like to save? yes/no:")
-            if userinput:
-                if userinput.lower() == "yes":
-                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
-                    self.controller.controllerSaveGame(fileName)
-                else:
-                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
+            answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
+            if answer == True:
+                    self.savePuzzle()
             else:
                 messagebox.showinfo("No information provided", "going to generate a new puzzle!")
         #self.controller.controllerNewGame()
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
         if (input == None):
+            messagebox.showinfo("No input!", "You hit cancel, don't worry the puzzle will stay as is.")
             return
+        self.check = self.controller.controllerCheckPangram(input)
+        while (self.check == False):
+            input = simpledialog.askstring("Entered an invalid pangram", "Choose a pangram to use (7 unique letters)")
+            if input == None:
+                 return
+            self.check = self.controller.controllerCheckPangram(input)     
+
         #then we can run the function and pull the data from model->controller->view
         #run base game function and input function
         if input == "" or len(input) < 7 or len(input) > 15:
             messagebox.showinfo("Invalid input!", "Ensure the input is an actual pangram (letters only) and the length is between 7-15")
+            return
         else:
             self.controller.controllerNewGame()
             self.controller.controllerRunBaseGameGUI(input)
