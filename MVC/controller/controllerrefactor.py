@@ -73,6 +73,9 @@ class controller:
     def controllerRunBaseGameGUI(self,userInput):
         self.model.NewPuzzleBaseGUI(userInput)
 
+    def controllerCheckPangram(self,input):
+        return self.model.checkPangram(input)
+
 
     
     #for hexagon letters in view
