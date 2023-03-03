@@ -1,4 +1,4 @@
-import modelrefactor as mdl
+from MVC.model import modelrefactor as mdl
 import sys
 import re
 

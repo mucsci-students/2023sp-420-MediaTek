@@ -1,10 +1,10 @@
 import time
 import re
-import controllerrefactor as ctrl
-import Commands
+from MVC.controller import controllerrefactor as ctrl
+from MVC.model import Commands as Commands
 import random
 import json
-import loadgame
+from MVC.model import loadgame as loadgame
 import sys
 import os
 

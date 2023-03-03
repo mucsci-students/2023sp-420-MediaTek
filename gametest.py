@@ -1,8 +1,8 @@
 import pytest
-import modelrefactor
-import controllerrefactor
-import wordlist as WL
-import IdentifyBaseWord as base
+import MVC.model.modelrefactor as modelrefactor
+import MVC.controller.controllerrefactor as controllerrefactor
+import MVC.model.wordlist as WL
+import MVC.model.IdentifyBaseWord as base
 import json
 
 class gametest:

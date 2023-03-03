@@ -1,11 +1,11 @@
 import time
 import re
-import IdentifyBaseWord as np
-import wordlist as wl
-import Commands
+from MVC.model import IdentifyBaseWord as np
+from MVC.model import wordlist as wl
+from MVC.model import Commands as Commands
 import random
 import json
-import loadgame
+from MVC.model import loadgame as loadgame
 import sys
 import os
 
@@ -267,3 +267,4 @@ class model:
             print("Okay... bye.")
             exit()
                 
+print("test")

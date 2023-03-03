@@ -1,8 +1,8 @@
 import json
 import random
 import re
-import wordstuff as ws
-import pangramdb as pgdb
+from MVC.model import wordstuff as ws
+from MVC.model import pangramdb as pgdb
 '''
 Note for team: to properly run this program, you must have the file in the same directory as your json files. Also make sure your json files match my pangram_files name
 Current bug: Bugs out at line 91 sometimes, I couldn't reproduce it but it was some type of out of bounds error something to do with the index.

@@ -1,5 +1,7 @@
 import sqlite3
 import json
+import os
+from MVC.model.connectDB import connectDB as cdb
 #con = sqlite3.connect('pangrams.db')
 #cursor = con.cursor()
 
@@ -21,10 +23,13 @@ displayWords = cursor.fetchall()
 for test2 in displayWords:
     print(test2)
 '''
-    
+check_dir = os.path.dirname(os.path.abspath(__file__))
+db_dir = os.path.join(check_dir,".","pangrams.db")
+abs_path = os.path.abspath(db_dir)
+print(abs_path)
 # function to choose a random pangram for use as the base word in a puzzle
 def randomBase():
-    con = sqlite3.connect('pangrams.db')
+    con = cdb.pangramConnect()
     cursor = con.cursor()
     cursor.execute("SELECT * FROM pangrams ORDER BY RANDOM() LIMIT 1;")
     randomPangram = cursor.fetchone()
@@ -42,3 +47,4 @@ def randomBase():
 #test = randomBase()
 #while len(test) != 15:
     #test = randomBase()
+#randomBase()
