@@ -1,8 +1,10 @@
 import sys
-import IdentifyBaseWord as np
-import wordlist as wl
-import savegame
-import loadgame
+#import MVC.model.IdentifyBaseWord as np
+from MVC.model import IdentifyBaseWord as np
+#import MVC.model.wordlist as wl
+from MVC.model import wordlist as wl
+from MVC.model import savegame as savegame
+from MVC.model import loadgame as loadgame
 
 
 

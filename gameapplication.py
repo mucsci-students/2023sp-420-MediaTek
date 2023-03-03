@@ -1,11 +1,11 @@
 import time
 import re
-import IdentifyBaseWord as np
-import wordlist as wl
-import Commands
+import MVC.model.IdentifyBaseWord as np
+import MVC.model.wordlist as wl
+import MVC.model.Commands as Commands
 import random
 import json
-import loadgame
+import MVC.model.loadgame as loadgame
 import sys
 import os
 

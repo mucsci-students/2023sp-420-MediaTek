@@ -1,8 +1,7 @@
 import sqlite3
 import json
-con = sqlite3.connect('wordbank.db')
-cursor = con.cursor()
-
+import os
+from MVC.model import connectDB as cdb
 #cursor.execute('''CREATE TABLE dict (word TEXT)''')
 
 
@@ -32,7 +31,7 @@ For the random function, if it's possible to return the word that's randomly cho
 
 #for base game
 def checkWord(userInput):
-    con = sqlite3.connect('wordbank.db')
+    con = cdb.wordBankConnect()
     cursor = con.cursor()
     #sql query to find the word
     cursor.execute("SELECT * FROM dict WHERE word=:word", {'word': userInput})
@@ -58,8 +57,4 @@ def checkWord(userInput):
         con.close()
         return False
 
-
-
-
-
-con.commit() 
+checkWord("abdomen")

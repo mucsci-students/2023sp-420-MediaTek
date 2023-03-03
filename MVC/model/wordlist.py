@@ -12,6 +12,8 @@
 import json
 # imports the sql library
 import sqlite3
+import os
+from MVC.model import connectDB as cdb
 # Actual function itself
 #words that user has guessed correctly
 userWordList = []
@@ -21,7 +23,7 @@ def generateWordList (reqLetter, userLetter):
     counter = 0
     
     # Start with getting every word in the wordlist json.
-    con = sqlite3.connect('wordbank.db')
+    con = cdb.connect()
     cursor = con.cursor()
     cursor.execute("SELECT * FROM dict")
     # This next part took me 20 minutes :(
