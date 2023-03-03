@@ -8,3 +8,4 @@ __pycache__/pangramdb.cpython-310.pyc
 __pycache__/savegame.cpython-310.pyc
 __pycache__/wordlist.cpython-310.pyc
 __pycache__/wordstuff.cpython-310.pyc
+*.json
