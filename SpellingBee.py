@@ -3,7 +3,9 @@ import subprocess
 import sys
 import os
 
+
 parser = argparse.ArgumentParser()
+#cli and mac arguments for project.
 parser.add_argument('--cli', action='store_true', help='Run in CLI mode')
 parser.add_argument('--mac', action='store_true', help=' Run the mac version of GUI')
 
