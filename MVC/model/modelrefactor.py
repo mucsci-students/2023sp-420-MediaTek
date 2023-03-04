@@ -40,7 +40,33 @@ class model:
     def __init__(self):
         self.p1 = player()
 
-    def gameLoad(self, inputFile):
+    
+       
+    def gameLoadGUI(self, inputFile):
+        # open the json file and load its contents
+        loadGame = list()
+        with open(inputFile + ".json", "r") as save:
+            loaded = json.load(save)
+
+        #print(loaded['RequiredLetter'])
+        #print(loaded['WordList'])
+
+        self.p1.gaReqLetter = loaded['RequiredLetter']
+        self.p1.gaUserLetters = loaded['PuzzleLetters']
+        self.p1.points = loaded['CurrentPoints']
+        self.p1.puzzleTotal = loaded['MaxPoints']
+        self.p1.guessedList = loaded['GuessedWords']
+        self.p1.getList = loaded['WordList']
+
+
+        print(self.p1.getList)
+        print("Required Letter: " + self.p1.gaReqLetter)
+        print("User Letters: " + self.p1.gaUserLetters) 
+        print("Points Earned: " + str(self.p1.points))
+        print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
+        print("Guessed Words: " + str(self.p1.guessedList))
+        
+    def gameLoadCLI(self, inputFile):
         # open the json file and load its contents
         #loadGame = list()
         with open(inputFile + ".json", "r") as save:
@@ -58,13 +84,12 @@ class model:
 
 
         #print(self.p1.getList)
-        print("Required Letter: " + self.p1.gaReqLetter)
-        print("User Letters: " + self.p1.gaUserLetters) 
+        print("Required Letter: " + self.p1.gaReqLetter.upper())
+        print("User Letters: " + self.p1.gaUserLetters.upper())
         print("Points Earned: " + str(self.p1.points))
         print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
-        print("Guessed Words: " + str(self.p1.guessedList))
-       
-        
+        print("Guessed Words: " + ", ".join(self.p1.guessedList))
+    
         # for each element in a file, make it a separate entry in the list.
         '''
         for l in loaded:
@@ -91,10 +116,12 @@ class model:
     def getGameState(self):
         return self.p1.gameState
     def getLetter(self):
-        return self.p1.gaUserLetters
+        return self.p1.gaUserLetters.upper()
     def getReqLetter(self):
-        return self.p1.gaReqLetter
-    def getGuessedWords(self):
+        return self.p1.gaReqLetter.upper()
+    def getGuessedWordsCLI(self):
+        return ', '.join(self.p1.guessedList)
+    def getGuessedWordsGUI(self):
         return self.p1.guessedList
     def getWordList(self):
         return self.p1.getList
@@ -162,7 +189,7 @@ class model:
         removeReqLetter = self.p1.gaUserLetters.replace(self.p1.gaReqLetter,'')
         #store this new string into a list
         for x in removeReqLetter:
-            self.p1.displayLetters.append(x)
+            self.p1.displayLetters.append(x.upper())
 
 
 
@@ -261,7 +288,7 @@ class model:
                 # if so, save it
                 inputFile = input("Please enter a name for the save file: ")
                 self.saveGame(inputFile)
-                print("Pyzzle saved! Goodbye!")
+                print("Puzzle saved! Goodbye!")
                 exit()
             elif gamesave == "no":
                 # if not, don't.

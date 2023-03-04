@@ -101,7 +101,7 @@ Try entering one of the following commands to start playing or exit the program:
                         else:
                             print("Your letters: " + self.controller.controllerGetLetters())
                             print("Required letter: " + self.controller.controllerGetReqLetter())
-                            print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
+                            print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
                             print("User Points: " + str(self.controller.controllerGetPoints()))
                             print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
                             self.showHoneyComb()
@@ -109,7 +109,7 @@ Try entering one of the following commands to start playing or exit the program:
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
                         else:
-                            print("Guessed words: " + str(self.controller.controllerGetGuessedWords()))
+                            print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
                 case "!shuffle":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
@@ -127,7 +127,7 @@ Try entering one of the following commands to start playing or exit the program:
                         inputFile = input("Enter the name of the file you want to load: ")
                         checkFile = inputFile + ".json"
                         if (os.path.exists(checkFile)):
-                            self.controller.controllerGameLoad(inputFile)
+                            self.controller.controllerGameLoadCLI(inputFile)
                             print("Puzzle loaded!")
                             self.showHoneyComb()
 

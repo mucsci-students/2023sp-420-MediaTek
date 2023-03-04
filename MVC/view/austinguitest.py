@@ -202,7 +202,7 @@ class View:
                 if filename:
                     checkFile = filename + ".json"
                     if os.path.exists(checkFile):
-                        self.controller.controllerGameLoad(filename)
+                        self.controller.controllerGameLoadGUI(filename)
                         messagebox.showinfo("Loaded", "Game loaded successfully!")
                         # clear listbox every time it's run
                         # must clear the letters once a new puzzle is generated
@@ -216,7 +216,7 @@ class View:
                         getLetters = getLetters.replace("[", "").replace("]","")
                         #controller function to append letters into a list
                         self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
-                        thelist = self.controller.controllerGetGuessedWords().copy()
+                        thelist = self.controller.controllerGetGuessedWordsGUI().copy()
                         for x in thelist:
                             self.listBox.insert(tk.END, x)
                         #print stmt's for testing
