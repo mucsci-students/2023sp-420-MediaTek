@@ -1,5 +1,5 @@
 import tkinter as tk
-import controllerrefactor as ctrl
+from MVC.controller import controllerrefactor as ctrl
 import math
 import random
 import os
@@ -18,7 +18,10 @@ class View:
         self.myFrame = tk.Frame(parent, bg='#F4F4F4')
         self.myFrame.pack()
         #creates background image!
-        self.bg = PhotoImage(file="combsbig.png", height=2000, width=2000)
+        check_dir = os.path.dirname(os.path.abspath(__file__))
+        db_dir = os.path.join(check_dir,".","combsbig.png")
+        abs_path = os.path.abspath(db_dir)
+        self.bg = PhotoImage(file=abs_path, height=2000, width=2000)
         self.img = Label(parent, image = self.bg)
         self.menu = tk.Menu(self.parent)
         self.parent.config(menu=self.menu)
@@ -27,6 +30,7 @@ class View:
         self.e = tk.Entry(self.parent, width=100, bg="white", fg="black")
         self.e.pack()
         self.saved = False
+
 
         # Variables that describe size of hexagon
         self.hex_radius = 60
