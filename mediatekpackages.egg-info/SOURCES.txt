@@ -23,4 +23,7 @@ MVC/view/noahmac.py
 mediatekpackages.egg-info/PKG-INFO
 mediatekpackages.egg-info/SOURCES.txt
 mediatekpackages.egg-info/dependency_links.txt
+mediatekpackages.egg-info/requires.txt
 mediatekpackages.egg-info/top_level.txt
+test/__init__.py
+test/unittests.py
