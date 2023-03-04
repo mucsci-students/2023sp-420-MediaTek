@@ -263,7 +263,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         else:
             random.shuffle(self.hexagonLetters)
             self.canvas.delete("all")
-            self.canvas.create_text(250, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
+            self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
     
 
