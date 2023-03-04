@@ -18,6 +18,8 @@ MVC/model/wordstuff.py
 MVC/view/CLIrefactor.py
 MVC/view/__init__.py
 MVC/view/austinguitest.py
+MVC/view/findpath.py
+MVC/view/noahmac.py
 mediatekpackages.egg-info/PKG-INFO
 mediatekpackages.egg-info/SOURCES.txt
 mediatekpackages.egg-info/dependency_links.txt
