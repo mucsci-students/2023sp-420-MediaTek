@@ -103,8 +103,6 @@ Try entering one of the following commands to start playing or exit the program:
                             print("Your letters: " + self.controller.controllerGetLetters())
                             print("Required letter: " + self.controller.controllerGetReqLetter())
                             print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
-                            print("User Points: " + str(self.controller.controllerGetPoints()))
-                            print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
                             self.showHoneyComb()
                 case "!showfoundwords":
                         if (self.controller.controllerGetPuzzleState() == 0):
@@ -145,6 +143,8 @@ Try entering one of the following commands to start playing or exit the program:
                             print("No game started!")
                         else:
                             print("Rank: " + self.controller.controllerGetPuzzleRank())
+                            print("User Points: " + str(self.controller.controllerGetPoints()))
+                            print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
                 case "!help":
                        if(self.controller.controllerGetPuzzleState() == 0):
                         self.controller.controllerStartCommands()
