@@ -185,12 +185,23 @@ class View:
         return filename
     #GABE WROTE THIS
     def loadPuzzle(self):
+        #if puzzle in progress, prompt for saving
+        if(self.controller.controllerGetPuzzleState() == 1):
             try:
-                filename = self.get_filename()
-                if filename:
-                    checkFile = filename + ".json"
-                    if os.path.exists(checkFile):
-                        self.controller.controllerGameLoad(filename)
+                answer = messagebox.askyesnocancel("Open", "Do you want to save the game before loading a new one?")
+                if answer is None:
+                    # User clicked Cancel, do nothing
+                    return
+                elif answer:
+                    # User clicked Yes, prompt to save and exit
+                    self.savePuzzle()
+                # User clicked No or has already saved the game
+                # Close the application
+                try:
+                    filename = filedialog.askopenfilename(defaultextension=".json", filetypes=(("JSON Files", "*.json"), ("All Files", "*.*")))
+                    if filename:
+                        self.clearInput()
+                        self.controller.controllerGameLoadGUI(filename)
                         messagebox.showinfo("Loaded", "Game loaded successfully!")
                         # clear listbox every time it's run
                         # must clear the letters once a new puzzle is generated
@@ -204,30 +215,71 @@ class View:
                         getLetters = getLetters.replace("[", "").replace("]","")
                         #controller function to append letters into a list
                         self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
-                        thelist = self.controller.controllerGetGuessedWords().copy()
+                        thelist = self.controller.controllerGetGuessedWordsGUI().copy()
                         for x in thelist:
                             self.listBox.insert(tk.END, x)
-                        #print stmt's for testing
-                        #print(self.hexagonLetters)
-                        #print(self.controller.controllerGetWordList())
+                        #adds the points
+                        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#FFFFFF')
+                        self.pointLabel.place(x=410,y=40)
+
+                        #adds the rank
+                        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#FFFFFF')
+                        self.rankLabel.place(x=60,y=474)
+
                         #enables use of enter button on keyboard
                         self.e.bind("<Return>",self.makeGuess)
-                        #adds the points
-                        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#F4F4F4')
-                        self.pointLabel.place(x=265,y=40)
-                        #adds the rank
-                        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 20 bold'), background='#F4F4F4')
-                        self.rankLabel.place(x=60,y=490)
                         #get required letter
                         self.reqLetter = self.controller.controllerGetReqLetter()
-                        print(self.reqLetter)
                         #hoping this removes the required letter from the list.
                         self.hexagonLetters.remove(self.reqLetter)
                         #creates the hexagon shapes
+                        self.canvas.delete("all")
                         self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
                         self.controller.controllerUpdatePuzzleState1()
-                    else:
-                        messagebox.showerror("Error", f"Error loading game: File does not exist")
+                except Exception as e:
+                    messagebox.showerror("Error", f"Error loading game: {e}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Error exiting game: {e}")
+        else:
+            try:
+                filename = filedialog.askopenfilename(defaultextension=".json", filetypes=(("JSON Files", "*.json"), ("All Files", "*.*")))
+                if filename:
+                    self.clearInput()
+                    self.controller.controllerGameLoadGUI(filename)
+                    messagebox.showinfo("Loaded", "Game loaded successfully!")
+                    # clear listbox every time it's run
+                    # must clear the letters once a new puzzle is generated
+                    self.hexagonLetters.clear()
+                    self.clearListbox()
+                    #gets points and rank from controller
+                    self.points.set(self.controller.controllerGetPoints())
+                    self.rank.set(self.controller.controllerGetPuzzleRank())
+                    # then we can run the function and pull the data from model->controller->view
+                    getLetters = self.controller.controllerGetLetters()
+                    getLetters = getLetters.replace("[", "").replace("]","")
+                    #controller function to append letters into a list
+                    self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
+                    thelist = self.controller.controllerGetGuessedWordsGUI().copy()
+                    for x in thelist:
+                        self.listBox.insert(tk.END, x)
+                    #adds the points
+                    self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#FFFFFF')
+                    self.pointLabel.place(x=410,y=40)
+
+                    #adds the rank
+                    self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#FFFFFF')
+                    self.rankLabel.place(x=60,y=474)
+
+                    #enables use of enter button on keyboard
+                    self.e.bind("<Return>",self.makeGuess)
+                    #get required letter
+                    self.reqLetter = self.controller.controllerGetReqLetter()
+                    #hoping this removes the required letter from the list.
+                    self.hexagonLetters.remove(self.reqLetter)
+                    #creates the hexagon shapes
+                    self.canvas.delete("all")
+                    self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
+                    self.controller.controllerUpdatePuzzleState1()
             except Exception as e:
                 messagebox.showerror("Error", f"Error loading game: {e}")
             
