@@ -261,7 +261,7 @@ class model:
                 # if so, save it
                 inputFile = input("Please enter a name for the save file: ")
                 self.saveGame(inputFile)
-                print("Pyzzle saved! Goodbye!")
+                print("Puzzle saved! Goodbye!")
                 exit()
             elif gamesave == "no":
                 # if not, don't.
