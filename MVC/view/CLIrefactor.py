@@ -30,7 +30,7 @@ class view:
             print('''  
                         %s
                     %s       %s
-                        \033[93m%s\033[0m
+                        %s
                     %s       %s
                         %s      
             ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
@@ -42,8 +42,9 @@ class view:
         print('''
 
 
-The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. Letters may be repeated but words must be 4 to 15 letters.
-Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. You are free to use your own pangram to create a personalized puzzle!
+The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. 
+Letters may be repeated but words must be 4 to 15 letters. Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. 
+You are free to use your own pangram to create a personalized puzzle!
 
 Try entering one of the following commands to start playing or exit the program:
     !newpuzzle: Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
