@@ -30,7 +30,7 @@ class view:
             print('''  
                         %s
                     %s       %s
-                        \033[93m%s\033[0m
+                        %s
                     %s       %s
                         %s      
             ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
@@ -42,8 +42,9 @@ class view:
         print('''
 
 
-The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. Letters may be repeated but words must be 4 to 15 letters.
-Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. You are free to use your own pangram to create a personalized puzzle!
+The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. 
+Letters may be repeated but words must be 4 to 15 letters. Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. 
+You are free to use your own pangram to create a personalized puzzle!
 
 Try entering one of the following commands to start playing or exit the program:
     !newpuzzle: Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
@@ -124,16 +125,21 @@ Try entering one of the following commands to start playing or exit the program:
                             inputFile = input("Please enter a name for the file: ")
                             self.controller.controllerSaveGame(inputFile)
                 case "!loadpuzzle":
-                        inputFile = input("Enter the name of the file you want to load: ")
-                        checkFile = inputFile + ".json"
-                        if (os.path.exists(checkFile)):
-                            self.controller.controllerGameLoadCLI(inputFile)
-                            print("Puzzle loaded!")
-                            self.showHoneyComb()
+                    if self.controller.controllerGetPuzzleState() == 1:
+                        wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
+                        if wantSave.lower() == "yes":
+                            inputFile = input("Please choose a name for the file: ")
+                            print("Saving your game!")
+                            self.controller.controllerSaveGame(inputFile)
+                    inputFile = input("Enter the name of the file you want to load: ")
+                    checkFile = inputFile + ".json"
+                    if os.path.exists(checkFile):
+                        self.controller.controllerGameLoadCLI(inputFile)
+                        print("Puzzle loaded!")
+                        self.showHoneyComb()
+                    else:
+                        print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
 
-                        else:
-                            #Tell the user the file doesn't exist
-                            print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
                 case "!showstatus":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")

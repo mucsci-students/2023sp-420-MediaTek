@@ -19,15 +19,12 @@ class player:
         self.gameState = 0
         #this will be used for the CLI honeycomb.
         self.displayLetters = []
-        #self.checkAuto = 0
-        #self.checkBase = 0
         self.points = 0
         self.puzzleStarted = 0
         #list of the word bank
         self.getList = list()
         self.showRank = "Noob"
         self.puzzleTotal = 0
-        #self.isLoaded = 0
         #list to store correctly guessed words.
         self.guessedList = list()
 
@@ -41,7 +38,10 @@ class model:
         self.p1 = player()
 
     
-       
+    '''
+    Function used for loading a game into the GUI
+    Just updates the player objects variable with the information side of the file.
+    '''
     def gameLoadGUI(self, inputFile):
         # open the json file and load its contents
         loadGame = list()
@@ -65,15 +65,15 @@ class model:
         print("Points Earned: " + str(self.p1.points))
         print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
         print("Guessed Words: " + str(self.p1.guessedList))
-        
+    '''
+    Function used for loading a game into the CLI
+    Just updates the player objects variable with the information side of the file.
+    '''  
     def gameLoadCLI(self, inputFile):
         # open the json file and load its contents
-        #loadGame = list()
         with open(inputFile + ".json", "r") as save:
             loaded = json.load(save)
 
-        #print(loaded['RequiredLetter'])
-        #print(loaded['WordList'])
 
         self.p1.gaReqLetter = loaded['RequiredLetter']
         self.p1.gaUserLetters = loaded['PuzzleLetters']
@@ -82,37 +82,19 @@ class model:
         self.p1.guessedList = loaded['GuessedWords']
         self.p1.getList = loaded['WordList']
 
-
-        #print(self.p1.getList)
         print("Required Letter: " + self.p1.gaReqLetter.upper())
         print("User Letters: " + self.p1.gaUserLetters.upper())
         print("Points Earned: " + str(self.p1.points))
         print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
         print("Guessed Words: " + ", ".join(self.p1.guessedList))
     
-        # for each element in a file, make it a separate entry in the list.
-        '''
-        for l in loaded:
-            loadGame.append(l)
-        '''
-        
-        # assign values based on the position of each element in the list.
-
-        '''
-        self.p1.gaReqLetter = loadgame.loadRequiredLetter(loadGame[0])
-        self.p1.gaUserLetters = loadgame.loadUserLetters(loadGame[1])
-        self.p1.points = loadgame.loadTotalPoints(loadGame[2])
-        self.p1.puzzleTotal = loadgame.loadMaxPoints(loadGame[3])
-        self.p1.guessedList = loadgame.loadGuessedWords(loadGame[4])
-        self.p1.getList = loadgame.loadWordBank(loadGame[5])
-        '''
-        
         self.p1.puzzleStarted = 1
 
-    def test1(self,userInput):
-        self.p1.gaUserLetters = userInput  
 
-    
+
+    '''
+    All of the functions below just return the information that is stored inside of the player class.
+    '''
     def getGameState(self):
         return self.p1.gameState
     def getLetter(self):
@@ -136,14 +118,19 @@ class model:
     def getHoneyCombList(self):
         return self.p1.displayLetters
     
-    #
+    '''
+    Update the puzzleStarted variable so we can track if a game has been started or not.
+    '''
     def updatePuzzleState1(self):
         self.p1.puzzleStarted = 1
     def updatePuzzleState0(self):
         self.p1.puzzleStarted = 0
 
-    #calculates total points within the players word bank.
-    #will only be run once per new puzzle.
+    '''
+    This function just calculates the total points by checking the length, and if it's a pangram.
+    It gets run once when a new game is started, so the total for the puzzle can be calculated 
+    '''
+
     def calculateTotalPoints(self, wordBank):
         for x in wordBank:
             toSet = set(x)
@@ -155,7 +142,9 @@ class model:
                     self.p1.puzzleTotal += (length + 7)
                 else:
                     self.p1.puzzleTotal += length
-
+    '''
+    Function will check what the user entered is actually a pangram, then check if it actually exists within the file.
+    '''
     def checkPangram(self,input):
         toSet = set(input)
         if (len(toSet) == 7):
@@ -163,12 +152,18 @@ class model:
             return ft
         else:
             return False
-    
+        
+    '''
+    Function will create an automatically generated puzzle for the user, and run the function to calculate the total points
+    '''
     def NewPuzzleAuto(self):
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.autoGame()
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
 
+    '''
+    Function will create a game based on the users input.
+    '''
     def NewPuzzleBase(self):
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame()
         while (self.p1.gaUserLetters == "empty") and (self.p1.gaReqLetter == "empty"):
@@ -176,12 +171,19 @@ class model:
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
     
+
+    '''
+    Function will create a game based on the users input.
+    '''
     def NewPuzzleBaseGUI(self,userInput):
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGameGUI(userInput)
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
         #print(self.p1.getList)
 
+    '''
+    Function returns a list of the userLetters and removes the required letter from it.
+    '''
 
     def lettersToList(self):
         #remove the required letter from the string.
@@ -191,7 +193,9 @@ class model:
         for x in removeReqLetter:
             self.p1.displayLetters.append(x.upper())
 
-
+    '''
+    Shuffles the users letters
+    '''
 
     def shuffleAuto(self):
         #SHUFFLE ALGO
@@ -207,8 +211,10 @@ class model:
         #before abcdef, after fedcba
         self.lettersToList()
         return self.p1.gaUserLetters
-
-    def shuffleBase(self,userLetters):
+    '''
+    Shuffles the users letters
+    '''
+    '''def shuffleBase(self,userLetters):
         #SHUFFLE ALGO
         replaceString = userLetters.replace("[","").replace("]","")
         toList = list(replaceString)
@@ -216,8 +222,14 @@ class model:
         shuffledLetters = ''.join(toList)
         self.p1.gaUserLetters = shuffledLetters
         self.lettersToList()
-        return self.p1.gaUserLetters
-
+        return self.p1.gaUserLetters'''
+    
+    '''
+    This function will take in the user input and check if it's a valid guess.
+    It will convert what the user entered into all lower case since the json files given were only lower case words.
+    The function also updates the players points variable based on the length and if it's a pangram
+    Returns true or false depening on if what the user entered was a correct guess.
+    '''
     def userGuess(self, userInput):
         totalPoints = 0
         #search if what the user types exists within the list
@@ -255,6 +267,10 @@ class model:
         else:
             print("Hey! you didn't use the required letter!")
             return False
+        
+    '''
+    Function calls the savePuzzle which will take in a bunch of important player variables and save them into a json file. 
+    '''
     def saveGame(self, inputFile):
         Commands.savePuzzle(self.p1.gaReqLetter, self.p1.gaUserLetters, self.p1.points, self.p1.puzzleTotal, self.p1.guessedList, self.p1.getList,inputFile)
     def startCommands(self):
