@@ -125,16 +125,21 @@ Try entering one of the following commands to start playing or exit the program:
                             inputFile = input("Please enter a name for the file: ")
                             self.controller.controllerSaveGame(inputFile)
                 case "!loadpuzzle":
-                        inputFile = input("Enter the name of the file you want to load: ")
-                        checkFile = inputFile + ".json"
-                        if (os.path.exists(checkFile)):
-                            self.controller.controllerGameLoadCLI(inputFile)
-                            print("Puzzle loaded!")
-                            self.showHoneyComb()
+                    if self.controller.controllerGetPuzzleState() == 1:
+                        wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
+                        if wantSave.lower() == "yes":
+                            inputFile = input("Please choose a name for the file: ")
+                            print("Saving your game!")
+                            self.controller.controllerSaveGame(inputFile)
+                    inputFile = input("Enter the name of the file you want to load: ")
+                    checkFile = inputFile + ".json"
+                    if os.path.exists(checkFile):
+                        self.controller.controllerGameLoadCLI(inputFile)
+                        print("Puzzle loaded!")
+                        self.showHoneyComb()
+                    else:
+                        print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
 
-                        else:
-                            #Tell the user the file doesn't exist
-                            print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
                 case "!showstatus":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
