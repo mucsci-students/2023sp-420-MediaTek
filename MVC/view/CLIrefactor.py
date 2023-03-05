@@ -7,6 +7,7 @@ import json
 from MVC.model import loadgame as loadgame
 import sys
 import os
+import textwrap
 
 
 #create controller object
@@ -40,15 +41,18 @@ class view:
     def startGame(self):
         self.controller.ensureYesOrNo()
         print('''
-The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. 
-Letters may be repeated but words must be 4 to 15 letters. Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. 
-You are free to use your own pangram to create a personalized puzzle!
+Welcome to MediaTek's Spelling Bee! 
+- The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
+- The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
+- Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
 
-Try entering one of the following commands to start playing or exit the program:
-- !newpuzzle: Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
-- !loadpuzzle: Allows you to load a saved puzzle from files. Type the file name of the saved puzzle with this command.
-- !help: Displays the list of commands currently accessible.
-- !exit: Exits the game.
+To get started, you can type:
+    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+    !help: To see the list of all the commands.
+    !exit: To exit the program.
+
+We hope you enjoy playing!
 ''')
 
         while (True):

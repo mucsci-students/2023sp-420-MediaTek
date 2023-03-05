@@ -12,35 +12,36 @@ from MVC.model import loadgame as loadgame
 def help():
     print('''
 
-How To Play: The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. 
-Letters may be repeated but words must be 4 to 15 letters. Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. 
-You are free to use your own pangram to create a personalized puzzle!
+How To Play: 
+- The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
+- The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
+- Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
 
 Commands:
-    !newpuzzle: Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
+    !newpuzzle: Generates a new puzzle. You can even provide your own pangram for puzzle creation!
     !showpuzzle: Displays the current puzzle.
     !showfoundwords: Lists all of the correctly guessed words.
-    !shuffle: Shuffles the given letters in a random arangement (except the required letter which stays in the center).
+    !shuffle: Shuffles the given letters in a random arangement (except the required letter in the center).
     !savepuzzle: Saves your puzzle to your local machine.
     !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
     !showstatus: Shows your current status.
     !help: You just typed this command. Congrats.
-    !exit: Exits the game. You will be asked if you want to save your puzzle to not lose progress.
+    !exit: Exits the game. You will be asked if you want to save your puzzle before exiting.
           ''')
 
 #list of commands at the beginning of the program
 def commandsStart():
     print('''
 
-The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them being required for all created words. 
-Letters may be repeated but words must be 4 to 15 letters. Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. 
-You are free to use your own pangram to create a personalized puzzle!
+- The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
+- The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
+- Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
 
-Try entering one of the following commands to start playing or exit the program:
-    !newpuzzle: Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
-    !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
-    !help: Displays the list of commands currently accessible.
-    !exit: Exits the game.
+To get started, you can type:
+    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+    !help: To see the list of all the commands.
+    !exit: To exit the program.
           ''')
 
 #def newPuzzle():
