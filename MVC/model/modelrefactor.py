@@ -59,7 +59,6 @@ class model:
         self.p1.getList = loaded['WordList']
 
 
-        print(self.p1.getList)
         print("Required Letter: " + self.p1.gaReqLetter)
         print("User Letters: " + self.p1.gaUserLetters) 
         print("Points Earned: " + str(self.p1.points))
@@ -233,7 +232,6 @@ class model:
     def userGuess(self, userInput):
         totalPoints = 0
         #search if what the user types exists within the list
-        #print(self.p1.getList)
         toLower = userInput.lower()
         userInput = toLower
         if self.p1.gaReqLetter in userInput:
@@ -283,18 +281,25 @@ class model:
     def gameRank(self):
         #variable to store ranks
         #for a game in progress, matches point values to ranks
-        #redo so that we take words from userunique, get point values (can yoink code above ^) for total value, use that value to do like getTotal < value * .10 (ten percent?) etc...
         calculatePercentage = ((self.p1.points/self.p1.puzzleTotal) * 100)
-        if calculatePercentage >= 0 and calculatePercentage <= 5:
+        if calculatePercentage >= 0 and calculatePercentage <= 1:
             self.p1.showRank = "Beginner"
-        elif calculatePercentage > 5 and calculatePercentage <= 40:
+        elif calculatePercentage > 1 and calculatePercentage <= 3:
+            self.p1.showRank = "Good"
+        elif calculatePercentage > 3 and calculatePercentage <= 6:
+            self.p1.showRank = "Great"
+        elif calculatePercentage > 6 and calculatePercentage <= 10:
             self.p1.showRank = "Novice"
-        elif calculatePercentage > 40 and calculatePercentage <= 60:
+        elif calculatePercentage > 10 and calculatePercentage <= 15:
+            self.p1.showRank = "Amazing"
+        elif calculatePercentage > 15 and calculatePercentage <= 25:
             self.p1.showRank = "Advanced"
-        elif calculatePercentage > 60 and calculatePercentage <= 80:
+        elif calculatePercentage > 25 and calculatePercentage <= 50:
             self.p1.showRank = "Expert"
-        else:    
+        elif calculatePercentage > 50 and calculatePercentage < 100:    
             self.p1.showRank = "Master"
+        else:
+            self.p1.showRank = "Puzzle Finished! Good Job!"
     
     
     # exits the game
