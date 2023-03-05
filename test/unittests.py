@@ -56,6 +56,20 @@ class unittest:
             assert self.model.getGameState() == 1
             assert len(self.model.getLetter()) == 7
     
+    # Tests the GUI version of BaseGame
+    def testBaseGameGUI(self):
+        self.pangram = "pangrams"
+        self.gameLetters, self.gameReq = self.base.baseGameGUI(self.pangram)
+        assert len(self.gameReq) == 1
+        assert not len(self.gameLetters) == 0
+    
+    # Tests auto game in IdentifyBaseWord
+    def testAutoGame(self):
+        self.gameLetters, self.gameReq = self.base.autoGame()
+        assert len(self.gameReq) == 1
+        assert not len(self.gameLetters) == 0
+        
+    
     # Tests save and load functionality
     def testSaveAndLoad(self):
         self.gameLetters = "mediocr"
@@ -85,3 +99,8 @@ class unittest:
             
 
 print(ctrl.controller.controllerGetLetters())
+unittest.testAutoGame(self)
+unittest.testBaseGameGUI(self)
+unittest.testInvalidPangram(self)
+unittest.testPangramSevenLetters(self)
+unittest.testSaveAndLoad(self)
