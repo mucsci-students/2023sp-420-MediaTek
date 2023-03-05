@@ -45,7 +45,7 @@ class model:
     def gameLoadGUI(self, inputFile):
         # open the json file and load its contents
         loadGame = list()
-        with open(inputFile + ".json", "r") as save:
+        with open(inputFile) as save:
             loaded = json.load(save)
 
         #print(loaded['RequiredLetter'])
