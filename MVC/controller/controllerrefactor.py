@@ -10,8 +10,10 @@ class controller:
     #functions will return the data that is stored within the object.
     def controllerGetLetters(self):
         return self.model.getLetter()
-    def controllerGetGuessedWords(self):
-        return self.model.getGuessedWords()
+    def controllerGetGuessedWordsGUI(self):
+        return self.model.getGuessedWordsGUI()
+    def controllerGetGuessedWordsCLI(self):
+        return self.model.getGuessedWordsCLI()
     def controllerGetWordList(self):
         return self.model.getWordList()
     def controllerShuffleAuto(self):
@@ -60,8 +62,10 @@ class controller:
         self.model.NewPuzzleBase()
     def controllerSaveGame(self, inputFile):
         self.model.saveGame(inputFile)
-    def controllerGameLoad(self, inputFile):
-        self.model.gameLoad(inputFile)
+    def controllerGameLoadGUI(self, inputFile):
+        self.model.gameLoadGUI(inputFile)
+    def controllerGameLoadCLI(self, inputFile):
+        self.model.gameLoadCLI(inputFile)
     def controllerNewGame(self):
         self.model.resetGame()
     def controllerStartCommands(self):
@@ -94,6 +98,8 @@ class controller:
 
     #Checks to see if the string only contains letters and !
     def checkInput(self,userInput, reqLetter):
+        print(userInput)
+        print(reqLetter)
         if re.match("^[a-zA-Z!]*$", userInput) and reqLetter in userInput:
             return True
         else:
