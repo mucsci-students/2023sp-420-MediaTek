@@ -47,7 +47,7 @@ To run our game locally, you will need to follow these steps.
 ### Prerequisites
 
 
-* Python version 3.112, which can be downloaded at https://www.python.org/downloads/
+* Python version 3.11.2, which can be downloaded at https://www.python.org/downloads/
 
 ### Installation
 
