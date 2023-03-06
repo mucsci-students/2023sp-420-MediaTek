@@ -11,12 +11,16 @@ from tkinter import filedialog
 import time
 
 class View:
+    '''
+    default constructor 
+    '''
     def __init__(self, parent, ctrl):
         self.controller = ctrl.controller()
         self.parent = parent
         # created a frame
         self.myFrame = tk.Frame(parent, bg='#F4F4F4')
         self.myFrame.pack()
+        #find the path for the background image.
         check_dir = os.path.dirname(os.path.abspath(__file__))
         db_dir = os.path.join(check_dir,".","combsbig.png")
         abs_path = os.path.abspath(db_dir)
@@ -73,7 +77,7 @@ class View:
         self.menu.add_cascade(label="Help",menu=self.helpMenu)
         self.helpMenu.add_command(label = "How to play",command = self.playInstructions)
         
-
+        #variables for displaying information to the screen
         self.hexagonLetters = []
         self.reqLetter = ""
         self.getLetters = ""
@@ -87,29 +91,44 @@ class View:
         self.test = 0
         # empty state for the buttons
 
-    
+    '''
+    Function created to only allow users to type in the letters given for the puzzle
+    '''
     def checkKeys(self,text):
+        #Allow the user to also use backspace key to remove letters
         if text == ["\b", ""]:
             return True
+        #create a list of the given letters for the puzzle
         letters = list(self.controller.controllerGetLetters())
+        #using list comprehension, we can check if the keys being pressed aren't in the list regardless of them entering capital letters.
         for x in text:
             if str(x).lower() not in [str(letter).lower() for letter in letters]:
                 return False
         return True
-
-
+    
     def clicker(self):
         print(self.controller.controllerGetLetters())
+    
 
+    '''
+    Function inserts the text at the end of the input box.
+    '''
     def sendInput(self, text):
         self.e.insert(tk.END, text)
-
+    '''
+    Function clears the input box completely.
+    '''
     def clearInput(self):
         self.e.delete(0, tk.END)
-
+    '''
+    Function clears the list box completely.
+    '''
     def clearListbox(self):
         self.listBox.delete(0, tk.END)
-
+    
+    '''
+    Function creates the hexagons for the puzzles.
+    '''
     def drawPuzzleUI(self, reqLetter, hexagonLetters):
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.hexReq = self.draw_hexagon(self.canvas, 375, 250, self.hex_radius, 'yellow', 'black')
@@ -140,11 +159,15 @@ class View:
             self.canvas.create_text(30, 485, text="Rank:", fill="black", font=('Helvetica 12 bold'))
    
     
-
+    '''
+    Function deletes the right most characte from the inputbox
+    '''
     def backspace(self):
         self.e.delete(len(self.e.get()) - 1, tk.END)
 
-    # call user guess from controller, this probably should have been moved into the controller later
+    '''
+    Function stores user input then runs through controller -> model guess function to see if they made a correct one or not.
+    '''
     def makeGuess(self, *args):
         input = self.e.get()
         #made it so userGuess returns true/false so that way we only insert valid words into the listbox.
@@ -155,12 +178,13 @@ class View:
                 messagebox.showinfo("Invalid Guess", "Please re-enter a guess.")
         else:
             messagebox.showinfo("Invalid input", "Ensure each guess uses the required letter, and consists of letters only.")
-
+        #update the points and rank after every guess.
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
         #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
         print(self.controller.controllerGetPuzzleRank())
         print(self.controller.controllerGetPoints())
+        #clears the input box everytime.
         self.clearInput()
 
     # Function that creates a hexagon
@@ -173,7 +197,11 @@ class View:
             points.append((x_i, y_i))
         canvas.create_polygon(points, fill=fill, outline=outline)
 
-    #GABE WROTE THIS
+    '''
+    Function shows up message asking if the user would like to save
+    If so then it runs from view->controller->model save function.
+    else throws errrors.
+    '''
     def savePuzzle(self):
          if(self.controller.controllerGetPuzzleState() == 0):
                 messagebox.showinfo("Error!", "No game started!")
@@ -187,7 +215,9 @@ class View:
             except Exception as e:
                 messagebox.showerror("Error", f"Error saving game: {e}")
 
-    #GABE WROTE THIS
+    '''
+    Function gets the filename from the user.
+    '''
     def get_filename(self):
         filename = ""
         while not filename:
@@ -198,7 +228,10 @@ class View:
                 break
         return filename
     
-    #GABE WROTE THIS
+    '''
+    Function asks if the user wants to save first, end result is loading data from a json file into the game.
+    Ugly solution since we found this bug last minute.
+    '''
     def loadPuzzle(self):
         #if puzzle in progress, prompt for saving
         if(self.controller.controllerGetPuzzleState() == 1):
@@ -298,7 +331,9 @@ class View:
             except Exception as e:
                 messagebox.showerror("Error", f"Error loading game: {e}")
          
-    #GABE WROTE THIS
+    '''
+    Function will prompt user if they'd like to save, exits the program.
+    '''
     def exitPuzzle(self):
         if(self.controller.controllerGetPuzzleState() == 0):
                 main.destroy()
@@ -333,10 +368,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
     
-
-    # this function will have all the necessary things for the game to be played, like mainly to redraw the hexagons
-    # as of right now trying to get new puzzle auto-working with it and making a correct guess.
-    # and then display the guessed words on the screen somewhere.
+    '''
+    Function is meant for automatically generating a puzzle for the user to play.
+    '''
     def gameplay(self):
         #checks if the puzzle state is 1
         #then asks the user if they would like to save
@@ -387,6 +421,10 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         self.canvas.delete("all")
         self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
         self.controller.controllerUpdatePuzzleState1()
+
+    '''
+    Function generates a new puzzle based off of what the user types in for their pangram.
+    '''
 
     def gameplayBase(self):
         if(self.controller.controllerGetPuzzleState() == 1):
