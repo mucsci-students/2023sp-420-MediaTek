@@ -13,7 +13,7 @@ import json
 # imports the sql library
 import sqlite3
 import os
-from MVC.model import connectDB as cdb
+from MVC.database import connectDB as cdb
 # Actual function itself
 #words that user has guessed correctly
 userWordList = []

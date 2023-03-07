@@ -163,10 +163,8 @@ class model:
     '''
     Function will create a game based on the users input.
     '''
-    def NewPuzzleBase(self):
-        self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame()
-        while (self.p1.gaUserLetters == "empty") and (self.p1.gaReqLetter == "empty"):
-             self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame()
+    def NewPuzzleBase(self,userInput):
+        self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame(userInput)
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
     
@@ -174,10 +172,10 @@ class model:
     '''
     Function will create a game based on the users input.
     '''
-    def NewPuzzleBaseGUI(self,userInput):
+    '''def NewPuzzleBaseGUI(self,userInput):
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGameGUI(userInput)
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
-        self.calculateTotalPoints(self.p1.getList)
+        self.calculateTotalPoints(self.p1.getList)'''
         #print(self.p1.getList)
 
     '''

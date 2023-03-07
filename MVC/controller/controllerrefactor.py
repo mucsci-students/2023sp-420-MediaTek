@@ -89,8 +89,8 @@ class controller:
     '''
     Calls the New Puzzle Base function
     '''
-    def controllerRunBaseGame(self):
-        self.model.NewPuzzleBase()
+    def controllerRunBaseGame(self,userInput):
+        self.model.NewPuzzleBase(userInput)
     '''
     Calls the save game function
     '''
@@ -99,8 +99,8 @@ class controller:
     '''
     Calls the game load gui function
     '''
-    def controllerGameLoadGUI(self, inputFile):
-        self.model.gameLoadGUI(inputFile)
+    '''def controllerGameLoadGUI(self, inputFile):
+        self.model.gameLoadGUI(inputFile)'''
     '''
     calls the game load cli function
     '''
@@ -129,8 +129,8 @@ class controller:
     '''
     Calls the new puzzle base gui function, passing userInput.
     '''
-    def controllerRunBaseGameGUI(self,userInput):
-        self.model.NewPuzzleBaseGUI(userInput)
+    '''def controllerRunBaseGameGUI(self,userInput):
+        self.model.NewPuzzleBaseGUI(userInput)'''
 
     
     '''

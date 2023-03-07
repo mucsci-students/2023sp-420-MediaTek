@@ -2,11 +2,11 @@ import os
 import sys
 getPath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'mvc'))
 sys.path.append(getPath)
-from MVC.model import modelrefactor as mdl
+from MVC.model import model as mdl
 from MVC.model import IdentifyBaseWord as base
 from MVC.model import wordlist as wl
 from MVC.model import savegame as save
-from MVC.controller import controllerrefactor as ctrl
+from MVC.controller import controller as ctrl
 
 # How many modules do we need? YES.
 import unittest

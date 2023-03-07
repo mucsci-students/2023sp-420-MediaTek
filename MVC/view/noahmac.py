@@ -405,7 +405,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             messagebox.showinfo("Invalid input!", "Ensure the input is an actual pangram (letters only) and the length is between 7-15")
         else:
             self.controller.controllerNewGame()
-            self.controller.controllerRunBaseGameGUI(input)
+            self.controller.controllerRunBaseGame(input)
             getLetters = self.controller.controllerGetLetters()
             print("Get letters before: " + getLetters)
             getLetters = getLetters.replace("[", "").replace("]","")

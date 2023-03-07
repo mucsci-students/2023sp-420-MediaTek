@@ -1,8 +1,8 @@
 import json
 import random
 import re
-from MVC.model import wordstuff as ws
-from MVC.model import pangramdb as pgdb
+from MVC.database import wordstuff as ws
+from MVC.database import pangramdb as pgdb
 '''
 Note for team: to properly run this program, you must have the file in the same directory as your json files. Also make sure your json files match my pangram_files name
 Current bug: Bugs out at line 91 sometimes, I couldn't reproduce it but it was some type of out of bounds error something to do with the index.
@@ -57,22 +57,23 @@ def autoGame():
     userLetters = replaceString
     return userLetters, reqLetter
     
-def baseGame():
+def baseGame(input):
     bguserLetters = None
     bgreqLetter = None
+    userInput = input.lower()
     getWords = list()
 
         #"word": "abhenry"
 
         #get user input, need to add checks like length, what if it isn't valid etc.
-    userInput = input("Please give a valid pangram: ")
-    userInput.lower()
-    getSet = set(userInput)
-    if len(getSet) != 7:
-        return "empty","empty"
+    #userInput = input("Please give a valid pangram: ")
+    #userInput.lower()
+    '''getSet = set(userInput)'''
+    '''if len(getSet) != 7:
+        return "empty","empty"'''
     
-    while(len(userInput) < 7):
-        userInput = input("Input must be at least 7 characters long! Please reenter a guess/command: ")
+    '''while(len(userInput) < 7):
+        userInput = input("Input must be at least 7 characters long! Please reenter a guess/command: ")'''
     
     #get length of input
     getLength = len(userInput)
@@ -92,13 +93,11 @@ def baseGame():
             return bguserLetters, bgreqLetter
         #so when the pangram they enter doesn't exist
         else: 
-            print("Uh oh, looks like you didn't enter a pangram that exists with the json file!")
-            return "empty","empty"
+            return "",""
     #if they enter an invalid length
     else:
-        print("invalid length, ensure the length of input is 7-15")
-        return "empty","empty"
-def baseGameGUI(userInput):
+        return "",""
+'''def baseGameGUI(userInput):
     bguserLetters = None
     bgreqLetter = None
     #get length of input
@@ -124,4 +123,4 @@ def baseGameGUI(userInput):
     else:
         return "",""
 
-#baseGame()
+#baseGame()'''

@@ -22,6 +22,7 @@ class view:
         self.controller = ctrl.controller()
         #variable to store user letters into a list for displaying a honeycomb.
         self.displayLetters = []
+        self.check = False
 
 
     def showHoneyComb(self):
@@ -93,7 +94,12 @@ We hope you enjoy playing!
                         self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
                     elif isAuto.lower() == "no":
-                        self.controller.controllerRunBaseGame()
+                        userInput = input("Choose a pangram: ")
+                        self.check = self.controller.controllerCheckPangram(userInput)
+                        while(self.check == False):
+                             userInput = input("Your pangram doesn't exist within our database, please try again. Enter a pangram: ")
+                             self.check = self.controller.controllerCheckPangram(userInput)
+                        self.controller.controllerRunBaseGame(userInput)
                         print("User letters: " + self.controller.controllerGetLetters())
                         print("Req letters: " + self.controller.controllerGetReqLetter())
                         self.showHoneyComb()
