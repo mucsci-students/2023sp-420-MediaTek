@@ -1,7 +1,7 @@
 import sqlite3
 import json
 import os
-from MVC.model.connectDB import connectDB as cdb
+from MVC.database import connectDB as cdb
 #con = sqlite3.connect('pangrams.db')
 #cursor = con.cursor()
 
