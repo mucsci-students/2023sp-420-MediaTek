@@ -1,7 +1,151 @@
+<<<<<<< Updated upstream
 # 2023sp-420-MediaTek
 <h1 align="center"><img src="https://preview.redd.it/pwpks2a80bj31.gif?width=800&auto=webp&s=48bfc3ad55d7d05c07ff193152deac92c9bb090e" alt="minecraft bee" width="200" height="200 />
 <h2 align="center">Welcome to MediaTek's Spelling Bee Game!</h2>
   <h4 align="right">An Application created by Austin An, Devon Fair, Gabe Zimmerman, Noah Barger, and Tessa Hughes</h4>
+=======
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a name="readme-top"></a>
+
+
+
+[![Contributors][contributors-shield]][contributors-url]
+[![Issues][issues-shield]][issues-url]
+![Repo Size][repo-size-shield]
+![Last Commit][last-commit-shield]
+[![MIT License][license-shield]][license-url]
+
+
+<!-- PROJECT LOGO -->
+<br />
+
+  # <div align="center">MediaTek's Spelling Bee Game</div>
+
+  <div align="center">
+    Created by Austin An, Devon Fair, Gabriel Zimmermann, Noah Barger, and Tess Hughes</div>
+    <br />
+  
+
+  
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+To run our game locally, you will need to follow these steps.
+
+### Prerequisites
+
+
+* Python version 3.11.2, which can be downloaded at https://www.python.org/downloads/
+
+### Installation
+
+
+
+1. Clone the repo  
+  WINDOWS/MAC:
+   ```sh
+   git clone https://github.com/mucsci-students/2023sp-420-MediaTek
+   ```
+2. Navigate to the folder inside your terminal  
+  WINDOWS/MAC:
+   ```sh
+   cd path\to\folder\2023sp-420-MediaTek
+   ``` 
+3. If on MAC make sure pip is installed with the command, if on Windows skip this step.
+  MAC:
+  ```sh
+  python3 -m ensurepip
+  ```
+4. Install dependencies with the following command  
+  WINDOWS/MAC:
+   ```sh
+   pip install -r requirements.txt 
+   ```
+5. To build the program, run the following command while still inside the directory  
+  WINDOWS/MAC:
+   ```sh
+   pip install -e .
+   ```
+  
+The game should now be properly installed and ready to play.
+ 
+ ### Running  
+ 
+ 
+1. To launch the game in GUI mode  
+  WINDOWS:
+   ```sh
+   py SpellingBee.py
+   ```
+   MAC:
+   ```sh
+   python3 SpellingBee.py --mac
+   ```
+2. To launch the game in CLI mode    
+  WINDOWS:
+   ```sh
+   py SpellingBee.py --cli
+   ```
+  MAC:
+  ```sh
+  python3 SpellingBee.py --cli
+  ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Test File
+  
+To run the test file, navigate to the test folder with  
+  WINDOWS/MAC:
+   ```sh
+   cd path\to\folder\2023sp-420-MediaTek\test
+   ```
+then run the command  
+  WINDOWS:
+   ```sh
+   py unittest.py
+   ```
+  MAC:
+    ```sh
+    python3 unittest.py
+    ```
+
+
+<!-- COMMANDS EXAMPLES -->
+## Commands
+
+See below for a list of CLI-specific commands and their functionality!
+  
+* ```!newpuzzle```  
+  Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
+* ```!showpuzzle```  
+  Displays the current puzzle, including all kinds of fun stats.
+* ```!showfoundwords```  
+  Lists all of the correctly guessed words.
+* ```!shuffle```  
+  Shuffles the given letters in a random arangement (except the required letter which stays in the center).
+* ```!savepuzzle```  
+  Saves your puzzle to the root directory.  **NOTE: The GUI version lets you save anywhere on your machine.
+* ```!loadpuzzle```  
+  Allows you to load a saved puzzle from the root directory.  **NOTE: The GUI version lets you load from anywhere on your machine.
+* ```!showstatus```  
+  Shows your current rank, points earned, and total points possible.
+* ```!help```  
+  Displays the list of commands currently accessible.
+* ```!exit```  
+  Exits the game. You will be asked if you want to save your puzzle to not lose progress.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Meet the Team
+  
+| [![Tessa Hughes](https://avatars.githubusercontent.com/u/122769747?v=4)](https://github.com/tmhughes1) | [![Austin An](https://avatars.githubusercontent.com/u/113960168?v=4)](https://github.com/auanmu) | [![Devon Fair](https://avatars.githubusercontent.com/u/20361090?v=4)](https://github.com/SteamsDev) | [![Noah Barger](https://avatars.githubusercontent.com/u/98166939?v=4)](https://github.com/noahbarger) | [![Gabe Zimmermann](https://avatars.githubusercontent.com/u/80365452?v=4)](https://github.com/gabe2762) | 
+|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| [Tessa Hughes](https://github.com/tmhughes1)                                                          | [Austin An](https://https://github.com/auanmu)                                                  | [Devon Fair](https://github.com/SteamsDev)                                                          | [Noah Barger](https://github.com/noahbarger)                                                           | [Gabe Zimmermann](https://github.com/gabe2762)                                                          |
+>>>>>>> Stashed changes
   
   
   <h3 align="left">Setup and Installation</h3><br />
