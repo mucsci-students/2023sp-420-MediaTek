@@ -11,10 +11,15 @@ class controller:
     '''
     def controllerGetLetters(self):
         return self.model.getLetter()
+    
+    
     def controllerGetGuessedWordsGUI(self):
-        return self.model.getGuessedWordsGUI()
+        return self.model.getGuessedWords()
     def controllerGetGuessedWordsCLI(self):
-        return self.model.getGuessedWordsCLI()
+        words = self.model.getGuessedWords()
+        return ', '.join(words)
+
+        
     def controllerGetWordList(self):
         return self.model.getWordList()
     def controllerShuffleAuto(self):
@@ -34,9 +39,12 @@ class controller:
     def controllerGetHoneyCombList(self):
         return self.model.getHoneyCombList()
     
+    
 
     def controllerToHoneyComblist(self):
         self.model.lettersToList()
+
+    
 
     '''
     These functions below all specifically modify the puzzle in some shape or form.
@@ -99,8 +107,8 @@ class controller:
     '''
     Calls the game load gui function
     '''
-    '''def controllerGameLoadGUI(self, inputFile):
-        self.model.gameLoadGUI(inputFile)'''
+    def controllerGameLoadGUI(self, inputFile):
+        self.model.gameLoadGUI(inputFile)
     '''
     calls the game load cli function
     '''
@@ -125,7 +133,47 @@ class controller:
     Calls the gameExit function
     '''
     def controllerGameExit(self):
-        self.model.gameExit()
+        '''
+           if self.p1.puzzleStarted:
+            gamesave = input("Do you wish to save your game? (yes/no): ")
+            if gamesave == "yes":
+                # if so, save it
+                inputFile = input("Please enter a name for the save file: ")
+                self.saveGame(inputFile)
+                print("Puzzle saved! Goodbye!")
+                exit()
+            elif gamesave == "no":
+                # if not, don't.
+                print("Okay! See you on the other side!")
+                exit()
+            else:
+                print("Please enter \"yes\" or \"no\"!")
+                self.gameExit()
+        # If a puzzle isn't loaded, just leave.
+        else:
+            print("Okay... bye.")
+            exit()
+        '''
+        if self.model.getPuzzleState() == 1:
+            gamesave = input("Do you wish to save your game? (yes/no): ")
+            if gamesave == "yes":
+                # if so, save it
+                inputFile = input("Please enter a name for the save file: ")
+                self.model.saveGame(inputFile)
+                print("Puzzle saved! Goodbye!")
+                exit()
+            elif gamesave == "no":
+                # if not, don't.
+                print("Okay! See you on the other side!")
+                exit()
+            else:
+                print("Please enter \"yes\" or \"no\"!")
+                self.gameExit()
+        else:
+            print("Okay... bye.")
+            exit()
+
+        #self.model.gameExit()
     '''
     Calls the new puzzle base gui function, passing userInput.
     '''
