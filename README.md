@@ -37,22 +37,27 @@ To run our game locally, you will need to follow these steps.
 
 
 1. Clone the repo  
-  WINDOWS:
+  WINDOWS/MAC:
    ```sh
    git clone https://github.com/mucsci-students/2023sp-420-MediaTek
    ```
 2. Navigate to the folder inside your terminal  
-  WINDOWS:
+  WINDOWS/MAC:
    ```sh
    cd path\to\folder\2023sp-420-MediaTek
    ``` 
-3. Install dependencies with the following command  
-  WINDOWS:
+3. If on MAC make sure pip is installed with the command, if on Windows skip this step.
+  MAC:
+  ```sh
+  python3 -m ensurepip
+  ```
+4. Install dependencies with the following command  
+  WINDOWS/MAC:
    ```sh
    pip install -r requirements.txt 
    ```
-4. To build the program, run the following command while still inside the directory  
-  WINDOWS:
+5. To build the program, run the following command while still inside the directory  
+  WINDOWS/MAC:
    ```sh
    pip install -e .
    ```
@@ -67,18 +72,27 @@ The game should now be properly installed and ready to play.
    ```sh
    py SpellingBee.py
    ```
+   MAC:
+   ```sh
+   python3 SpellingBee.py --mac
+   ```
 2. To launch the game in CLI mode    
   WINDOWS:
    ```sh
    py SpellingBee.py --cli
    ```
+  MAC:
+  ```sh
+  python3 SpellingBee.py --cli
+  ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 ## Test File
   
 To run the test file, navigate to the test folder with  
-  WINDOWS:
+  WINDOWS/MAC:
    ```sh
    cd path\to\folder\2023sp-420-MediaTek\test
    ```
@@ -87,6 +101,10 @@ then run the command
    ```sh
    py unittest.py
    ```
+  MAC:
+    ```sh
+    python3 unittest.py
+    ```
 
 
 <!-- COMMANDS EXAMPLES -->
@@ -121,26 +139,42 @@ See below for a list of CLI-specific commands and their functionality!
 | [![Tessa Hughes](https://avatars.githubusercontent.com/u/122769747?v=4)](https://github.com/tmhughes1) | [![Austin An](https://avatars.githubusercontent.com/u/113960168?v=4)](https://github.com/auanmu) | [![Devon Fair](https://avatars.githubusercontent.com/u/20361090?v=4)](https://github.com/SteamsDev) | [![Noah Barger](https://avatars.githubusercontent.com/u/98166939?v=4)](https://github.com/noahbarger) | [![Gabe Zimmermann](https://avatars.githubusercontent.com/u/80365452?v=4)](https://github.com/gabe2762) | 
 |---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | [Tessa Hughes](https://github.com/tmhughes1)                                                          | [Austin An](https://https://github.com/auanmu)                                                  | [Devon Fair](https://github.com/SteamsDev)                                                          | [Noah Barger](https://github.com/noahbarger)                                                           | [Gabe Zimmermann](https://github.com/gabe2762)                                                          |
+>>>>>>> Stashed changes
   
   
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=red
-[contributors-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/graphs/contributors
-[repo-size-shield]: https://img.shields.io/github/repo-size/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=success
-[last-commit-shield]: https://img.shields.io/github/last-commit/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=9cf
-[issues-shield]: https://img.shields.io/github/issues/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=yellow
-[issues-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/issues
-[license-shield]: https://img.shields.io/github/license/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=blueviolet
-[license-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/blob/master/LICENSE.txt
+  <h3 align="left">Setup and Installation</h3><br />
+  
+  <p align="left">
+  For our game to run on your computer, ensure you have the following installed:
+  <ul>
+    <li>Latest version of Python, found <a href="https://www.python.org/downloads/">here</a></li>
+  </ul><br />
+  To install and run the game on your computer, do the following:
+  <ul><br />
+    <li>Download the most recent version of the repository</li>
+    <li>For Windows OS:</li>
+        Open your Command Prompt and open the directory of the game folder using <code>cd C:\Users\name\2023sp-420-MediaTek</code>.
+        Once inside the directory, type <code>py gameapplication.py</code> OR <code>python3 gameapplication.py</code> to run!</li>
+    <li>For Mac OS:</li>
+        Open your Terminal and type <code>cd 2023sp-420-MediaTek</code>, ensuring you are in the correct directory where the folder is located first.
+        Once inside, type <code>python3 gameapplication.py</code> OR <code>py gameapplication.py</code> to run!</li>
+  </ul><br />
+  </p>
+  <h3>Commands</h3>
+  <p>For a list of commands and their functionality, see below!
+  <ul>
+  <li><code>!newpuzzle</code></li>  Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
+  <li><code>!showpuzzle</code></li>  Displays the current puzzle.
+  <li><code>!showfoundwords</code></li>  Lists all of the correctly guessed words.
+  <li><code>!shuffle</code></li>  Shuffles the given letters in a random arangement (except the required letter which stays in the center).
+  <li><code>!savepuzzle</code></li>  Saves your puzzle to your local machine.
+  <li><code>!loadpuzzle</code></li>  Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
+  <li><code>!showstatus</code></li>  Shows your current status.
+  <li><code>!help</code></li>  Displays the list of commands currently accessible.
+  <li><code>!exit</code></li>  Exits the game. You will be asked if you want to save your puzzle to not lose progress.
+  </ul>
+  </p><br />
+  <br />
+  <img src="https://64.media.tumblr.com/81e4263afa274df7639a083407fc603a/c2009d127ae92e1d-1d/s640x960/d2fa5e871d801b7f33fe4aa5c111778a3b434d5b.gif" alt="bees in a forest" width="800" height="200" />
+  <h3 align="right">Enjoy playing our spelling bee game!</h3>
+  <p align="right">(bees not included)</p>
