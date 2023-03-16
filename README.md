@@ -46,7 +46,12 @@ To run our game locally, you will need to follow these steps.
    ```sh
    cd path\to\folder\2023sp-420-MediaTek
    ``` 
-3. To build the program, run the following command while still inside the directory  
+3. Install dependencies with the following command  
+  WINDOWS:
+   ```sh
+   pip install -r requirements.txt 
+   ```
+4. To build the program, run the following command while still inside the directory  
   WINDOWS:
    ```sh
    pip install -e .
