@@ -42,6 +42,10 @@ class model:
     Function used for loading a game into the GUI
     Just updates the player objects variable with the information side of the file.
     '''
+
+
+    #need to change gameLoadCLI/GUI to be the same exact function
+    #the difference between the two need to be done FIRST in the controller, and then call gameLoad.
     def gameLoadGUI(self, inputFile):
         # open the json file and load its contents
         loadGame = list()
@@ -100,9 +104,13 @@ class model:
         return self.p1.gaUserLetters.upper()
     def getReqLetter(self):
         return self.p1.gaReqLetter.upper()
+    '''
     def getGuessedWordsCLI(self):
         return ', '.join(self.p1.guessedList)
     def getGuessedWordsGUI(self):
+        return self.p1.guessedList
+    '''
+    def getGuessedWords(self):
         return self.p1.guessedList
     def getWordList(self):
         return self.p1.getList
@@ -181,7 +189,7 @@ class model:
     '''
     Function returns a list of the userLetters and removes the required letter from it.
     '''
-
+    
     def lettersToList(self):
         #remove the required letter from the string.
         self.p1.displayLetters.clear()
@@ -189,6 +197,7 @@ class model:
         #store this new string into a list
         for x in removeReqLetter:
             self.p1.displayLetters.append(x.upper())
+    
 
     '''
     Shuffles the users letters
@@ -301,6 +310,8 @@ class model:
     
     
     # exits the game
+    #to be deleted, got moved to controller.
+    '''
     def gameExit(self):
         # if a puzzle is started, as if the user wants to save the game
         if self.p1.puzzleStarted:
@@ -322,4 +333,5 @@ class model:
         else:
             print("Okay... bye.")
             exit()
+        '''
             

@@ -72,7 +72,7 @@ We hope you enjoy playing!
                 else:
                     self.controller.controllerUserGuess(userInput)
 
-            match userInput:
+            match userInput.lower():
                 case "!newpuzzle":
                     if(self.controller.controllerGetPuzzleState() == 1):
                         wantSave = input("Hey do you want to save the game? (yes/no): ")
@@ -83,7 +83,7 @@ We hope you enjoy playing!
                         else:
                             print("Ok, lets generate a new puzzle! ")
                     self.controller.controllerNewGame()
-                    isAuto = input("Do you want it to be automatically generated?: ")
+                    isAuto = input("Do you want it to be automatically generated? (yes/no): ")
                     while isAuto.lower() != "yes" and isAuto.lower() != "no":
                         isAuto = input("Do you want it to be automatically generated?: ")
                     
