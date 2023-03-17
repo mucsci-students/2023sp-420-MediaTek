@@ -158,6 +158,7 @@ class View:
     Function stores user input then runs through controller -> model guess function to see if they made a correct one or not.
     '''
     # call user guess from controller, this probably should have been moved into the controller later
+    
     def makeGuess(self, *args):
         input = self.e.get()        
         #made it so userGuess returns true/false so that way we only insert valid words into the listbox.
@@ -180,6 +181,7 @@ class View:
         print(self.controller.controllerGetPoints())
         #clears the input box everytime.
         self.clearInput()
+
 
     # Function that creates a hexagon
     def draw_hexagon(self, canvas, x, y, radius, fill, outline):
@@ -329,11 +331,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         #if there is some sort of userInput put in, check if it's yes then ask for fileName
         #run save function, else in the end it will generate a new puzzle.
         if(self.controller.controllerGetPuzzleState() == 1):
-            answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
+            answer = messagebox.askyesno("Would you like to save?", "Would you like to save the current game?")
             if answer == True:
                 self.savePuzzle()
-            else:
-                messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
         self.clearInput()
         self.controller.controllerNewGame()
         # clear listbox every time it's run
@@ -372,12 +372,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
             if answer == True:
                     self.savePuzzle()
-            else:
-                messagebox.showinfo("No information provided", "going to generate a new puzzle!")
         #self.controller.controllerNewGame()
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
         if (input == None):
-            messagebox.showinfo("No input!", "You hit cancel, don't worry the puzzle will stay as is.")
             return
         self.check = self.controller.controllerCheckPangram(input)
         while (self.check == False):
