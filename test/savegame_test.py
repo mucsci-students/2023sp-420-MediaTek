@@ -22,7 +22,7 @@ class savegame_test:
     def __init__(self):
         self.wordlist = wordlist
     
-    # Tests the samvegam file for functionality
+    # Tests the savegame file for functionality
     def savegame_test(self):
         userLetters = "pangrms"
         reqLetter = "a"
@@ -31,7 +31,7 @@ class savegame_test:
         points = 20
         maxPoints = 100
         
-        # Unsure if this is the optimal way to test this but it's all I got wit the knowlege I have.
+        # Unsure if this is the optimal way to test this but it's all I got with the knowlege I have.
         savegame(reqLetter, userLetters, points, maxPoints, guessedWords, wordList, "pangram")
         with open("pangram.json", "r") as save:
             assert json.load(save) != None
