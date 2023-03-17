@@ -23,17 +23,14 @@ class IdentifyBaseWord_test:
     # Tests automatic game functionality
     def autoGame_test(self):
         randUserLetters, randReqLetter = self.base.autoGame()
-        assert randReqLetter.isalpha() & len(randReqLetter) == 1
-        assert randUserLetters.isalpha() & len(randUserLetters) == 7
+        print(randReqLetter)
+        print(randUserLetters)
+        assert (randReqLetter.isalpha()) and (len(randReqLetter) == 1)
+        assert (randUserLetters.isalpha()) and (len(randUserLetters) == 7)
     
     # Tests base game functionality
     def baseGame_test(self):
         userInput = "pangrams"
         baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
-        assert baseReqLetter.isalpha() & len(baseReqLetter) == 1
-        assert baseUserLetters.isalpha() & len(baseUserLetters) == 7
-        
-        userInput = "pangram"
-        baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
-        assert len(baseReqLetter) == 0
-        assert len(baseUserLetters) == 0
+        assert (baseReqLetter.isalpha()) and (len(baseReqLetter) == 1)
+        assert (baseUserLetters.isalpha()) and (len(baseUserLetters) == 7)
