@@ -168,11 +168,11 @@ class View:
             else:
                 messagebox.showinfo("Invalid Guess", "Word is not in list.")
         else:
+
             if len(input) < 4:
                 messagebox.showinfo("Invalid guess", "Word is too short (minimum 4 letters).")
             else:
                 messagebox.showinfo("Invalid input", "Required letter was not used.")
-
         #update the points and rank after every guess.
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
@@ -375,6 +375,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         #self.controller.controllerNewGame()
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
         if (input == None):
+            messagebox.showinfo("No input!", "You hit cancel, don't worry the puzzle will stay as is.")
             return
         self.check = self.controller.controllerCheckPangram(input)
         while (self.check == False):
