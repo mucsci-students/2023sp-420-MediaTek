@@ -9,7 +9,7 @@ from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import filedialog
 import time
-#t
+
 class View:
     def __init__(self, parent, ctrl):
         self.controller = ctrl.controller()
@@ -27,7 +27,7 @@ class View:
         self.parent.config(menu=self.menu)
         self.img.place(x = 0,y = 0)
         # created an input box
-        self.e = tk.Entry(self.parent, width=100, bg="white", fg="black")
+        self.e = tk.Entry(self.parent, width=100, bg="white", fg="black", validate ="key", validatecommand=(self.parent.register(self.checkKeys), "%S"))
         self.e.pack()
         self.saved = False
 
@@ -85,13 +85,34 @@ class View:
         self.listBox.pack(padx=300,pady=5, fill=tk.BOTH, expand=True)
         self.test = 0
         # empty state for the buttons
+        
+    '''
+    Function created to only allow users to type in the letters given for the puzzle
+    '''
+    def checkKeys(self,text):
+        #Allow the user to also use backspace key to remove letters
+        if text == ["\b", ""]:
+            return True
+        #create a list of the given letters for the puzzle
+        letters = list(self.controller.controllerGetLetters())
+        #using list comprehension, we can check if the keys being pressed aren't in the list regardless of them entering capital letters.
+        for x in text:
+            if str(x).lower() not in [str(letter).lower() for letter in letters]:
+                return False
+        return True
 
     def clicker(self):
         print(self.controller.controllerGetLetters())
-
+    
+    '''
+    Function inserts the text at the end of the input box.
+    '''
     def sendInput(self, text):
         self.e.insert(tk.END, text)
 
+    '''
+    Function clears the input box completely.
+    '''
     def clearInput(self):
         self.e.delete(0, tk.END)
 
@@ -127,27 +148,37 @@ class View:
                 self.canvas.create_text(30, 485, text="Rank:", fill="black", font=('Helvetica 20 bold'))
 
     
-
+    '''
+    Function deletes the right most characte from the inputbox
+    '''
     def backspace(self):
         self.e.delete(len(self.e.get()) - 1, tk.END)
 
+    '''
+    Function stores user input then runs through controller -> model guess function to see if they made a correct one or not.
+    '''
     # call user guess from controller, this probably should have been moved into the controller later
     def makeGuess(self, *args):
-        input = self.e.get()
+        input = self.e.get()        
         #made it so userGuess returns true/false so that way we only insert valid words into the listbox.
-        if self.controller.checkInput(input, self.reqLetter) == True:
+        if self.controller.checkInput(input.lower(), self.reqLetter.lower()) == True and len(input) >= 4:
             if self.controller.controllerUserGuess(input) == True:
-                self.listBox.insert(tk.END,input)
+                self.listBox.insert(tk.END,input.lower())
             else:
-                messagebox.showinfo("Invalid Guess", "Please re-enter a guess.")
+                messagebox.showinfo("Invalid Guess", "Word is not in list.")
         else:
-            messagebox.showinfo("Invalid input", "Ensure each guess uses the required letter, and consists of letters only.")
+            if len(input) < 4:
+                messagebox.showinfo("Invalid guess", "Word is too short (minimum 4 letters).")
+            else:
+                messagebox.showinfo("Invalid input", "Required letter was not used.")
 
+        #update the points and rank after every guess.
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
         #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
         print(self.controller.controllerGetPuzzleRank())
         print(self.controller.controllerGetPoints())
+        #clears the input box everytime.
         self.clearInput()
 
     # Function that creates a hexagon
@@ -185,6 +216,45 @@ class View:
                 break
         return filename
     #GABE WROTE THIS
+    def loadHelper(self,filename):
+        self.clearInput()
+        self.controller.controllerGameLoadGUI(filename)
+        messagebox.showinfo("Loaded", "Game loaded successfully!")
+        # clear listbox every time it's run
+        # must clear the letters once a new puzzle is generated
+        self.hexagonLetters.clear()
+        self.clearListbox()
+        #gets points and rank from controller
+        self.points.set(self.controller.controllerGetPoints())
+        self.rank.set(self.controller.controllerGetPuzzleRank())
+        # then we can run the function and pull the data from model->controller->view
+        getLetters = self.controller.controllerGetLetters()
+        getLetters = getLetters.replace("[", "").replace("]","")
+        #controller function to append letters into a list
+        self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
+        thelist = self.controller.controllerGetGuessedWordsGUI().copy()
+        for x in thelist:
+            self.listBox.insert(tk.END, x)
+        #adds the points
+        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 20 bold'), background='#FFFFFF', foreground='#000000')
+        self.pointLabel.place(x=400,y=35)
+
+        #adds the rank
+        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 20 bold'), background='#FFFFFF', foreground='#000000')
+        self.rankLabel.place(x=60,y=470)
+
+        #enables use of enter button on keyboard
+        self.e.bind("<Return>",self.makeGuess)
+        #get required letter
+        self.reqLetter = self.controller.controllerGetReqLetter()
+        #hoping this removes the required letter from the list.
+        self.hexagonLetters.remove(self.reqLetter)
+        #creates the hexagon shapes
+        self.canvas.delete("all")
+        self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
+        self.controller.controllerUpdatePuzzleState1()
+
+
     def loadPuzzle(self):
         #if puzzle in progress, prompt for saving
         if(self.controller.controllerGetPuzzleState() == 1):
@@ -201,42 +271,7 @@ class View:
                 try:
                     filename = filedialog.askopenfilename(defaultextension=".json", filetypes=(("JSON Files", "*.json"), ("All Files", "*.*")))
                     if filename:
-                        self.clearInput()
-                        self.controller.controllerGameLoadGUI(filename)
-                        messagebox.showinfo("Loaded", "Game loaded successfully!")
-                        # clear listbox every time it's run
-                        # must clear the letters once a new puzzle is generated
-                        self.hexagonLetters.clear()
-                        self.clearListbox()
-                        #gets points and rank from controller
-                        self.points.set(self.controller.controllerGetPoints())
-                        self.rank.set(self.controller.controllerGetPuzzleRank())
-                        # then we can run the function and pull the data from model->controller->view
-                        getLetters = self.controller.controllerGetLetters()
-                        getLetters = getLetters.replace("[", "").replace("]","")
-                        #controller function to append letters into a list
-                        self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
-                        thelist = self.controller.controllerGetGuessedWordsGUI().copy()
-                        for x in thelist:
-                            self.listBox.insert(tk.END, x)
-                        #adds the points
-                        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#FFFFFF')
-                        self.pointLabel.place(x=410,y=40)
-
-                        #adds the rank
-                        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#FFFFFF')
-                        self.rankLabel.place(x=60,y=474)
-
-                        #enables use of enter button on keyboard
-                        self.e.bind("<Return>",self.makeGuess)
-                        #get required letter
-                        self.reqLetter = self.controller.controllerGetReqLetter()
-                        #hoping this removes the required letter from the list.
-                        self.hexagonLetters.remove(self.reqLetter)
-                        #creates the hexagon shapes
-                        self.canvas.delete("all")
-                        self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
-                        self.controller.controllerUpdatePuzzleState1()
+                        self.loadHelper(filename)
                 except Exception as e:
                     messagebox.showerror("Error", f"Error loading game: {e}")
             except Exception as e:
@@ -245,42 +280,7 @@ class View:
             try:
                 filename = filedialog.askopenfilename(defaultextension=".json", filetypes=(("JSON Files", "*.json"), ("All Files", "*.*")))
                 if filename:
-                    self.clearInput()
-                    self.controller.controllerGameLoadGUI(filename)
-                    messagebox.showinfo("Loaded", "Game loaded successfully!")
-                    # clear listbox every time it's run
-                    # must clear the letters once a new puzzle is generated
-                    self.hexagonLetters.clear()
-                    self.clearListbox()
-                    #gets points and rank from controller
-                    self.points.set(self.controller.controllerGetPoints())
-                    self.rank.set(self.controller.controllerGetPuzzleRank())
-                    # then we can run the function and pull the data from model->controller->view
-                    getLetters = self.controller.controllerGetLetters()
-                    getLetters = getLetters.replace("[", "").replace("]","")
-                    #controller function to append letters into a list
-                    self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
-                    thelist = self.controller.controllerGetGuessedWordsGUI().copy()
-                    for x in thelist:
-                        self.listBox.insert(tk.END, x)
-                    #adds the points
-                    self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#FFFFFF')
-                    self.pointLabel.place(x=410,y=40)
-
-                    #adds the rank
-                    self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#FFFFFF')
-                    self.rankLabel.place(x=60,y=474)
-
-                    #enables use of enter button on keyboard
-                    self.e.bind("<Return>",self.makeGuess)
-                    #get required letter
-                    self.reqLetter = self.controller.controllerGetReqLetter()
-                    #hoping this removes the required letter from the list.
-                    self.hexagonLetters.remove(self.reqLetter)
-                    #creates the hexagon shapes
-                    self.canvas.delete("all")
-                    self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
-                    self.controller.controllerUpdatePuzzleState1()
+                    self.loadHelper(filename)
             except Exception as e:
                 messagebox.showerror("Error", f"Error loading game: {e}")
             
@@ -329,81 +329,70 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         #if there is some sort of userInput put in, check if it's yes then ask for fileName
         #run save function, else in the end it will generate a new puzzle.
         if(self.controller.controllerGetPuzzleState() == 1):
-            userinput = simpledialog.askstring("Would you like to save your game?",  "Would you like to save? yes/no:")
-            if userinput:
-                if userinput.lower() == "yes":
-                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
-                    self.controller.controllerSaveGame(fileName)
-                elif userinput.lower() == "no":
-                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
-                else:
-                    messagebox.showinfo("Error", "Enter yes/no:")
-                    return
+            answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
+            if answer == True:
+                self.savePuzzle()
             else:
-                 messagebox.showinfo("No information provided", "Cancelled, try again")
-                 return
+                messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
+        self.clearInput()
         self.controller.controllerNewGame()
         # clear listbox every time it's run
         self.clearListbox()
         # must clear the letters once a new puzzle is generated
         self.hexagonLetters.clear()
-
         #gets points and rank from controller
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
-
         # then we can run the function and pull the data from model->controller->view
         self.controller.controllerRunAutoGame()
         getLetters = self.controller.controllerGetLetters()
         getLetters = getLetters.replace("[", "").replace("]","")
-        
         #controller function to append letters into a list
         self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
-        #print stmt's for testing
-        #print(self.hexagonLetters)
-        #print(self.controller.controllerGetWordList())
-
         #enables use of enter button on keyboard
         self.e.bind("<Return>",self.makeGuess)
-
         #adds the points
-        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 20 bold'), background='#FFFFFF')
-        self.pointLabel.place(x=410,y=36)
-
-
+        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 20 bold'), background='#FFFFFF', foreground='#000000')
+        self.pointLabel.place(x=400,y=35)
         #adds the rank
-        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 20 bold'), background='#FFFFFF')
+        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 20 bold'), background='#FFFFFF', foreground='#000000')
         self.rankLabel.place(x=60,y=470)
-
         #get required letter
         self.reqLetter = self.controller.controllerGetReqLetter()
         print(self.reqLetter)
         #hoping this removes the required letter from the list.
         self.hexagonLetters.remove(self.reqLetter)
         #creates the hexagon shapes
+        self.canvas.delete("all")
         self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
         self.controller.controllerUpdatePuzzleState1()
 
     def gameplayBase(self):
         if(self.controller.controllerGetPuzzleState() == 1):
-            userinput = simpledialog.askstring("Would you like to save your game?",  "Would you like to save? yes/no:")
-            if userinput:
-                if userinput.lower() == "yes":
-                    fileName = simpledialog.askstring("Please enter a file name", "File name: ")
-                    self.controller.controllerSaveGame(fileName)
-                else:
-                    messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
+            answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
+            if answer == True:
+                    self.savePuzzle()
             else:
                 messagebox.showinfo("No information provided", "going to generate a new puzzle!")
         #self.controller.controllerNewGame()
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
         if (input == None):
+            messagebox.showinfo("No input!", "You hit cancel, don't worry the puzzle will stay as is.")
             return
+        self.check = self.controller.controllerCheckPangram(input)
+        while (self.check == False):
+            input = simpledialog.askstring("Entered an invalid pangram", "Choose a pangram to use (7 unique letters)")
+            if input == None:
+                 return
+            self.check = self.controller.controllerCheckPangram(input)     
+
         #then we can run the function and pull the data from model->controller->view
         #run base game function and input function
         if input == "" or len(input) < 7 or len(input) > 15:
             messagebox.showinfo("Invalid input!", "Ensure the input is an actual pangram (letters only) and the length is between 7-15")
+            return
         else:
+            self.clearInput()
             self.controller.controllerNewGame()
             self.controller.controllerRunBaseGame(input)
             getLetters = self.controller.controllerGetLetters()
@@ -421,18 +410,13 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
             #enables use of enter button on keyboard
             self.e.bind("<Return>",self.makeGuess)
-            #adds the points
-            self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 20 bold'), background='#F4F4F4')
-            self.pointLabel.place(x=375,y=40)
-            #adds the rank
-            self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#F4F4F4')
-            self.rankLabel.place(x=60,y=270)
             #get required letter
             self.reqLetter = self.controller.controllerGetReqLetter()
             print(self.reqLetter)
             #hoping this removes the required letter from the list.
             self.hexagonLetters.remove(self.reqLetter)
             #creates the hexagon shapes
+            self.canvas.delete("all")
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
             self.controller.controllerUpdatePuzzleState1()
 

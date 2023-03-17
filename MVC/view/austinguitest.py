@@ -169,15 +169,19 @@ class View:
     Function stores user input then runs through controller -> model guess function to see if they made a correct one or not.
     '''
     def makeGuess(self, *args):
-        input = self.e.get()
+        input = self.e.get()        
         #made it so userGuess returns true/false so that way we only insert valid words into the listbox.
-        if self.controller.checkInput(input.lower(), self.reqLetter.lower()) == True:
+        if self.controller.checkInput(input.lower(), self.reqLetter.lower()) == True and len(input) >= 4:
             if self.controller.controllerUserGuess(input) == True:
                 self.listBox.insert(tk.END,input.lower())
             else:
-                messagebox.showinfo("Invalid Guess", "Please re-enter a guess.")
+                messagebox.showinfo("Invalid Guess", "Word is not in list.")
         else:
-            messagebox.showinfo("Invalid input", "Ensure each guess uses the required letter, and consists of letters only.")
+            if len(input) < 4:
+                messagebox.showinfo("Invalid guess", "Word is too short (minimum 4 letters).")
+            else:
+                messagebox.showinfo("Invalid input", "Required letter was not used.")
+
         #update the points and rank after every guess.
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
