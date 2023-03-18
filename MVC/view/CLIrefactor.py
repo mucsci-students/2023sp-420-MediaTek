@@ -66,11 +66,14 @@ We hope you enjoy playing!
                 userInput = input("Input must be between 4 and 15 characters! Please reenter your input: ")
 
             if '!' not in userInput:
-                #controller user guess function
+            # controller user guess function
                 if self.controller.controllerGetPuzzleState() != 1:
-                     print("Make sure to start a puzzle before guessing")
+                    print("Make sure to start a puzzle before guessing")
                 else:
-                    self.controller.controllerUserGuess(userInput)
+                    if userInput in self.controller.controllerGetGuessedWordsCLI():
+                        print("This word has already been guessed correctly.")
+                    else:
+                        self.controller.controllerUserGuess(userInput)
 
             match userInput.lower():
                 case "!newpuzzle":
