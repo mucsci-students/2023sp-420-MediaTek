@@ -185,6 +185,14 @@ class View:
                 messagebox.showinfo("Invalid Guess", "Word is not in list.")
         else:
             messagebox.showinfo("Invalid input", "Required letter was not used.")
+        #update the points and rank after every guess.
+        self.points.set(self.controller.controllerGetPoints())
+        self.rank.set(self.controller.controllerGetPuzzleRank())
+        #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
+        print(self.controller.controllerGetPuzzleRank())
+        print(self.controller.controllerGetPoints())
+        #clears the input box everytime.
+        self.clearInput()
 
     # Function that creates a hexagon
     def draw_hexagon(self, canvas, x, y, radius, fill, outline):
