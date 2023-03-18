@@ -68,7 +68,7 @@ We hope you enjoy playing!
             if '!' not in userInput:
             # controller user guess function
                 if self.controller.controllerGetPuzzleState() != 1:
-                    print("Make sure to start a puzzle before guessing")
+                    print("You have not started a puzzle. Type !newpuzzle to start playing, !exit to exit, !help for more options.")
                 else:
                     if userInput in self.controller.controllerGetGuessedWordsCLI():
                         print("This word has already been guessed correctly.")
