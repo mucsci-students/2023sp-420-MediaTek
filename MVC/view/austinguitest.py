@@ -170,22 +170,21 @@ class View:
     '''
     def makeGuess(self, *args):
         input = self.e.get()
-        #made it so userGuess returns true/false so that way we only insert valid words into the listbox.
-        if self.controller.checkInput(input.lower(), self.reqLetter.lower()) == True:
+        # Check if the input is within the required length range
+        if len(input) < 4 or len(input) > 15:
+            messagebox.showinfo("Invalid guess", "Word must be between 4 and 15 letters.")
+        # Check if the word has already been guessed correctly
+        elif input.lower() in self.listBox.get(0, tk.END):
+            messagebox.showinfo("Already Guessed", "This word has already been guessed correctly.")
+        # Check if the input is valid
+        elif self.controller.checkInput(input.lower(), self.reqLetter.lower()) == True:
+            # Check if the guess is correct
             if self.controller.controllerUserGuess(input) == True:
                 self.listBox.insert(tk.END,input.lower())
             else:
-                messagebox.showinfo("Invalid Guess", "Please re-enter a guess.")
+                messagebox.showinfo("Invalid Guess", "Word is not in list.")
         else:
-            messagebox.showinfo("Invalid input", "Ensure each guess uses the required letter, and consists of letters only.")
-        #update the points and rank after every guess.
-        self.points.set(self.controller.controllerGetPoints())
-        self.rank.set(self.controller.controllerGetPuzzleRank())
-        #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
-        print(self.controller.controllerGetPuzzleRank())
-        print(self.controller.controllerGetPoints())
-        #clears the input box everytime.
-        self.clearInput()
+            messagebox.showinfo("Invalid input", "Required letter was not used.")
 
     # Function that creates a hexagon
     def draw_hexagon(self, canvas, x, y, radius, fill, outline):
@@ -347,11 +346,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         #if there is some sort of userInput put in, check if it's yes then ask for fileName
         #run save function, else in the end it will generate a new puzzle.
         if(self.controller.controllerGetPuzzleState() == 1):
-            answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
+            answer = messagebox.askyesno("Would you like to save?", "Would you like to save the current game?")
             if answer == True:
                 self.savePuzzle()
-            else:
-                messagebox.showinfo("Generating a new puzzle", "Time to generate a new puzzle!")
         self.clearInput()
         self.controller.controllerNewGame()
         # clear listbox every time it's run
@@ -394,12 +391,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
             if answer == True:
                     self.savePuzzle()
-            else:
-                messagebox.showinfo("No information provided", "going to generate a new puzzle!")
         #self.controller.controllerNewGame()
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
         if (input == None):
-            messagebox.showinfo("No input!", "You hit cancel, don't worry the puzzle will stay as is.")
             return
         self.check = self.controller.controllerCheckPangram(input)
         while (self.check == False):
