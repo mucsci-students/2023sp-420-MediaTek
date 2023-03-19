@@ -33,8 +33,12 @@ class View:
 
         self.img.place(x = 0,y = 0)
         # created an input box
-        self.e = tk.Entry(self.parent, width=100, bg="white", fg="black", validate ="key", validatecommand=(self.parent.register(self.checkKeys), "%S"))
-        self.e.pack()
+        self.inputFrame = tk.Frame(self.parent)
+        self.inputFrame.pack(side='top', padx=5, pady=5)
+        self.label = tk.Label(self.inputFrame, text="Guess:", font=('Helvetica 14 bold'))
+        self.label.pack(side='left', padx=5, pady=5)
+        self.e = tk.Entry(self.inputFrame, width=50, bg="white", fg="black", validate ="key", validatecommand=(self.parent.register(self.checkKeys), "%S"))
+        self.e.pack(side='left', padx=5, pady=5)
         self.saved = False
         self.check = None
 
