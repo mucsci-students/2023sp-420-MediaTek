@@ -29,7 +29,6 @@ To run our game locally, you will need to follow these steps.
 
 ### Prerequisites
 
-
 * Python version 3.11.2, which can be downloaded at https://www.python.org/downloads/
 
 ### Installation
@@ -37,7 +36,6 @@ To run our game locally, you will need to follow these steps.
 
 
 1. Clone the repo  
-  WINDOWS:
    ```sh
    git clone https://github.com/mucsci-students/2023sp-420-MediaTek
    ```
@@ -45,17 +43,29 @@ To run our game locally, you will need to follow these steps.
   WINDOWS:
    ```sh
    cd path\to\folder\2023sp-420-MediaTek
-   ``` 
+   ```   
+    macOS:
+     ```sh
+     cd path to folder 2023sp-420-MediaTek
+     ``` 
 3. Install dependencies with the following command  
   WINDOWS:
    ```sh
    pip install -r requirements.txt 
    ```
+    macOS:
+     ```sh
+     pip3 install -r requirements.txt 
+     ```
 4. To build the program, run the following command while still inside the directory  
   WINDOWS:
    ```sh
    pip install -e .
    ```
+    macOS:
+     ```sh
+     pip3 install -e .
+     ```  
   
 The game should now be properly installed and ready to play.
  
@@ -67,11 +77,19 @@ The game should now be properly installed and ready to play.
    ```sh
    py SpellingBee.py
    ```
+    macOS:
+     ```sh
+     python3 SpellingBee.py
+     ```
 2. To launch the game in CLI mode    
   WINDOWS:
    ```sh
    py SpellingBee.py --cli
    ```
+    macOS:
+     ```sh
+     python3 SpellingBee.py --cli
+     ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -82,10 +100,18 @@ To run the test file, navigate to the test folder with
    ```sh
    cd path\to\folder\2023sp-420-MediaTek\test
    ```
+  macOS:
+   ```sh
+   cd path to folder 2023sp-420-MediaTek test
+   ```
 then run the command  
   WINDOWS:
    ```sh
    py unittest.py
+   ```
+  macOS:
+   ```sh
+   python3 unittest.py
    ```
 
 
@@ -143,4 +169,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [issues-shield]: https://img.shields.io/github/issues/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=yellow
 [issues-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/issues
 [license-shield]: https://img.shields.io/github/license/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=blueviolet
-[license-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/blob/master/LICENSE.txt
+[license-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/blob/develop/LICENSE
