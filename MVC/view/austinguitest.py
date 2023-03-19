@@ -101,7 +101,9 @@ class View:
         #create a list of the given letters for the puzzle
         letters = list(self.controller.controllerGetLetters())
         #using list comprehension, we can check if the keys being pressed aren't in the list regardless of them entering capital letters.
-        for x in text:
+        # ITERATOR DESIGN PATTERN
+        myIter = iter(text)
+        for x in myIter:
             if str(x).lower() not in [str(letter).lower() for letter in letters]:
                 return False
         return True
