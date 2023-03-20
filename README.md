@@ -107,11 +107,11 @@ To run the test file, navigate to the test folder with
 then run the command  
   WINDOWS:
    ```sh
-   py unittest.py
+   py test/run.py
    ```
   macOS:
    ```sh
-   python3 unittest.py
+   python3 test/run.py
    ```
 
 
