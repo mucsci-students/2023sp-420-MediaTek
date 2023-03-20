@@ -89,8 +89,8 @@ class View:
         self.points = tk.IntVar()
 
         # create a list box which will show the found words
-        self.listBox = tk.Listbox(self.parent, width=4, height=10)
-        self.listBox.pack(pady=5, padx=300, fill=tk.BOTH, expand=True)
+        self.listBox = tk.Listbox(self.parent, width=20, height=10, font='Helvetica 24', justify='center')
+        self.listBox.pack(pady=5, padx=300, fill='y', expand=True)
 
         self.test = 0
         # empty state for the buttons
