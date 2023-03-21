@@ -1,7 +1,7 @@
 from MVC.model import modelrefactor as mdl
 import sys
 import re
-
+import json
 class controller:
     def __init__(self):
         self.model = mdl.model()
@@ -108,12 +108,16 @@ class controller:
     Calls the game load gui function
     '''
     def controllerGameLoadGUI(self, inputFile):
-        self.model.gameLoadGUI(inputFile)
+        with open(inputFile) as save:
+            loaded = json.load(save)
+        self.model.gameLoad(loaded)
     '''
     calls the game load cli function
     '''
     def controllerGameLoadCLI(self, inputFile):
-        self.model.gameLoadCLI(inputFile)
+        with open(inputFile + ".json", "r") as save:
+            loaded = json.load(save)
+        self.model.gameLoad(loaded)
     '''
     calls the resetGame function
     '''

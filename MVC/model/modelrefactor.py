@@ -26,7 +26,6 @@ class player:
         self.showRank = "Noob"
         self.puzzleTotal = 0
         #list to store correctly guessed words.
-        self.guessedList = list()
 
 class model:
     #should be called before gameLoad function, becauese it will reset all of the variables to their default state, and then gameLoad will update them
@@ -46,38 +45,11 @@ class model:
 
     #need to change gameLoadCLI/GUI to be the same exact function
     #the difference between the two need to be done FIRST in the controller, and then call gameLoad.
-    def gameLoadGUI(self, inputFile):
-        # open the json file and load its contents
-        loadGame = list()
-        with open(inputFile) as save:
-            loaded = json.load(save)
-
-        #print(loaded['RequiredLetter'])
-        #print(loaded['WordList'])
-
-        self.p1.gaReqLetter = loaded['RequiredLetter']
-        self.p1.gaUserLetters = loaded['PuzzleLetters']
-        self.p1.points = loaded['CurrentPoints']
-        self.p1.puzzleTotal = loaded['MaxPoints']
-        self.p1.guessedList = loaded['GuessedWords']
-        self.p1.getList = loaded['WordList']
-
-
-        print("Required Letter: " + self.p1.gaReqLetter)
-        print("User Letters: " + self.p1.gaUserLetters) 
-        print("Points Earned: " + str(self.p1.points))
-        print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
-        print("Guessed Words: " + str(self.p1.guessedList))
     '''
     Function used for loading a game into the CLI
     Just updates the player objects variable with the information side of the file.
     '''  
-    def gameLoadCLI(self, inputFile):
-        # open the json file and load its contents
-        with open(inputFile + ".json", "r") as save:
-            loaded = json.load(save)
-
-
+    def gameLoad(self, loaded):
         self.p1.gaReqLetter = loaded['RequiredLetter']
         self.p1.gaUserLetters = loaded['PuzzleLetters']
         self.p1.points = loaded['CurrentPoints']
