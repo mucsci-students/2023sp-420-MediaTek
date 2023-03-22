@@ -49,18 +49,18 @@ class view:
         cmdautocomplete = wrdcmp(self.b4commands,ignore_case=True,match_middle=True)
         self.controller.ensureYesOrNo()
         print('''
-        Welcome to MediaTek's Spelling Bee! 
-        - The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
-        - The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
-        - Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
+Welcome to MediaTek's Spelling Bee! 
+- The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
+- The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
+- Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
 
-        To get started, you can type:
-            !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
-            !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
-            !help: To see the list of all the commands.
-            !exit: To exit the program.
+To get started, you can type:
+!newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+!loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+!help: To see the list of all the commands.
+!exit: To exit the program.
 
-        We hope you enjoy playing!
+We hope you enjoy playing!
         ''')
         '''
         Documentation using prompt toolkit for tab-completion of commands
