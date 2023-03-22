@@ -26,7 +26,7 @@ class view:
         self.displayLetters = []
         self.check = False
         self.b4commands = ["!newpuzzle","!loadpuzzle","!help","!exit"]
-        self.commands = ["!newpuzzle","!loadpuzzle","!help","!exit","!showpuzzle","!showfoundwords","!shuffle","!savepuzzle","!showstatus"]
+        self.commands = ["!newpuzzle","!showpuzzle","!showfoundwords","!shuffle","!savepuzzle","!loadpuzzle","!showstatus","!help","!exit"]
 
 
 
