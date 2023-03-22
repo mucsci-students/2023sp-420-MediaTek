@@ -55,10 +55,10 @@ Welcome to MediaTek's Spelling Bee!
 - Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
 
 To get started, you can type:
-!newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
-!loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
-!help: To see the list of all the commands.
-!exit: To exit the program.
+    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+    !help: To see the list of all the commands.
+    !exit: To exit the program.
 
 We hope you enjoy playing!
         ''')
@@ -106,11 +106,11 @@ We hope you enjoy playing!
             # controller user guess function
                 if self.controller.controllerGetPuzzleState() != 1:
                     print('''
-                    To get started, you can type:
-                    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
-                    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
-                    !help: To see the list of all the commands.
-                    !exit: To exit the program.
+To get started, you can type:
+    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+    !help: To see the list of all the commands.
+    !exit: To exit the program.
                     ''')
                 else:
                     if userInput in self.controller.controllerGetGuessedWordsCLI():
