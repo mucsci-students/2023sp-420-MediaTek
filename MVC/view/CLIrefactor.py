@@ -8,6 +8,8 @@ from MVC.model import loadgame as loadgame
 import sys
 import os
 import textwrap
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter as wrdcmp
 
 
 #create controller object
@@ -23,6 +25,9 @@ class view:
         #variable to store user letters into a list for displaying a honeycomb.
         self.displayLetters = []
         self.check = False
+        self.b4commands = ["!newpuzzle","!loadpuzzle","!help","!exit"]
+        self.commands = ["!newpuzzle","!loadpuzzle","!help","!exit","!showpuzzle","!showfoundwords","!shuffle","!savepuzzle","!showstatus"]
+
 
 
     def showHoneyComb(self):
@@ -40,41 +45,73 @@ class view:
          
 
     def startGame(self):
+         #Set this before the loop runs since we only want to show the available commands instead of all of them.
+        cmdautocomplete = wrdcmp(self.b4commands,ignore_case=True,match_middle=True)
         self.controller.ensureYesOrNo()
         print('''
-Welcome to MediaTek's Spelling Bee! 
-- The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
-- The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
-- Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
+        Welcome to MediaTek's Spelling Bee! 
+        - The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
+        - The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
+        - Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
 
-To get started, you can type:
-    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
-    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
-    !help: To see the list of all the commands.
-    !exit: To exit the program.
+        To get started, you can type:
+            !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+            !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+            !help: To see the list of all the commands.
+            !exit: To exit the program.
 
-We hope you enjoy playing!
-''')
-
+        We hope you enjoy playing!
+        ''')
+        '''
+        Documentation using prompt toolkit for tab-completion of commands
+        Completion class:
+            wrdcmp (word completer): this bascially just provides a way for auto completion based on specific words (which is self.x list we are passing to it)
+            wrdcmp(self.x,ignore_case=True,match_middle=True)
+                self.x: list of words we would like for auto completion to use
+                ignore_case: case sensitviity variable (set to true since we allow A-Z characters)
+                match_middle: variable that allows the command to be matched if the user is in the middle of typing it.
+        Prompt class:
+            prompt: This libraries wayh to get input from the user
+            prompt(message,completer)
+                message: some type of text for the user to see
+                completer: this is built into the library defined by it, allows the user to press tab and autocomplete the commands we give it)
+                Due to this, this is why we set cmdautocomplete = wrdcmp(self.b4commands,ignore_case=True,match_middle=True) because it will allow tab completion to
+                happen with word completer.
+        '''
         while (True):
-            userInput = input("Please enter a guess or command, commands start with '!': ")
+            if self.controller.controllerGetPuzzleState() == 1:
+                 #once a game is started the user will have access to all of the commands, so uses this instead.
+                 cmdautocomplete = wrdcmp(self.commands,ignore_case=True,match_middle=True)
+            userInput = prompt("Please enter a guess or command, commands start with '!': ",completer=cmdautocomplete)
             checkInput = self.controller.checkInputCLI(userInput)
             while(checkInput == False):
-                userInput = input("Input can only contain [!, A-Z], please reenter: ")
+                userInput = prompt("Input can only contain [!, A-Z], please reenter: ",completer=cmdautocomplete)
                 checkInput = self.controller.checkInputCLI(userInput)
             while(len(userInput) < 4) or (len(userInput) > 15):
-                userInput = input("Input must be between 4 and 15 characters! Please reenter your input: ")
+                userInput = prompt("Input must be between 4 and 15 characters! Please reenter your input: ",completer=cmdautocomplete)
+
+
+
+            '''
+            In the scenario that a user types in multiple exclamation points, or when using tab completion theres still multiple
+            We can just check if the first spot in the string is an exclamation point and if the count of them is > 1, if so we can replace all !'s and just readd it at the end
+            '''
+            if (userInput[0] == '!') and userInput.count('!') > 1:
+                 # replace all !'s with a space, then add a '!' back into the front of it.
+                 rstring = userInput.replace("!","")
+                 fstring = '!' + rstring
+                 userInput = fstring
 
             if '!' not in userInput:
             # controller user guess function
                 if self.controller.controllerGetPuzzleState() != 1:
                     print('''
-To get started, you can type:
-    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
-    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
-    !help: To see the list of all the commands.
-    !exit: To exit the program.
-''')
+                    To get started, you can type:
+                        !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+                        !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+                        !help: To see the list of all the commands.
+                        !exit: To exit the program.
+                    ''')
                 else:
                     if userInput in self.controller.controllerGetGuessedWordsCLI():
                         print("This word has already been guessed correctly.")
@@ -94,7 +131,7 @@ To get started, you can type:
                     self.controller.controllerNewGame()
                     isAuto = input("Do you want it to be automatically generated? (yes/no): ")
                     while isAuto.lower() != "yes" and isAuto.lower() != "no":
-                        isAuto = input("Do you want it to be automatically generated?: ")
+                        isAuto = input("Do you want it to be automatically generated? (yes/no): ")
                     
                     if (isAuto.lower() == "yes"):
                         self.controller.controllerRunAutoGame()
