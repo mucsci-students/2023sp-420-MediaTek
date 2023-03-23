@@ -26,7 +26,6 @@ for test2 in displayWords:
 check_dir = os.path.dirname(os.path.abspath(__file__))
 db_dir = os.path.join(check_dir,".","pangrams.db")
 abs_path = os.path.abspath(db_dir)
-print(abs_path)
 # function to choose a random pangram for use as the base word in a puzzle
 def randomBase():
     con = cdb.pangramConnect()

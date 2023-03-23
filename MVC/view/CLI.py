@@ -1,6 +1,6 @@
 import time
 import re
-from MVC.controller import controllerrefactor as ctrl
+from MVC.controller import Controller as ctrl
 from MVC.model import Commands as Commands
 import random
 import json
@@ -192,7 +192,6 @@ To get started, you can type:
                         self.showHoneyComb()
                     else:
                         print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
-
                 case "!showstatus":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
@@ -207,6 +206,6 @@ To get started, you can type:
                         self.controller.controllerHelpCommand()
                 case "!exit":
                         self.controller.controllerGameExit()
-          
+#singleton design pattern
 view = view()
 view.startGame()

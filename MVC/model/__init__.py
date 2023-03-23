@@ -1,4 +1,4 @@
-from .modelrefactor import *
+from .Model import *
 from .Commands import *
 from .IdentifyBaseWord import *
 from .loadgame import *

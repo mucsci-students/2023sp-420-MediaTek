@@ -1,4 +1,4 @@
-from MVC.model import modelrefactor as mdl
+from MVC.model import Model as mdl
 import sys
 import re
 import json
