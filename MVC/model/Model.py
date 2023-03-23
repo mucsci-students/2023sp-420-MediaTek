@@ -63,7 +63,7 @@ class model:
         print("Points Earned: " + str(self.p1.points))
         print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
         print("Guessed Words: " + ", ".join(self.p1.guessedList))
-    
+        self.gameRank()
         self.p1.puzzleStarted = 1
 
 
