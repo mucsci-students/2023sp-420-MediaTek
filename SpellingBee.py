@@ -12,9 +12,9 @@ parser.add_argument('--mac', action='store_true', help=' Run the mac version of 
 args = parser.parse_args()
 
 #get aboslute path for clirefactor and austinguitest.py
-clipath = os.path.abspath("MVC/view/CLIrefactor.py")
-guipath = os.path.abspath("MVC/view/austinguitest.py")
-macpath = os.path.abspath("MVC/view/noahmac.py")
+clipath = os.path.abspath("MVC/view/CLI.py")
+guipath = os.path.abspath("MVC/view/winGUI.py")
+macpath = os.path.abspath("MVC/view/macGUI.py")
 
 if args.cli:
     # Run CLI mode
