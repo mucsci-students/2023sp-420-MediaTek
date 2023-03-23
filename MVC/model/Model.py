@@ -257,7 +257,9 @@ class model:
         Commands.help()
     
 
-    #This needs to be rewritten.
+    '''
+    Observer design pattern
+    '''
     def gameRank(self):
         #variable to store ranks
         #for a game in progress, matches point values to ranks
