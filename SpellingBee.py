@@ -1,26 +1,39 @@
-import argparse
+import platform
+import os
 import subprocess
 import sys
-import os
+import argparse
 
-
-parser = argparse.ArgumentParser()
-#cli and mac arguments for project.
-parser.add_argument('--cli', action='store_true', help='Run in CLI mode')
-parser.add_argument('--mac', action='store_true', help=' Run the mac version of GUI')
-
-args = parser.parse_args()
-
-#get aboslute path for clirefactor and austinguitest.py
 clipath = os.path.abspath("MVC/view/CLI.py")
-guipath = os.path.abspath("MVC/view/winGUI.py")
+winpath = os.path.abspath("MVC/view/winGUI.py")
 macpath = os.path.abspath("MVC/view/macGUI.py")
+linuxpath = os.path.abspath("MVC/view/winGUI.py")
 
-if args.cli:
-    # Run CLI mode
-    subprocess.run([sys.executable, clipath])
-elif args.mac:
-    subprocess.run([sys.executable, macpath])
-else:
-    # Run GUI mode
-    subprocess.run([sys.executable, guipath])
+def run_appropriate_file():
+    parser = argparse.ArgumentParser(description="Run the appropriate version of the application based on the operating system")
+    parser.add_argument('--cli', action='store_true', help='run the command-line version')
+    args = parser.parse_args()
+    
+    os_name = platform.system()
+    print(f"Detected OS: {os_name}")
+    
+    if os_name == "Windows":
+        if args.cli:
+            subprocess.run([sys.executable, clipath])
+        else:
+            subprocess.run([sys.executable, winpath])
+    elif os_name == "Darwin":
+        if args.cli:
+            subprocess.run([sys.executable, clipath])
+        else:
+            subprocess.run([sys.executable, macpath])
+    elif os_name == "Linux":
+        if args.cli:
+            subprocess.run([sys.executable, clipath])
+        else:
+            subprocess.run([sys.executable, linuxpath])
+    else:
+        print("Unsupported OS")
+
+run_appropriate_file()
+
