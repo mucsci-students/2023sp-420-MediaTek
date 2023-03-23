@@ -26,6 +26,7 @@ class player:
         self.showRank = "Noob"
         self.puzzleTotal = 0
         #list to store correctly guessed words.
+        self.guessedList = list()
 
 class model:
     #should be called before gameLoad function, becauese it will reset all of the variables to their default state, and then gameLoad will update them
