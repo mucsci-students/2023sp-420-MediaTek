@@ -1,5 +1,5 @@
 import tkinter as tk
-from MVC.controller import controllerfile as ctrl
+from MVC.controller import Controller as ctrl
 import math
 import random
 import os
