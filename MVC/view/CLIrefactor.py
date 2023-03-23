@@ -207,6 +207,6 @@ To get started, you can type:
                         self.controller.controllerHelpCommand()
                 case "!exit":
                         self.controller.controllerGameExit()
-          
+#singleton design pattern
 view = view()
 view.startGame()
