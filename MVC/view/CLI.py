@@ -1,6 +1,6 @@
 import time
 import re
-from MVC.controller import controllerfile as ctrl
+from MVC.controller import Controller as ctrl
 from MVC.model import Commands as Commands
 import random
 import json
