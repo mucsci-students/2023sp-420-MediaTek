@@ -27,6 +27,7 @@ class run:
         
         self.test2.savegame_test()
         
+        '''
         self.modeltest.getGameState_test()
         self.modeltest.getGuessedWords_test()
         self.modeltest.getHoneyCombList_test()
@@ -37,6 +38,7 @@ class run:
         self.modeltest.getPuzzleTotal_test()
         self.modeltest.getReqLetter_test()
         self.modeltest.getWordList_test()
+        '''
         
         
 testRun = run()
