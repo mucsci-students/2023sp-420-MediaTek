@@ -28,8 +28,36 @@ class view:
         self.b4commands = ["!newpuzzle","!loadpuzzle","!help","!exit"]
         self.commands = ["!newpuzzle","!showpuzzle","!showfoundwords","!shuffle","!savepuzzle","!loadpuzzle","!showstatus","!help","!exit"]
 
+    def grid(self):
+        x = self.controller.gridHint()
 
+        # Formats Matrix
+        cell_width = 2
+        fmt = '{:>' + str(cell_width) + '}'
+        for i in range(0, x.shape[0]):
+            for j in range(0, x.shape[1]):
+                if x[i,j] is not None:
+                    x[i,j] = fmt.format(x[i,j])
+        # Prints Matrix
+        print("Grid Hint:")
+        print(x)
+        print("\n")
+        
+    def hintCount (self):
+        count = self.controller.firstTwo()
+        print("Two Word List:")
+        print(count)
+        print("\n")
 
+    def totHint(self):
+        x,y = self.controller.totalHint()
+        # Prints
+        print(f"WORDS:{self.controller.getTotalWords()} POINTS:{self.controller.controllerGetPuzzleTotal()} PANGRAMS:{x} ({y} Perfect)")
+    
+    def hint(self):
+        hints = [self.grid(),self.hintCount(),self.totHint()]
+        hint = random.choice(hints)
+        
     def showHoneyComb(self):
 
             self.controller.controllerToHoneyComblist()
@@ -206,6 +234,8 @@ To get started, you can type:
                         self.controller.controllerHelpCommand()
                 case "!exit":
                         self.controller.controllerGameExit()
+                case "!hint":
+                    self.hint()
 #singleton design pattern
 view = view()
 view.startGame()

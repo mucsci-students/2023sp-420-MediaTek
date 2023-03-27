@@ -2,6 +2,8 @@ from MVC.model import Model as mdl
 import sys
 import re
 import json
+import numpy 
+
 class controller:
     def __init__(self):
         self.model = mdl.model()
@@ -243,4 +245,111 @@ class controller:
             self.controllerGameExit()
         else:
             return
+        
+
+    # Functions displays the total number of words, max points, and pangrams    
+    def totalHint(self):
+        lowerList = []
+        getLetter = self.controllerGetLetters()
+        reqLetter = self.controllerGetReqLetter()
+        hexagonLetters = []
+        hexagonLetters = self.controllerToList(getLetter,hexagonLetters)
+         # Turns hexagons list lowercase
+        for letter in hexagonLetters:
+            lowerList.append(letter.lower()) 
+        # Combines new hexagon list and reqLetter
+        totalLetters =  lowerList + [reqLetter.lower()]
+        self.words = self.controllerGetWordList()
+        totalWords = 0
+        self.maxPoints = self.controllerGetPuzzleTotal()
+        # Adds up total words
+        for word in self.words:
+            totalWords += 1
+        totPan = 0
+        totPerf = 0
+        # If all the letters are in a word it adds one to total pangram if one is 7 letters long and a pangram adds to total perfect
+        for word in self.words:
+            if set(totalLetters).issubset(set(word)):
+                if len(word) == 7 and len(set(word)) == 7:
+                    totPerf += 1
+                totPan += 1
+        return totPan,totPerf
+
+    # Function iterates through list of words and finds how many words start with a specific two letters then displays the total amount of words that begin with those two letters
+    def firstTwo(self):
+        count = {}
+        self.totalWords = self.controllerGetWordList()
+        # Goes through every wood in the word list and keeps count of the words with the same firs two letters
+        for word in self.totalWords:
+            two = word[0:2]
+            if two in count:
+                count[two] +=1
+            else:
+                count[two] = 1
+        return count
+
+    # Displays a matrix where the top row is the lengths of words, the first column is the letters for the puzzle.
+    # Each row displays the letter the word begins with as well as how many words start with that letter and what their length is.
+    #The final column combines the total words for each letter and the final row displays the total words with the specific length.
+    def gridHint(self):
+        lowerList = []
+        length = [4,5,6,7,8,9,10,11,12,13,14,15]
+        getLetter = self.controllerGetLetters()
+        reqLetter = self.controllerGetReqLetter()
+        hexagonLetters = []
+        hexagonLetters = self.controllerToList(getLetter,hexagonLetters)
+        # Turns hexagons list lowercase
+        for letter in hexagonLetters:
+            lowerList.append(letter.lower()) 
+        # Combines new hexagon list and reqLetter
+        totalLetters =  lowerList + [reqLetter.lower()]
+        self.totalWords = self.controllerGetWordList()
+        # Initializes 9 by 14 matrix with object type
+        x = numpy.empty((9,14),dtype=object)
+        i = 1
+        x[0,0] = ''
+        x[0,13] = ''
+        # Sets first row excluding the first and last row with letters
+        for letter in totalLetters:
+            x[i,0] = letter
+            i += 1
+        j = 1
+        for lengths in length:
+            x[0][j] = lengths
+            # Count the number of words that start with each letter and have the given length
+            for i, letter in enumerate(totalLetters):
+                count = 0
+                for word in self.totalWords:
+                    # Compares letter  and checks the length and adds count to cell
+                    if word.startswith(letter) and len(word) == lengths:
+                        count += 1
+                x[i+1, j] = count
+            j += 1
+        # Adds up rows and sets the value equal to the final element of row
+        rowTotal = 0
+        for k in range(1,8):
+            for m in range(1,12):
+                rowTotal += x[k,m]
+            x[k,13] = rowTotal
+            rowTotal = 0 
+        # Adds up columns and sets the value equal to the final element of column   
+        colTotal = 0
+        wordSum = 0
+        # Adds up all words
+        for word in self.totalWords:
+            wordSum += 1
+        for l in range(1,13):
+            for n in range(1,8):
+                colTotal += x[n,l]
+            x[8,l] = colTotal
+            colTotal = 0 
+        # Sets corner spots to desired values
+        x[8,13] = wordSum
+        x[8,0] = ""
+        return x
+   
+    # Gets total number of words
+    def getTotalWords(self):
+        wordSum =len (self.controllerGetWordList())
+        return wordSum
         

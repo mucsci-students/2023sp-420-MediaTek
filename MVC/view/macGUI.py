@@ -1,4 +1,5 @@
 import tkinter as tk
+from turtle import width
 from MVC.controller import Controller as ctrl
 import math
 import random
@@ -9,6 +10,9 @@ from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import filedialog
 import time
+import numpy
+from numpy import *
+from tkinter import Toplevel, Label
 
 class View:
     def __init__(self, parent, ctrl):
@@ -27,14 +31,10 @@ class View:
         self.parent.config(menu=self.menu)
         self.img.place(x = 0,y = 0)
         # created an input box
-        self.inputFrame = tk.Frame(self.parent)
-        self.inputFrame.pack(side='top', padx=5, pady=5)
-        self.label = tk.Label(self.inputFrame, text="Guess:", font=('Helvetica 14 bold'))
-        self.label.pack(side='left', padx=5, pady=5)
-        self.e = tk.Entry(self.inputFrame, width=50, bg="white", fg="black", validate ="key", validatecommand=(self.parent.register(self.checkKeys), "%S"))
-        self.e.pack(side='left', padx=5, pady=5)
+        self.e = tk.Entry(self.parent, width=100, bg="white", fg="black", validate ="key", validatecommand=(self.parent.register(self.checkKeys), "%S"))
+        self.e.pack()
         self.saved = False
-        self.check = None
+
 
         # Variables that describe size of hexagon
         self.hex_radius = 60
@@ -73,11 +73,13 @@ class View:
         help_menu = tk.Menu(self.menu)
         self.menu.add_cascade(label="Help",menu=help_menu)
         help_menu.add_command(label = "How to play",command = self.playInstructions)
+        help_menu.add_separator()
+        help_menu.add_command(label = "Hint",command = self.pickHint)
         # create the frame
         self.frame = tk.Frame(self.parent)
         self.frame.pack(fill='both', expand=True)
         
-
+        self.totalWords = []
         self.hexagonLetters = []
         self.reqLetter = ""
         self.getLetters = ""
@@ -85,8 +87,8 @@ class View:
         self.points = tk.IntVar()
 
         # create a list box which will show the found words
-        self.listBox = tk.Listbox(self.parent, width=20, height=10, font='Helvetica 24', justify='center')
-        self.listBox.pack(pady=5, padx=300, fill='y', expand=True)
+        self.listBox = tk.Listbox(self.parent, width=1, height=50)
+        self.listBox.pack(padx=300,pady=5, fill=tk.BOTH, expand=True)
         self.test = 0
         # empty state for the buttons
         
@@ -329,6 +331,44 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
     
+    # Function randomly picks a hint from the hint functions
+    def pickHint(self):
+        hints = [self.grid(),self.hintCount(),self.totHint()]
+        hint = random.choice(hints)
+
+    def hintDisplay(self,title,message,width,height):
+        # Creates top level message
+        hintMessage = Toplevel()
+        hintMessage.title(title)
+         # set the size of the message
+        hintMessage.geometry(f"{width}x{height}")
+        # create a label and change font
+        label = Label(hintMessage, text=message, font=("Courier New",12))
+        # Add padding
+        label.pack(padx=40, pady=40)
+        # Makes the window 
+        hintMessage.grab_set()
+
+    def grid(self):
+        x = self.controller.gridHint()
+        cell_width = 2
+        fmt = '{:>' + str(cell_width) + '}'
+        message = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
+        self.hintDisplay("Grid Hint:", message, 400, 200)
+        
+    def hintCount (self):
+        count = self.controller.firstTwo()
+        # Formats how the list will print when transferred to a window
+        message = "Two Letter List Hint:\n" + "\n".join([f"{k}: {v}" for k, v in count.items()])
+        print(self.controller.controllerGetWordList())
+        self.hintDisplay("First Two Letters Hint:",message,250,700)
+    
+    def totHint(self):
+        x,y = self.controller.totalHint()
+        # Formats message to display propertly on message window 
+        message = f"WORDS: {self.controller.getTotalWords()}\nPOINTS: {self.controller.controllerGetPuzzleTotal()}\nPANGRAMS: {x} ({y} Perfect)"
+        self.hintDisplay("Puzzle Total Hint:", message, 250, 150)
+
 
     # this function will have all the necessary things for the game to be played, like mainly to redraw the hexagons
     # as of right now trying to get new puzzle auto-working with it and making a correct guess.
