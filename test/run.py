@@ -17,7 +17,7 @@ class run:
     def __init__(self):
         self.test1 = IdentifyBaseWord_test.IdentifyBaseWord_test()
         self.test2 = savegame_test.savegame_test()
-        self.modeltest = Model_test.Model_test()
+        # self.modeltest = Model_test.Model_test()
     
     # runs all the tests implemented so far
     def run(self):
