@@ -82,7 +82,7 @@ class View:
         self.menu.add_cascade(label="Help",menu=help_menu)
         help_menu.add_command(label = "How to play",command = self.playInstructions)
         help_menu.add_separator()
-        help_menu.add_command(label = "Hint",command = self.pickHint)
+        help_menu.add_command(label = "Hints",command = self.pickHint)
         # create the frame
         self.frame = tk.Frame(self.parent)
         self.frame.pack(fill='both', expand=True)
@@ -235,6 +235,7 @@ class View:
             elif filename == None:
                 break
         return filename
+    
     #GABE WROTE THIS
     def loadHelper(self,filename):
         self.clearInput()
@@ -341,6 +342,8 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     
     # Function randomly picks a hint from the hint functions
     def pickHint(self):
+        if (self.controller.controllerGetPuzzleState() != 1):
+            return
         hints = [self.grid(),self.hintCount(),self.totHint()]
         hint = random.choice(hints)
 

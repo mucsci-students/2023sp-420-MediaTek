@@ -80,6 +80,7 @@ class View:
         self.helpMenu = tk.Menu(self.menu)
         self.menu.add_cascade(label="Help",menu=self.helpMenu)
         self.helpMenu.add_command(label = "How to play",command = self.playInstructions)
+        self.helpMenu.add_command(label = "Hints",command = self.pickHint)
         
         #variables for displaying information to the screen
         self.hexagonLetters = []
@@ -89,7 +90,7 @@ class View:
         self.points = tk.IntVar()
 
         # create a list box which will show the found words
-        self.listBox = tk.Listbox(self.parent, width=20, height=10, font='Helvetica 24', justify='center')
+        self.listBox = tk.Listbox(self.parent, width=20, height=8, font='Helvetica 24', justify='center')
         self.listBox.pack(pady=5, padx=300, fill='y', expand=True)
 
         self.test = 0
@@ -137,7 +138,7 @@ class View:
     '''
     def drawPuzzleUI(self, reqLetter, hexagonLetters):
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
-            self.hexReq = self.draw_hexagon(self.canvas, 375, 250, self.hex_radius, 'yellow', 'black')
+            hexReq = self.draw_hexagon(self.canvas, 375, 250, self.hex_radius, 'yellow', 'black')
             hex1 = self.draw_hexagon(self.canvas, 375, 365, self.hex_radius, 'white', 'black')
             hex2 = self.draw_hexagon(self.canvas, 375, 135, self.hex_radius, 'white', 'black')
             hex3 = self.draw_hexagon(self.canvas, 265, 307.5, self.hex_radius, 'white', 'black')
@@ -145,19 +146,19 @@ class View:
             hex5 = self.draw_hexagon(self.canvas, 265, 194, self.hex_radius, 'white', 'black')
             hex6 = self.draw_hexagon(self.canvas, 485, 194, self.hex_radius, 'white', 'black')
             #creates the buttons with the letters and input functionality
-            self.btn1 = tk.Button(self.canvas,text = hexagonLetters[0], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[0]))
+            self.btn1 = tk.Button(self.canvas, text = hexagonLetters[0], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[0]))
             self.btn1.place(x=349, y=325)
-            self.btn2 = tk.Button(self.canvas,text = hexagonLetters[1], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[1]))
+            self.btn2 = tk.Button(self.canvas, text = hexagonLetters[1], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[1]))
             self.btn2.place(x=349, y=94)
-            self.btn3 = tk.Button(self.canvas,text = hexagonLetters[2], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[2]))
+            self.btn3 = tk.Button(self.canvas, text = hexagonLetters[2], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[2]))
             self.btn3.place(x=238, y=270)
-            self.btn4 = tk.Button(self.canvas,text = hexagonLetters[3], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[3]))
+            self.btn4 = tk.Button(self.canvas, text = hexagonLetters[3], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[3]))
             self.btn4.place(x=455, y=270)
-            self.btn5 = tk.Button(self.canvas,text = hexagonLetters[4], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[4]))
+            self.btn5 = tk.Button(self.canvas, text = hexagonLetters[4], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[4]))
             self.btn5.place(x=238, y=158)
-            self.btn6 = tk.Button(self.canvas,text = hexagonLetters[5], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[5]))
+            self.btn6 = tk.Button(self.canvas, text = hexagonLetters[5], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[5]))
             self.btn6.place(x=455, y=158)
-            self.btn7 = tk.Button(self.canvas,text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
+            self.btn7 = tk.Button(self.canvas, text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
             self.btn7.place(x=349, y=210)
             self.btn7.configure(bg = "yellow")
             #text for points and rank
@@ -351,6 +352,46 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
     
+    # Function randomly picks a hint from the hint functions
+    def pickHint(self):
+        if (self.controller.controllerGetPuzzleState() != 1):
+            return
+        hints = [self.grid(),self.hintCount(),self.totHint()]
+        hint = random.choice(hints)
+
+    def hintDisplay(self,title,message,width,height):
+        # Creates top level message
+        hintMessage = Toplevel()
+        hintMessage.title(title)
+         # set the size of the message
+        hintMessage.geometry(f"{width}x{height}")
+        # create a label and change font
+        label = Label(hintMessage, text=message, font=("Courier New", 10))
+        # Add padding
+        label.pack(padx=40, pady=40)
+        # Makes the window 
+        hintMessage.grab_set()
+
+    def grid(self):
+        x = self.controller.gridHint()
+        cell_width = 2
+        fmt = '{:>' + str(cell_width) + '}'
+        grid = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
+        self.hintDisplay("Grid Hint:", grid, 450, 250)
+        
+    def hintCount (self):
+        count = self.controller.firstTwo()
+        # Formats how the list will print when transferred to a window
+        twoCount = "Two Letter List Hint:\n" + "\n".join([f"{k}: {v}" for k, v in count.items()])
+        print(self.controller.controllerGetWordList())
+        self.hintDisplay("First Two Letters Hint:", twoCount, 250, 500)
+    
+    def totHint(self):
+        x,y = self.controller.totalHint()
+        # Formats message to display propertly on message window 
+        totalWords = f"WORDS: {self.controller.getTotalWords()}\nPOINTS: {self.controller.controllerGetPuzzleTotal()}\nPANGRAMS: {x} ({y} Perfect)"
+        self.hintDisplay("Puzzle Total Hint:", totalWords, 300, 180)
+
     '''
     Function is meant for automatically generating a puzzle for the user to play.
     '''
