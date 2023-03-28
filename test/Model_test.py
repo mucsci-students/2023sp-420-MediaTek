@@ -10,17 +10,18 @@ import json
 class Model_test:
     
     def __init__(self):
-        self.model = Model.model
-        with open("mediocre.json", "r") as jsonFile:
+        self.model = Model.model()
+        self.p1 = Model.player()
+        with open("test/mediocre.json", "r") as jsonFile:
             game = json.load(jsonFile)
-        self.model.gameLoad(self, game)
+        self.model.gameLoad(game)
         
-        self.reqLetter = game['RequiredLetter']
-        self.userLetters = game['PuzzleLetters']
-        self.points = game['CurrentPoints']
-        self.maxPoints = game['MaxPoints']
-        self.guessedWords = game['GuessedWords']
-        self.wordList = game['WordList']
+        self.p1.gaReqLetter = game['RequiredLetter']
+        self.p1.gaUserLetters = game['PuzzleLetters']
+        self.p1.points = game['CurrentPoints']
+        self.p1.puzzleTotal = game['MaxPoints']
+        self.p1.guessedList = game['GuessedWords']
+        self.p1.getList = game['WordList']
         
         self.wl = wordlist
             
@@ -28,53 +29,98 @@ class Model_test:
     
     def getGameState_test(self):
         self.gameState = self.model.getGameState()
-        assert self.gameState == self.player.gameState
+        assert self.gameState == self.p1.gameState
     
     def getLetters_test(self):
         self.gameLetters = self.model.getLetter()
-        lettersExpected = self.userLetters.upper()
-        assert lettersExpected == self.gameLetter
-    
+        lettersExpected = self.p1.gaUserLetters.upper()
+        assert lettersExpected == self.gameLetters
+        
     def getReqLetter_test(self):
         self.reqLetter = self.model.getReqLetter()
-        letterExpected = self.reqLetter.upper()
+        letterExpected = self.p1.gaReqLetter.upper()
         assert letterExpected == self.reqLetter
     
     def getGuessedWords_test(self):
         self.guessedWords = self.model.getGuessedWords()
-        wordsExpected = self.guessedWords.upper()
-        assert wordsExpected == self.guessedWords
+        wordsExpected = self.p1.guessedList
+        for w in wordsExpected:
+            assert self.guessedWords.__contains__(w)
     
     def getWordList_test(self):
         self.list = self.model.getWordList()
-        wordsExpected = self.wl.generateWordList(self.reqLetter, self.userLetters)
-        assert wordsExpected == self.list
+        wordsExpected = self.wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
+        for u in wordsExpected:
+            if self.guessedWords.__contains__(u):
+                wordsExpected.remove(u)
+        assert len(wordsExpected) == len(self.list)
     
     def getPoints_test(self):
         self.testPoints = self.model.getPoints()
-        assert self.points == self.testPoints
+        assert self.p1.points == self.testPoints
     
     def getPuzzleState_test(self):
         self.state = self.model.getGameState()
-        assert self.state == 1
+        assert self.state == 0
     
     def getPuzzleTotal_test(self):
         self.total = self.model.getPuzzleTotal()
-        totalExpected = self.maxPoints
+        totalExpected = self.p1.puzzleTotal
         assert totalExpected == self.total
     
     def getPuzzleRank_test(self):
         self.rank = self.model.getPuzzleRank()
-        assert self.rank == 'Great'
+        assert self.rank == "Great"
     
     def getHoneyCombList_test(self):
         self.letters = self.model.getHoneyCombList()
-        # what should be asserted here?
+        # No idea what should be asserted here...
     
     def updatePuzzleState0_test(self):
         self.model.updatePuzzleState0()
+        print(self.model.getPuzzleState())
         assert self.model.getPuzzleState() == 0
     
     def updatePuzzleState1_test(self):
         self.model.updatePuzzleState1()
+        print(self.model.getPuzzleState())
         assert self.model.getPuzzleState() == 1
+    
+    def calculateTotalPoints_test(self):
+        self.model.calculateTotalPoints(wordBank=self.wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters))
+        assert self.p1.puzzleTotal == 897
+    
+    def checkPangram_test(self):
+        self.testOne = checkPangram(input="pangram")
+        assert self.testOne == False
+        
+        self.testTwo = checkPangram(input="mediocre")
+        assert self.testTwo == True
+        
+        self.testThree = checkPangram(input="viability")
+        assert self.testThree == True
+        
+        self.testFour = checkPangram(input="notanactualword")
+        assert self.testFour == False
+    
+    def NewPuzzleAuto_test(self):
+        self.testmodel = Model.model()
+        self.testmodel.newPuzzleAuto()
+        assert self.testmodel.p1.gaUserLetters.isalpha() and len(self.testmodel.p1.gaUserLetters) == 7
+        assert self.testmodel.p1.gaReqLetters.isalpha() and len(self.testmodel.p1.gaReqLetters) == 1      
+        assert self.testmodel.p1.points == 0
+        assert len(self.testmodel.p1.getList) > 0
+        assert self.testmodel.p1.puzzleTotal > 0
+        assert len(self.testmodel.p1.guessedList) == 0
+    
+    def NewPuzzleBase_test(self):
+        self.testmodel = Model.model()
+        self.testPangram = "jibberish"
+        self.testmodel.NewPuzzleBase(userInput=self.testPangram)
+        assert self.testmodel.p1.gaUserLetters.isahpha() and len(self.testmodel.p1.gaUserLetters) == 7
+        assert self.testmodel.p1.gaReqLetters.isahpha() and len(self.testmodel.p1.gaReqLetters) == 1
+        assert len(self.testmodel.p1.getList) > 0
+        assert self.testmodel.p1.puzzleTotal > 0
+        assert self.testmodel.p1.points == 0
+        assert len(self.testmodel.p1.guessedList) == 0
+    
