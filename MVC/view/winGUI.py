@@ -3,35 +3,37 @@ from MVC.controller import Controller as ctrl
 import math
 import random
 import os
-import copy
 from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import filedialog
-import time
 
 class View:
     '''
-    default constructor 
+    Default constructor. Contains all the set up needed for the TKinter GUI. 
     '''
     def __init__(self, parent, ctrl):
         self.controller = ctrl.controller()
         self.parent = parent
+
         # created a frame
         self.myFrame = tk.Frame(parent, bg='#F4F4F4')
         self.myFrame.pack()
+
         #find the path for the background image.
         check_dir = os.path.dirname(os.path.abspath(__file__))
         db_dir = os.path.join(check_dir,".","combsbig.png")
         abs_path = os.path.abspath(db_dir)
+
         #creates background image!
         self.bg = PhotoImage(file=abs_path, height=2000, width=2000)
         self.img = Label(parent, image = self.bg)
+        self.img.place(x = 0,y = 0)
+
         #menu
         self.menu = tk.Menu(self.parent)
         self.parent.config(menu=self.menu)
 
-        self.img.place(x = 0,y = 0)
         # created an input box
         self.inputFrame = tk.Frame(self.parent)
         self.inputFrame.pack(side='top', padx=5, pady=5)
@@ -116,17 +118,18 @@ class View:
     def clicker(self):
         print(self.controller.controllerGetLetters())
     
-
     '''
     Function inserts the text at the end of the input box.
     '''
     def sendInput(self, text):
         self.e.insert(tk.END, text)
+
     '''
     Function clears the input box completely.
     '''
     def clearInput(self):
         self.e.delete(0, tk.END)
+
     '''
     Function clears the list box completely.
     '''
@@ -134,29 +137,41 @@ class View:
         self.listBox.delete(0, tk.END)
     
     '''
+    Function to create hexagons.
+    '''
+    def drawHex(self, x, y):
+        return self.draw_hexagon(self.canvas, x, y, self.hex_radius, 'white', 'black')
+    
+    '''
+    Function to create buttons.
+    '''
+    def createButton(self, x):
+        return tk.Button(self.canvas, text= x, width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command= lambda: self.sendInput(x))
+
+    '''
     Function creates the hexagons for the puzzles.
     '''
     def drawPuzzleUI(self, reqLetter, hexagonLetters):
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             hexReq = self.draw_hexagon(self.canvas, 375, 250, self.hex_radius, 'yellow', 'black')
-            hex1 = self.draw_hexagon(self.canvas, 375, 365, self.hex_radius, 'white', 'black')
-            hex2 = self.draw_hexagon(self.canvas, 375, 135, self.hex_radius, 'white', 'black')
-            hex3 = self.draw_hexagon(self.canvas, 265, 307.5, self.hex_radius, 'white', 'black')
-            hex4 = self.draw_hexagon(self.canvas, 485, 307.5, self.hex_radius, 'white', 'black')
-            hex5 = self.draw_hexagon(self.canvas, 265, 194, self.hex_radius, 'white', 'black')
-            hex6 = self.draw_hexagon(self.canvas, 485, 194, self.hex_radius, 'white', 'black')
+            hex1 = self.drawHex(375, 365)
+            hex2 = self.drawHex(375, 135)
+            hex3 = self.drawHex(265, 307.5)
+            hex4 = self.drawHex(485, 307.5)
+            hex5 = self.drawHex(265, 194)
+            hex6 = self.drawHex(485, 194)
             #creates the buttons with the letters and input functionality
-            self.btn1 = tk.Button(self.canvas, text = hexagonLetters[0], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[0]))
+            self.btn1 = self.createButton(hexagonLetters[0])
             self.btn1.place(x=349, y=325)
-            self.btn2 = tk.Button(self.canvas, text = hexagonLetters[1], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[1]))
+            self.btn2 = self.createButton(hexagonLetters[1])
             self.btn2.place(x=349, y=94)
-            self.btn3 = tk.Button(self.canvas, text = hexagonLetters[2], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[2]))
+            self.btn3 = self.createButton(hexagonLetters[2])
             self.btn3.place(x=238, y=270)
-            self.btn4 = tk.Button(self.canvas, text = hexagonLetters[3], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[3]))
+            self.btn4 = self.createButton(hexagonLetters[3])
             self.btn4.place(x=455, y=270)
-            self.btn5 = tk.Button(self.canvas, text = hexagonLetters[4], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[4]))
+            self.btn5 = self.createButton(hexagonLetters[4])
             self.btn5.place(x=238, y=158)
-            self.btn6 = tk.Button(self.canvas, text = hexagonLetters[5], width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(hexagonLetters[5]))
+            self.btn6 = self.createButton(hexagonLetters[5])
             self.btn6.place(x=455, y=158)
             self.btn7 = tk.Button(self.canvas, text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
             self.btn7.place(x=349, y=210)
@@ -195,9 +210,6 @@ class View:
         #update the points and rank after every guess.
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
-        #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
-        print(self.controller.controllerGetPuzzleRank())
-        print(self.controller.controllerGetPoints())
         #clears the input box everytime.
         self.clearInput()
 
@@ -243,39 +255,39 @@ class View:
         return filename
     
     '''
-    Function asks if the user wants to save first, end result is loading data from a json file into the game.
-    Ugly solution since we found this bug last minute.
+    Function used in new game generation, which clears the canvas and its elements and gets data from the controller.
+    Parameters are simple checks for some subtle 1 line differences between gameplay, gameplaybase, and loadHelper (used in if stmts).
     '''
-
-    def loadHelper(self,filename):
+    def gameHelper(self, x, y, z, a):
         self.clearInput()
-        self.controller.controllerGameLoadGUI(filename)
-        messagebox.showinfo("Loaded", "Game loaded successfully!")
-        # clear listbox every time it's run
-        # must clear the letters once a new puzzle is generated
-        self.hexagonLetters.clear()
+        if a == 1:
+            self.controller.controllerNewGame()
         self.clearListbox()
+        self.hexagonLetters.clear()
         #gets points and rank from controller
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
         # then we can run the function and pull the data from model->controller->view
+        if x == 1:
+            self.controller.controllerRunAutoGame()
+        elif x == 2:
+            self.controller.controllerRunBaseGame(y)
         getLetters = self.controller.controllerGetLetters()
         getLetters = getLetters.replace("[", "").replace("]","")
         #controller function to append letters into a list
         self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
-        thelist = self.controller.controllerGetGuessedWordsGUI().copy()
-        for x in thelist:
-            self.listBox.insert(tk.END, x)
+        if z == 1:
+            thelist = self.controller.controllerGetGuessedWordsGUI().copy()
+            for x in thelist:
+                self.listBox.insert(tk.END, x)
+        #enables use of enter button on keyboard
+        self.e.bind("<Return>",self.makeGuess)
         #adds the points
         self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#FFFFFF')
         self.pointLabel.place(x=410,y=40)
-
         #adds the rank
         self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#FFFFFF')
         self.rankLabel.place(x=60,y=474)
-
-        #enables use of enter button on keyboard
-        self.e.bind("<Return>",self.makeGuess)
         #get required letter
         self.reqLetter = self.controller.controllerGetReqLetter()
         #hoping this removes the required letter from the list.
@@ -284,6 +296,15 @@ class View:
         self.canvas.delete("all")
         self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
         self.controller.controllerUpdatePuzzleState1()
+
+    '''
+    Function asks if the user wants to save first, end result is loading data from a json file into the game.
+    '''
+    def loadHelper(self,filename):
+        self.controller.controllerGameLoadGUI(filename)
+        messagebox.showinfo("Loaded", "Game loaded successfully!")
+        #see gameHelper's documentation for an explanation on parameters
+        self.gameHelper(0, 0, 1, 0)
 
 
     def loadPuzzle(self):
@@ -340,7 +361,6 @@ class View:
     def playInstructions(self):
         messagebox.showinfo("How To Play", '''The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them (the middle letter!) being required for all created words. Letters may be repeated but words must be 4 to 15 letters.
 Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. You are free to use your own pangram to create a personalized puzzle by pressing the New Puzzle Base button!''')
-        
 
     #shuffle function which just shuffles the list of letters, deletes all the widgets on the canvas and remakes them
     def shuffle(self):
@@ -359,6 +379,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         hints = [self.grid(),self.hintCount(),self.totHint()]
         hint = random.choice(hints)
 
+    '''
+    Function that creates the pop up windows for hints.
+    '''
     def hintDisplay(self,title,message,width,height):
         # Creates top level message
         hintMessage = Toplevel()
@@ -372,6 +395,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         # Makes the window 
         hintMessage.grab_set()
 
+    '''
+    Function that creates the matrix of letters and their counts.
+    '''
     def grid(self):
         x = self.controller.gridHint()
         cell_width = 2
@@ -379,13 +405,18 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         grid = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
         self.hintDisplay("Grid Hint:", grid, 450, 250)
         
+    '''
+    Function that creates the list of two letters in words and their counts.
+    '''
     def hintCount (self):
         count = self.controller.firstTwo()
         # Formats how the list will print when transferred to a window
         twoCount = "Two Letter List Hint:\n" + "\n".join([f"{k}: {v}" for k, v in count.items()])
-        print(self.controller.controllerGetWordList())
         self.hintDisplay("First Two Letters Hint:", twoCount, 250, 500)
     
+    '''
+    Function that finds the total number of words, points, and pangrams.
+    '''
     def totHint(self):
         x,y = self.controller.totalHint()
         # Formats message to display propertly on message window 
@@ -396,51 +427,17 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     Function is meant for automatically generating a puzzle for the user to play.
     '''
     def gameplay(self):
-        #checks if the puzzle state is 1
-        #then asks the user if they would like to save
-        #if there is some sort of userInput put in, check if it's yes then ask for fileName
-        #run save function, else in the end it will generate a new puzzle.
+        #if puzzle in progress, prompt for saving, otherwise create new puzzle
         if(self.controller.controllerGetPuzzleState() == 1):
             answer = messagebox.askyesno("Would you like to save?", "Would you like to save the current game?")
             if answer == True:
                 self.savePuzzle()
-        self.clearInput()
-        self.controller.controllerNewGame()
-        # clear listbox every time it's run
-        self.clearListbox()
-        # must clear the letters once a new puzzle is generated
-        self.hexagonLetters.clear()
-        #gets points and rank from controller
-        self.points.set(self.controller.controllerGetPoints())
-        self.rank.set(self.controller.controllerGetPuzzleRank())
-        # then we can run the function and pull the data from model->controller->view
-        self.controller.controllerRunAutoGame()
-        getLetters = self.controller.controllerGetLetters()
-        getLetters = getLetters.replace("[", "").replace("]","")
-        #controller function to append letters into a list
-        self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
-        #enables use of enter button on keyboard
-        self.e.bind("<Return>",self.makeGuess)
-        #adds the points
-        self.pointLabel = tk.Label(self.canvas, textvariable = self.points, font=('Helvetica 12 bold'), background='#FFFFFF')
-        self.pointLabel.place(x=410,y=40)
-        #adds the rank
-        self.rankLabel = tk.Label(self.canvas, textvariable  = self.rank, font=('Helvetica 12 bold'), background='#FFFFFF')
-        self.rankLabel.place(x=60,y=474)
-        #get required letter
-        self.reqLetter = self.controller.controllerGetReqLetter()
-        print(self.reqLetter)
-        #hoping this removes the required letter from the list.
-        self.hexagonLetters.remove(self.reqLetter)
-        #creates the hexagon shapes
-        self.canvas.delete("all")
-        self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
-        self.controller.controllerUpdatePuzzleState1()
+        #see gameHelper's documentation for an explanation on parameters
+        self.gameHelper(1, 0, 0, 1)
 
     '''
     Function generates a new puzzle based off of what the user types in for their pangram.
     '''
-
     def gameplayBase(self):
         if(self.controller.controllerGetPuzzleState() == 1):
             answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
@@ -450,7 +447,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
         if (input == None):
             return
-        self.check = self.controller.controllerCheckPangram(input)
+        self.check = self.controller.controllerCheckPangram(input.lower())
         while (self.check == False):
             input = simpledialog.askstring("Entered an invalid pangram", "Choose a pangram to use (7 unique letters)")
             if input == None:
@@ -463,39 +460,11 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             messagebox.showinfo("Invalid input!", "Ensure the input is an actual pangram (letters only) and the length is between 7-15")
             return
         else:
-            self.clearInput()
-            self.controller.controllerNewGame()
-            self.controller.controllerRunBaseGame(input)
-            getLetters = self.controller.controllerGetLetters()
-            print("Get letters before: " + getLetters)
-            getLetters = getLetters.replace("[", "").replace("]","")
-            print("Get letters: " + getLetters)
-             # clear listbox every time it's run
-            self.clearListbox()
-            # must clear the letters once a new puzzle is generated
-            self.hexagonLetters.clear()
-            #gets points and rank from controller
-            self.points.set(self.controller.controllerGetPoints())
-            self.rank.set(self.controller.controllerGetPuzzleRank())
-            #controller function to append letters into a list
-            self.hexagonLetters = self.controller.controllerToList(getLetters, self.hexagonLetters)
-            #enables use of enter button on keyboard
-            self.e.bind("<Return>",self.makeGuess)
-            #get required letter
-            self.reqLetter = self.controller.controllerGetReqLetter()
-            print(self.reqLetter)
-            #hoping this removes the required letter from the list.
-            self.hexagonLetters.remove(self.reqLetter)
-            #creates the hexagon shapes
-            self.canvas.delete("all")
-            self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
-            self.controller.controllerUpdatePuzzleState1()
+           #see gameHelper's documentation for an explanation on parameters
+           self.gameHelper(2, input, 0, 1)
 
-
-  
 # Runs the GUI
 main = tk.Tk()
 main.title("MediaTek's Spelling Bee!")
 View(main,ctrl)
 main.mainloop()
-
