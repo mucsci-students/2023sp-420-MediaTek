@@ -85,3 +85,42 @@ class Model_test:
         self.model.updatePuzzleState1()
         print(self.model.getPuzzleState())
         assert self.model.getPuzzleState() == 1
+    
+    def calculateTotalPoints_test(self):
+        self.model.calculateTotalPoints(wordBank=self.wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters))
+        assert self.p1.puzzleTotal == 897
+    
+    def checkPangram_test(self):
+        self.testOne = checkPangram(input="pangram")
+        assert self.testOne == False
+        
+        self.testTwo = checkPangram(input="mediocre")
+        assert self.testTwo == True
+        
+        self.testThree = checkPangram(input="viability")
+        assert self.testThree == True
+        
+        self.testFour = checkPangram(input="notanactualword")
+        assert self.testFour == False
+    
+    def NewPuzzleAuto_test(self):
+        self.testmodel = Model.model()
+        self.testmodel.newPuzzleAuto()
+        assert self.testmodel.p1.gaUserLetters.isalpha() and len(self.testmodel.p1.gaUserLetters) == 7
+        assert self.testmodel.p1.gaReqLetters.isalpha() and len(self.testmodel.p1.gaReqLetters) == 1      
+        assert self.testmodel.p1.points == 0
+        assert len(self.testmodel.p1.getList) > 0
+        assert self.testmodel.p1.puzzleTotal > 0
+        assert len(self.testmodel.p1.guessedList) == 0
+    
+    def NewPuzzleBase_test(self):
+        self.testmodel = Model.model()
+        self.testPangram = "jibberish"
+        self.testmodel.NewPuzzleBase(userInput=self.testPangram)
+        assert self.testmodel.p1.gaUserLetters.isahpha() and len(self.testmodel.p1.gaUserLetters) == 7
+        assert self.testmodel.p1.gaReqLetters.isahpha() and len(self.testmodel.p1.gaReqLetters) == 1
+        assert len(self.testmodel.p1.getList) > 0
+        assert self.testmodel.p1.puzzleTotal > 0
+        assert self.testmodel.p1.points == 0
+        assert len(self.testmodel.p1.guessedList) == 0
+    
