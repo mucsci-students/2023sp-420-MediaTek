@@ -27,11 +27,6 @@ def run_appropriate_file():
             subprocess.run([sys.executable, clipath])
         else:
             subprocess.run([sys.executable, macpath])
-    elif os_name == "Linux":
-        if args.cli:
-            subprocess.run([sys.executable, clipath])
-        else:
-            subprocess.run([sys.executable, linuxpath])
     else:
         print("Unsupported OS")
 
