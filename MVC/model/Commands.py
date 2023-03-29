@@ -18,15 +18,16 @@ How To Play:
 - Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
 
 Commands:
-    !newpuzzle: Generates a new puzzle. You can even provide your own pangram for puzzle creation!
-    !showpuzzle: Displays the current puzzle.
-    !showfoundwords: Lists all of the correctly guessed words.
-    !shuffle: Shuffles the given letters in a random arangement (except the required letter in the center).
-    !savepuzzle: Saves your puzzle to your local machine.
-    !loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
-    !showstatus: Shows your current status.
-    !help: You just typed this command. Congrats.
-    !exit: Exits the game. You will be asked if you want to save your puzzle before exiting.
+    newpuzzle: Generates a new puzzle. You can even provide your own pangram for puzzle creation!
+    showpuzzle: Displays the current puzzle.
+    showfoundwords: Lists all of the correctly guessed words.
+    shuffleletters: Shuffles the given letters in a random arangement (except the required letter in the center).
+    savepuzzle: Saves your puzzle to your local machine.
+    loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
+    showstatus: Shows your current status.
+    showhints: Shows hints for your current game.
+    gamehelp: You just typed this command. Congrats.
+    gameexit: Exits the game. You will be asked if you want to save your puzzle before exiting.
           ''')
 
 #list of commands at the beginning of the program
