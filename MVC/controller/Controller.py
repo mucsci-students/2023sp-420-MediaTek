@@ -174,12 +174,10 @@ class controller:
                 exit()
             else:
                 print("Please enter \"yes\" or \"no\"!")
-                self.gameExit()
+                self.controllerGameExit()
         else:
             print("Okay... bye.")
             exit()
-
-        #self.model.gameExit()
     '''
     Calls the new puzzle base gui function, passing userInput.
     '''
@@ -222,13 +220,13 @@ class controller:
     def checkInput(self,userInput, reqLetter):
         print(userInput)
         print(reqLetter)
-        if re.match("^[a-zA-Z!]*$", userInput) and reqLetter in userInput:
+        if re.match("^[a-zA-Z]*$", userInput) and reqLetter in userInput:
             return True
         else:
             return False
     
     def checkInputCLI(self,userInput):
-        if re.match("^[a-zA-Z!]*$", userInput):
+        if re.match("^[a-zA-Z]*$", userInput):
             return True
         else:
             return False

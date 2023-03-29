@@ -19,14 +19,21 @@ print("Hello! Welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 controller.ensureYesOrNo()'''
 class view:
+    #set instance to None at first
+    instance = None
+    #upon the view class being called, a new single instance of it will be created.
+    def __new__(self):
+        if self.instance is None:
+              self.instance = super().__new__(self)
+        return self.instance
     #while loop for the CLI.
     def __init__(self):
         self.controller = ctrl.controller()
         #variable to store user letters into a list for displaying a honeycomb.
         self.displayLetters = []
         self.check = False
-        self.b4commands = ["!newpuzzle","!loadpuzzle","!help","!exit"]
-        self.commands = ["!newpuzzle","!showpuzzle","!showfoundwords","!shuffle","!savepuzzle","!loadpuzzle","!showstatus","!help","!exit"]
+        self.b4commands = ["newpuzzle","loadpuzzle","gamehelp","gameexit"]
+        self.commands = ["newpuzzle","showpuzzle","showfoundwords","shuffleletters","savepuzzle","loadpuzzle","showstatus","showhints","gamehelp","gameexit"]
 
     def grid(self):
         x = self.controller.gridHint()
@@ -83,10 +90,10 @@ Welcome to MediaTek's Spelling Bee!
 - Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
 
 To get started, you can type:
-    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
-    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
-    !help: To see the list of all the commands.
-    !exit: To exit the program.
+    newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+    loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+    help: To see the list of all the commands.
+    exit: To exit the program.
 
 We hope you enjoy playing!
         ''')
@@ -110,10 +117,10 @@ We hope you enjoy playing!
             if self.controller.controllerGetPuzzleState() == 1:
                  #once a game is started the user will have access to all of the commands, so uses this instead.
                  cmdautocomplete = wrdcmp(self.commands,ignore_case=True,match_middle=True)
-            userInput = prompt("Please enter a guess or command, commands start with '!': ",completer=cmdautocomplete)
+            userInput = prompt("Please enter a guess or command: ",completer=cmdautocomplete)
             checkInput = self.controller.checkInputCLI(userInput)
             while(checkInput == False):
-                userInput = prompt("Input can only contain [!, A-Z], please reenter: ",completer=cmdautocomplete)
+                userInput = prompt("Input can only contain [A-Z], please reenter: ",completer=cmdautocomplete)
                 checkInput = self.controller.checkInputCLI(userInput)
             while(len(userInput) < 4) or (len(userInput) > 15):
                 userInput = prompt("Input must be between 4 and 15 characters! Please reenter your input: ",completer=cmdautocomplete)
@@ -124,30 +131,17 @@ We hope you enjoy playing!
             In the scenario that a user types in multiple exclamation points, or when using tab completion theres still multiple
             We can just check if the first spot in the string is an exclamation point and if the count of them is > 1, if so we can replace all !'s and just readd it at the end
             '''
+            '''
             if (userInput[0] == '!') and userInput.count('!') > 1:
                  # replace all !'s with a space, then add a '!' back into the front of it.
                  rstring = userInput.replace("!","")
                  fstring = '!' + rstring
                  userInput = fstring
-
-            if '!' not in userInput:
+            '''
             # controller user guess function
-                if self.controller.controllerGetPuzzleState() != 1:
-                    print('''
-To get started, you can type:
-    !newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
-    !loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
-    !help: To see the list of all the commands.
-    !exit: To exit the program.
-                    ''')
-                else:
-                    if userInput in self.controller.controllerGetGuessedWordsCLI():
-                        print("This word has already been guessed correctly.")
-                    else:
-                        self.controller.controllerUserGuess(userInput)
 
             match userInput.lower():
-                case "!newpuzzle":
+                case "newpuzzle":
                     if(self.controller.controllerGetPuzzleState() == 1):
                         wantSave = input("Hey do you want to save the game? (yes/no): ")
                         if (wantSave.lower() == "yes"):
@@ -164,7 +158,7 @@ To get started, you can type:
                     if (isAuto.lower() == "yes"):
                         self.controller.controllerRunAutoGame()
                         print("User letters: " + self.controller.controllerGetLetters())
-                        print("Req letters: " + self.controller.controllerGetReqLetter())
+                        print("Required letter: " + self.controller.controllerGetReqLetter())
                         self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
                     elif isAuto.lower() == "no":
@@ -175,10 +169,10 @@ To get started, you can type:
                              self.check = self.controller.controllerCheckPangram(userInput)
                         self.controller.controllerRunBaseGame(userInput)
                         print("User letters: " + self.controller.controllerGetLetters())
-                        print("Req letters: " + self.controller.controllerGetReqLetter())
+                        print("Required letter: " + self.controller.controllerGetReqLetter())
                         self.showHoneyComb()
                         self.controller.controllerUpdatePuzzleState1()
-                case "!showpuzzle":
+                case "showpuzzle":
                         #lots of these are just printing stuff can be removed, just for testing purpsoe.
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
@@ -187,25 +181,25 @@ To get started, you can type:
                             print("Required letter: " + self.controller.controllerGetReqLetter())
                             print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
                             self.showHoneyComb()
-                case "!showfoundwords":
+                case "showfoundwords":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
                         else:
                             print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
-                case "!shuffle":
+                case "shuffleletters":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
                         else:
                             self.controller.controllerShuffleAuto()
                             self.showHoneyComb()
                             print("Your letters: " + self.controller.controllerGetLetters())
-                case "!savepuzzle":
+                case "savepuzzle":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
                         else:
                             inputFile = input("Please enter a name for the file: ")
                             self.controller.controllerSaveGame(inputFile)
-                case "!loadpuzzle":
+                case "loadpuzzle":
                     if self.controller.controllerGetPuzzleState() == 1:
                         wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
                         if wantSave.lower() == "yes":
@@ -220,22 +214,39 @@ To get started, you can type:
                         self.showHoneyComb()
                     else:
                         print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
-                case "!showstatus":
+                case "showstatus":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
                         else:
                             print("Rank: " + self.controller.controllerGetPuzzleRank())
                             print("User Points: " + str(self.controller.controllerGetPoints()))
                             print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
-                case "!help":
+                case "gamehelp":
                        if(self.controller.controllerGetPuzzleState() == 0):
                         self.controller.controllerStartCommands()
                        else:
                         self.controller.controllerHelpCommand()
-                case "!exit":
+                case "gameexit":
                         self.controller.controllerGameExit()
-                case "!hint":
-                    self.hint()
+                case "showhints":
+                    if(self.controller.controllerGetPuzzleState() == 0):
+                        print("No game started!")
+                    else:
+                        self.hint()
+                case _:
+                    if self.controller.controllerGetPuzzleState() != 1:
+                        print('''
+To get started, you can type:
+    newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
+    loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
+    gamehelp: To see the list of all the commands.
+    gameexit: To exit the program.
+                        ''')
+                    else:
+                        if userInput in self.controller.controllerGetGuessedWordsCLI():
+                            print("This word has already been guessed correctly.")
+                        else:
+                            self.controller.controllerUserGuess(userInput)
 #singleton design pattern
 view = view()
 view.startGame()
