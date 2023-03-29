@@ -392,8 +392,6 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         label = Label(hintMessage, text=message, font=("Courier New", 10))
         # Add padding
         label.pack(padx=40, pady=40)
-        # Makes the window 
-        hintMessage.grab_set()
 
     '''
     Function that creates the matrix of letters and their counts.
