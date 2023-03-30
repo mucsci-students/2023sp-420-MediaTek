@@ -28,7 +28,8 @@ def run_appropriate_file():
         else:
             subprocess.run([sys.executable, macpath])
     else:
-        print("Unsupported OS")
+        if args.cli:
+            subprocess.run([sys.executable, clipath])
 
 run_appropriate_file()
 
