@@ -243,7 +243,7 @@ To get started, you can type:
     gameexit: To exit the program.
                         ''')
                     else:
-                        if userInput in self.controller.controllerGetGuessedWordsCLI():
+                        if userInput in self.controller.controllerGetGuessedWordsGUI():
                             print("This word has already been guessed correctly.")
                         else:
                             self.controller.controllerUserGuess(userInput)
