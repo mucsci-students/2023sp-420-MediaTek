@@ -19,14 +19,17 @@ print("Hello! Welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 controller.ensureYesOrNo()'''
 class view:
-    #set instance to None at first
     instance = None
-    #upon the view class being called, a new single instance of it will be created.
+    '''
+    Creates a new single instance for the view if none exists already.
+    '''
     def __new__(self):
         if self.instance is None:
               self.instance = super().__new__(self)
         return self.instance
-    #while loop for the CLI.
+    '''
+    Default consturctor for our view.
+    '''
     def __init__(self):
         self.controller = ctrl.controller()
         #variable to store user letters into a list for displaying a honeycomb.
@@ -64,8 +67,12 @@ class view:
     def hint(self):
         hints = [self.grid(),self.hintCount(),self.totHint()]
         hint = random.choice(hints)
-    
-    def checkGame(self,game):
+    '''
+    Helper function used in new puzzle command runs the game dependent on them answering yes or no for it being automatically generated
+    game: a string that will be either yes or no
+    Displays the user letter, req letter, and honeycomb in the end.
+    '''
+    def newPuzzleHelper(self,game):
         print(game.lower())
         if game.lower() == "yes":
             self.controller.controllerRunAutoGame()
@@ -81,19 +88,22 @@ class view:
         self.showHoneyComb()
         self.controller.controllerUpdatePuzzleState1()
     
-
-        
+    '''
+    Function displays the honeycomb for the CLI
+    '''
     def showHoneyComb(self):
-
-            self.controller.controllerToHoneyComblist()
-            self.displayLetters = self.controller.controllerGetHoneyCombList()
-            print('''  
-                        %s
-                    %s       %s
-                        %s
-                    %s       %s
-                        %s      
-            ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+        self.controller.controllerToHoneyComblist()
+        self.displayLetters = self.controller.controllerGetHoneyCombList()
+        print('''  
+                    %s
+                %s       %s
+                    %s
+                %s       %s
+                    %s      
+        ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+    '''
+    Function for new puzzle command, just asks for input and generates a new puzzle.
+    '''
     def newPuzzle(self):
         if(self.controller.controllerGetPuzzleState() == 1):
             wantSave = input("Hey do you want to save the game? (yes/no): ")
@@ -104,13 +114,15 @@ class view:
             else:
                 print("Ok, lets generate a new puzzle! ")
         self.controller.controllerNewGame()
-        isAuto = input("Do you want it to be automatically generated? (yes/no): ")
+        isAuto   = input("Do you want it to be automatically generated? (yes/no): ")
         while isAuto.lower() != "yes" and isAuto.lower() != "no":
             isAuto = input("Do you want it to be automatically generated? (yes/no): ")
     
         if (isAuto.lower() == "yes") or isAuto.lower() == "no":
-            self.checkGame(isAuto)
-
+            self.newPuzzleHelper(isAuto)
+    '''
+    Function that just displays the data related to the puzzle.
+    '''
     def showPuzzle(self):
         if (self.controller.controllerGetPuzzleState() == 0):
             print("No game started!")
@@ -119,25 +131,36 @@ class view:
             print("Required letter: " + self.controller.controllerGetReqLetter())
             print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
             self.showHoneyComb()
+    '''
+    Function that displays the users guessed words.
+    '''    
     def showFoundWords(self):
         if (self.controller.controllerGetPuzzleState() == 0):
-                    print("No game started!")
+            print("No game started!")
         else:
             print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
-    
+    '''
+    Function that shuffles the users letters around.
+    '''
     def shuffleLetters(self):
         if (self.controller.controllerGetPuzzleState() == 0):
-                print("No game started!")
+            print("No game started!")
         else:
             self.controller.controllerShuffleAuto()
             self.showHoneyComb()
             print("Your letters: " + self.controller.controllerGetLetters())
+    '''
+    Function that asks for user to input a file name they'd like to create a save of.
+    '''
     def savePuzzle(self):
         if (self.controller.controllerGetPuzzleState() == 0):
-                print("No game started!")
+            print("No game started!")
         else:
             inputFile = input("Please enter a name for the file: ")
             self.controller.controllerSaveGame(inputFile)
+    '''
+    Function loads an existing puzzle into the game.
+    '''
     def loadPuzzle(self):
         if self.controller.controllerGetPuzzleState() == 1:
             wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
@@ -153,10 +176,10 @@ class view:
             self.showHoneyComb()
         else:
             print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
-    def checkGameStarted(self):
-        self.controller.controllerGetPuzzleState() 
 
-
+    '''
+    Function is the game itself and keeps running until the user exits.
+    '''
     def startGame(self):
          #Set this before the loop runs since we only want to show the available commands instead of all of them.
         cmdautocomplete = wrdcmp(self.b4commands,ignore_case=True,match_middle=True)
