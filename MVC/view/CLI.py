@@ -19,14 +19,19 @@ print("Hello! Welcome to MediaTek's Spelling bee!")
 print("The goal of this game is to guess as many words as you can to accumulate points!")
 controller.ensureYesOrNo()'''
 class view:
-    #set instance to None at first
     instance = None
-    #upon the view class being called, a new single instance of it will be created.
+
+    '''
+    Creates a new single instance for the view if none exists already.
+    '''
     def __new__(self):
         if self.instance is None:
               self.instance = super().__new__(self)
         return self.instance
-    #while loop for the CLI.
+    
+    '''
+    Default consturctor for our view.
+    '''
     def __init__(self):
         self.controller = ctrl.controller()
         #variable to store user letters into a list for displaying a honeycomb.
@@ -64,21 +69,126 @@ class view:
     def hint(self):
         hints = [self.grid(),self.hintCount(),self.totHint()]
         hint = random.choice(hints)
-        
+    
+    '''
+    Helper function used in new puzzle command runs the game dependent on them answering yes or no for it being automatically generated
+    game: a string that will be either yes or no
+    Displays the user letter, req letter, and honeycomb in the end.
+    '''
+    def newPuzzleHelper(self,game):
+        print(game.lower())
+        if game.lower() == "yes":
+            self.controller.controllerRunAutoGame()
+        elif game.lower() == "no":
+            userInput = input("Choose a pangram: ")
+            self.check = self.controller.controllerCheckPangram(userInput)
+            while(self.check == False):
+                    userInput = input("Your pangram doesn't exist within our database, please try again. Enter a pangram: ")
+                    self.check = self.controller.controllerCheckPangram(userInput)
+            self.controller.controllerRunBaseGame(userInput)
+        print("User letters: " + self.controller.controllerGetLetters())
+        print("Required letter: " + self.controller.controllerGetReqLetter())
+        self.showHoneyComb()
+        self.controller.controllerUpdatePuzzleState1()
+    
+    '''
+    Function displays the honeycomb for the CLI
+    '''
     def showHoneyComb(self):
+        self.controller.controllerToHoneyComblist()
+        self.displayLetters = self.controller.controllerGetHoneyCombList()
+        print('''  
+                    %s
+                %s       %s
+                    %s
+                %s       %s
+                    %s      
+        ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
 
-            self.controller.controllerToHoneyComblist()
-            self.displayLetters = self.controller.controllerGetHoneyCombList()
-            print('''  
-                        %s
-                    %s       %s
-                        %s
-                    %s       %s
-                        %s      
-            ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+    '''
+    Function for new puzzle command, just asks for input and generates a new puzzle.
+    '''
+    def newPuzzle(self):
+        if(self.controller.controllerGetPuzzleState() == 1):
+            wantSave = input("Hey do you want to save the game? (yes/no): ")
+            if (wantSave.lower() == "yes"):
+                inputFile = input("Please choose a name for the file: ")
+                print("Saving your game!")
+                self.controller.controllerSaveGame(inputFile)
+            else:
+                print("Ok, lets generate a new puzzle! ")
+        self.controller.controllerNewGame()
+        isAuto  = input("Do you want it to be automatically generated? (yes/no): ")
+        while isAuto.lower() != "yes" and isAuto.lower() != "no":
+            isAuto = input("Do you want it to be automatically generated? (yes/no): ")
+    
+        if (isAuto.lower() == "yes") or isAuto.lower() == "no":
+            self.newPuzzleHelper(isAuto)
 
-         
+    '''
+    Function that just displays the data related to the puzzle.
+    '''
+    def showPuzzle(self):
+        if (self.controller.controllerGetPuzzleState() == 0):
+            print("No game started!")
+        else:
+            print("Your letters: " + self.controller.controllerGetLetters())
+            print("Required letter: " + self.controller.controllerGetReqLetter())
+            print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
+            self.showHoneyComb()
 
+    '''
+    Function that displays the users guessed words.
+    '''    
+    def showFoundWords(self):
+        if (self.controller.controllerGetPuzzleState() == 0):
+            print("No game started!")
+        else:
+            print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
+
+    '''
+    Function that shuffles the users letters around.
+    '''
+    def shuffleLetters(self):
+        if (self.controller.controllerGetPuzzleState() == 0):
+            print("No game started!")
+        else:
+            self.controller.controllerShuffleAuto()
+            self.showHoneyComb()
+            print("Your letters: " + self.controller.controllerGetLetters())
+
+    '''
+    Function that asks for user to input a file name they'd like to create a save of.
+    '''
+    def savePuzzle(self):
+        if (self.controller.controllerGetPuzzleState() == 0):
+            print("No game started!")
+        else:
+            inputFile = input("Please enter a name for the file: ")
+            self.controller.controllerSaveGame(inputFile)
+
+    '''
+    Function loads an existing puzzle into the game.
+    '''
+    def loadPuzzle(self):
+        if self.controller.controllerGetPuzzleState() == 1:
+            wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
+            if wantSave.lower() == "yes":
+                inputFile = input("Please choose a name for the file: ")
+                print("Saving your game!")
+                self.controller.controllerSaveGame(inputFile)
+        inputFile = input("Enter the name of the file you want to load: ")
+        checkFile = inputFile + ".json"
+        if os.path.exists(checkFile):
+            self.controller.controllerGameLoadCLI(inputFile)
+            print("Puzzle loaded!")
+            self.showHoneyComb()
+        else:
+            print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
+
+    '''
+    Function is the game itself and keeps running until the user exits.
+    '''
     def startGame(self):
          #Set this before the loop runs since we only want to show the available commands instead of all of them.
         cmdautocomplete = wrdcmp(self.b4commands,ignore_case=True,match_middle=True)
@@ -124,96 +234,21 @@ We hope you enjoy playing!
                 checkInput = self.controller.checkInputCLI(userInput)
             while(len(userInput) < 4) or (len(userInput) > 15):
                 userInput = prompt("Input must be between 4 and 15 characters! Please reenter your input: ",completer=cmdautocomplete)
-
-
-
-            '''
-            In the scenario that a user types in multiple exclamation points, or when using tab completion theres still multiple
-            We can just check if the first spot in the string is an exclamation point and if the count of them is > 1, if so we can replace all !'s and just readd it at the end
-            '''
-            '''
-            if (userInput[0] == '!') and userInput.count('!') > 1:
-                 # replace all !'s with a space, then add a '!' back into the front of it.
-                 rstring = userInput.replace("!","")
-                 fstring = '!' + rstring
-                 userInput = fstring
-            '''
             # controller user guess function
 
             match userInput.lower():
                 case "newpuzzle":
-                    if(self.controller.controllerGetPuzzleState() == 1):
-                        wantSave = input("Hey do you want to save the game? (yes/no): ")
-                        if (wantSave.lower() == "yes"):
-                            inputFile = input("Please choose a name for the file: ")
-                            print("Saving your game!")
-                            self.controller.controllerSaveGame(inputFile)
-                        else:
-                            print("Ok, lets generate a new puzzle! ")
-                    self.controller.controllerNewGame()
-                    isAuto = input("Do you want it to be automatically generated? (yes/no): ")
-                    while isAuto.lower() != "yes" and isAuto.lower() != "no":
-                        isAuto = input("Do you want it to be automatically generated? (yes/no): ")
-                    
-                    if (isAuto.lower() == "yes"):
-                        self.controller.controllerRunAutoGame()
-                        print("User letters: " + self.controller.controllerGetLetters())
-                        print("Required letter: " + self.controller.controllerGetReqLetter())
-                        self.showHoneyComb()
-                        self.controller.controllerUpdatePuzzleState1()
-                    elif isAuto.lower() == "no":
-                        userInput = input("Choose a pangram: ")
-                        self.check = self.controller.controllerCheckPangram(userInput)
-                        while(self.check == False):
-                             userInput = input("Your pangram doesn't exist within our database, please try again. Enter a pangram: ")
-                             self.check = self.controller.controllerCheckPangram(userInput)
-                        self.controller.controllerRunBaseGame(userInput)
-                        print("User letters: " + self.controller.controllerGetLetters())
-                        print("Required letter: " + self.controller.controllerGetReqLetter())
-                        self.showHoneyComb()
-                        self.controller.controllerUpdatePuzzleState1()
+                    self.newPuzzle()
                 case "showpuzzle":
-                        #lots of these are just printing stuff can be removed, just for testing purpsoe.
-                        if (self.controller.controllerGetPuzzleState() == 0):
-                            print("No game started!")
-                        else:
-                            print("Your letters: " + self.controller.controllerGetLetters())
-                            print("Required letter: " + self.controller.controllerGetReqLetter())
-                            print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
-                            self.showHoneyComb()
+                    self.showPuzzle()
                 case "showfoundwords":
-                        if (self.controller.controllerGetPuzzleState() == 0):
-                            print("No game started!")
-                        else:
-                            print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
+                    self.showFoundWords()
                 case "shuffleletters":
-                        if (self.controller.controllerGetPuzzleState() == 0):
-                            print("No game started!")
-                        else:
-                            self.controller.controllerShuffleAuto()
-                            self.showHoneyComb()
-                            print("Your letters: " + self.controller.controllerGetLetters())
+                    self.shuffleLetters()
                 case "savepuzzle":
-                        if (self.controller.controllerGetPuzzleState() == 0):
-                            print("No game started!")
-                        else:
-                            inputFile = input("Please enter a name for the file: ")
-                            self.controller.controllerSaveGame(inputFile)
+                    self.savePuzzle()
                 case "loadpuzzle":
-                    if self.controller.controllerGetPuzzleState() == 1:
-                        wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
-                        if wantSave.lower() == "yes":
-                            inputFile = input("Please choose a name for the file: ")
-                            print("Saving your game!")
-                            self.controller.controllerSaveGame(inputFile)
-                    inputFile = input("Enter the name of the file you want to load: ")
-                    checkFile = inputFile + ".json"
-                    if os.path.exists(checkFile):
-                        self.controller.controllerGameLoadCLI(inputFile)
-                        print("Puzzle loaded!")
-                        self.showHoneyComb()
-                    else:
-                        print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
+                    self.loadPuzzle()
                 case "showstatus":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
