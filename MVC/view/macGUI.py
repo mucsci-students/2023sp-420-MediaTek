@@ -151,6 +151,7 @@ class View:
         return tk.Button(self.canvas, text= x, width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command= lambda: self.sendInput(x))
 
     def drawPuzzleUI(self, reqLetter, hexagonLetters):
+                self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
                 hexReq = self.draw_hexagon(self.canvas, 375, 250, self.hex_radius, 'yellow', 'black')
                 hex1 = self.drawHex(375, 365)
                 hex2 = self.drawHex(375, 135)
