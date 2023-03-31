@@ -64,6 +64,24 @@ class view:
     def hint(self):
         hints = [self.grid(),self.hintCount(),self.totHint()]
         hint = random.choice(hints)
+    
+    def checkGame(self,game):
+        print(game.lower())
+        if game.lower() == "yes":
+            self.controller.controllerRunAutoGame()
+        elif game.lower() == "no":
+            userInput = input("Choose a pangram: ")
+            self.check = self.controller.controllerCheckPangram(userInput)
+            while(self.check == False):
+                    userInput = input("Your pangram doesn't exist within our database, please try again. Enter a pangram: ")
+                    self.check = self.controller.controllerCheckPangram(userInput)
+            self.controller.controllerRunBaseGame(userInput)
+        print("User letters: " + self.controller.controllerGetLetters())
+        print("Required letter: " + self.controller.controllerGetReqLetter())
+        self.showHoneyComb()
+        self.controller.controllerUpdatePuzzleState1()
+    
+
         
     def showHoneyComb(self):
 
@@ -90,23 +108,8 @@ class view:
         while isAuto.lower() != "yes" and isAuto.lower() != "no":
             isAuto = input("Do you want it to be automatically generated? (yes/no): ")
     
-        if (isAuto.lower() == "yes"):
-            self.controller.controllerRunAutoGame()
-            print("User letters: " + self.controller.controllerGetLetters())
-            print("Required letter: " + self.controller.controllerGetReqLetter())
-            self.showHoneyComb()
-            self.controller.controllerUpdatePuzzleState1()
-        elif isAuto.lower() == "no":
-            userInput = input("Choose a pangram: ")
-            self.check = self.controller.controllerCheckPangram(userInput)
-            while(self.check == False):
-                    userInput = input("Your pangram doesn't exist within our database, please try again. Enter a pangram: ")
-                    self.check = self.controller.controllerCheckPangram(userInput)
-            self.controller.controllerRunBaseGame(userInput)
-            print("User letters: " + self.controller.controllerGetLetters())
-            print("Required letter: " + self.controller.controllerGetReqLetter())
-            self.showHoneyComb()
-            self.controller.controllerUpdatePuzzleState1()
+        if (isAuto.lower() == "yes") or isAuto.lower() == "no":
+            self.checkGame(isAuto)
 
     def showPuzzle(self):
         if (self.controller.controllerGetPuzzleState() == 0):
@@ -150,6 +153,9 @@ class view:
             self.showHoneyComb()
         else:
             print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
+    def checkGameStarted(self):
+        self.controller.controllerGetPuzzleState() 
+
 
     def startGame(self):
          #Set this before the loop runs since we only want to show the available commands instead of all of them.
