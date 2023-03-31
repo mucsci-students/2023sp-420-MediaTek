@@ -118,7 +118,7 @@ class view:
             else:
                 print("Ok, lets generate a new puzzle! ")
         self.controller.controllerNewGame()
-        isAuto   = input("Do you want it to be automatically generated? (yes/no): ")
+        isAuto  = input("Do you want it to be automatically generated? (yes/no): ")
         while isAuto.lower() != "yes" and isAuto.lower() != "no":
             isAuto = input("Do you want it to be automatically generated? (yes/no): ")
     
