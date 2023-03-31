@@ -20,6 +20,7 @@ print("The goal of this game is to guess as many words as you can to accumulate 
 controller.ensureYesOrNo()'''
 class view:
     instance = None
+
     '''
     Creates a new single instance for the view if none exists already.
     '''
@@ -27,6 +28,7 @@ class view:
         if self.instance is None:
               self.instance = super().__new__(self)
         return self.instance
+    
     '''
     Default consturctor for our view.
     '''
@@ -67,6 +69,7 @@ class view:
     def hint(self):
         hints = [self.grid(),self.hintCount(),self.totHint()]
         hint = random.choice(hints)
+    
     '''
     Helper function used in new puzzle command runs the game dependent on them answering yes or no for it being automatically generated
     game: a string that will be either yes or no
@@ -101,6 +104,7 @@ class view:
                 %s       %s
                     %s      
         ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+
     '''
     Function for new puzzle command, just asks for input and generates a new puzzle.
     '''
@@ -120,6 +124,7 @@ class view:
     
         if (isAuto.lower() == "yes") or isAuto.lower() == "no":
             self.newPuzzleHelper(isAuto)
+
     '''
     Function that just displays the data related to the puzzle.
     '''
@@ -131,6 +136,7 @@ class view:
             print("Required letter: " + self.controller.controllerGetReqLetter())
             print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
             self.showHoneyComb()
+
     '''
     Function that displays the users guessed words.
     '''    
@@ -139,6 +145,7 @@ class view:
             print("No game started!")
         else:
             print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
+
     '''
     Function that shuffles the users letters around.
     '''
@@ -149,6 +156,7 @@ class view:
             self.controller.controllerShuffleAuto()
             self.showHoneyComb()
             print("Your letters: " + self.controller.controllerGetLetters())
+
     '''
     Function that asks for user to input a file name they'd like to create a save of.
     '''
@@ -158,6 +166,7 @@ class view:
         else:
             inputFile = input("Please enter a name for the file: ")
             self.controller.controllerSaveGame(inputFile)
+
     '''
     Function loads an existing puzzle into the game.
     '''
@@ -239,20 +248,7 @@ We hope you enjoy playing!
                 case "savepuzzle":
                     self.savePuzzle()
                 case "loadpuzzle":
-                    if self.controller.controllerGetPuzzleState() == 1:
-                        wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
-                        if wantSave.lower() == "yes":
-                            inputFile = input("Please choose a name for the file: ")
-                            print("Saving your game!")
-                            self.controller.controllerSaveGame(inputFile)
-                    inputFile = input("Enter the name of the file you want to load: ")
-                    checkFile = inputFile + ".json"
-                    if os.path.exists(checkFile):
-                        self.controller.controllerGameLoadCLI(inputFile)
-                        print("Puzzle loaded!")
-                        self.showHoneyComb()
-                    else:
-                        print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
+                    self.loadPuzzle()
                 case "showstatus":
                         if (self.controller.controllerGetPuzzleState() == 0):
                             print("No game started!")
