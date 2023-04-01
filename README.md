@@ -118,25 +118,27 @@ then run the command
 <!-- COMMANDS EXAMPLES -->
 ## Commands
 
-See below for a list of CLI-specific commands and their functionality!
+See below for a list of CLI-specific commands and their functionality! All commands support tab-completion.
   
-* ```!newpuzzle```  
+* ```newpuzzle```  
   Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
-* ```!showpuzzle```  
+* ```showpuzzle```  
   Displays the current puzzle, including all kinds of fun stats.
-* ```!showfoundwords```  
+* ```showfoundwords```  
   Lists all of the correctly guessed words.
-* ```!shuffle```  
+* ```shuffleletters```  
   Shuffles the given letters in a random arangement (except the required letter which stays in the center).
-* ```!savepuzzle```  
+* ```savepuzzle```  
   Saves your puzzle to the root directory.  **NOTE: The GUI version lets you save anywhere on your machine.
-* ```!loadpuzzle```  
+* ```loadpuzzle```  
   Allows you to load a saved puzzle from the root directory.  **NOTE: The GUI version lets you load from anywhere on your machine.
-* ```!showstatus```  
+* ```showstatus```  
   Shows your current rank, points earned, and total points possible.
-* ```!help```  
+* ```showhints```  
+  Shows useful stats for solving a puzzle, including how many words start with each letter.
+* ```gamehelp```  
   Displays the list of commands currently accessible.
-* ```!exit```  
+* ```gameexit```  
   Exits the game. You will be asked if you want to save your puzzle to not lose progress.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
