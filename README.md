@@ -30,7 +30,15 @@ To run our game locally, you will need to follow these steps.
 ### Prerequisites
 
 * Python version 3.11.2, which can be downloaded at https://www.python.org/downloads/
-
+* Run this command for pip  
+  WINDOWS:
+  ```sh
+  py -m ensurepip --upgrade
+  ```  
+  macOS:
+  ```sh
+  python3 -m ensurepip --upgrade
+  ```  
 ### Installation
 
 
@@ -112,7 +120,8 @@ then run the command
   macOS:
    ```sh
    python3 test/run.py
-   ```
+   ```  
+
 
 
 <!-- COMMANDS EXAMPLES -->
@@ -141,6 +150,20 @@ See below for a list of CLI-specific commands and their functionality! All comma
 * ```gameexit```  
   Exits the game. You will be asked if you want to save your puzzle to not lose progress.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- DESIGN PATTERN LIST -->
+## Design Patterns
+
+Below is a list of design patterns used in our program and where to find them!
+
+* MVC  
+    Our codebase follows a general Model-View-Controller schema, which can be seen within the MVC directory.  
+* Singleton  
+    MVC/view/CLI.py contains the singleton design pattern, where it only has one instance and returns the same object.  
+* Iterator  
+    MVC/view/winGUI.py contains the iterator design pattern, where an iterator object is used to loop through a list and restrict user inputs.
+    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
