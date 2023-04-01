@@ -15,7 +15,6 @@ def run_appropriate_file():
     args = parser.parse_args()
     
     os_name = platform.system()
-    print(f"Detected OS: {os_name}")
     
     if os_name == "Windows":
         if args.cli:
