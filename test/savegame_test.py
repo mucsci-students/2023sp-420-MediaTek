@@ -16,14 +16,14 @@ from MVC.model import wordlist as wordlist
 import unittest
 import json
 
-class savegame_test:
+class savegame_test (unittest.TestCase):
     
     # Initializes the class
-    def __init__(self):
+    def setUp(self):
         self.wordlist = wordlist
     
     # Tests the savegame file for functionality
-    def savegame_test(self):
+    def test_savegame(self):
         userLetters = "pangrms"
         reqLetter = "a"
         guessedWords = ["pangram", "pangrams", "grams", "gram"]
@@ -34,5 +34,8 @@ class savegame_test:
         # Unsure if this is the optimal way to test this but it's all I got with the knowlege I have.
         savegame(reqLetter, userLetters, points, maxPoints, guessedWords, wordList, "pangram")
         with open("pangram.json", "r") as save:
-            assert json.load(save) != None
+            self.assertTrue(json.load(save) != None)
+
+if __name__ == '__main__':
+    unittest.main()
         

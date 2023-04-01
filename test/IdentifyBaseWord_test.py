@@ -14,29 +14,32 @@ sys.path.append(getPath)
 from MVC.model import IdentifyBaseWord as IdentifyBaseWord
 import unittest
 
-class IdentifyBaseWord_test:
+class IdentifyBaseWord_test (unittest.TestCase):
     
     # Initializes the class
-    def __init__(self):
+    def setUp(self):
         self.base = IdentifyBaseWord
     
     # Tests automatic game functionality
-    def autoGame_test(self):
+    def test_autoGame(self):
         randUserLetters, randReqLetter = self.base.autoGame()
-        assert (randReqLetter.isalpha()) and (len(randReqLetter) == 1)
-        assert (randUserLetters.isalpha()) and (len(randUserLetters) == 7)
+        self.assertTrue(randReqLetter.isalpha() and len(randReqLetter) == 1)
+        self.assertTrue(randUserLetters.isalpha() and len(randUserLetters) == 7)
         
     
     # Tests base game functionality
-    def baseGame_test(self):
+    def test_baseGame(self):
         userInput = "pangrams"
         baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
-        assert (baseReqLetter.isalpha()) and (len(baseReqLetter) == 1)
-        assert (baseUserLetters.isalpha()) and (len(baseUserLetters) == 7)
+        self.assertTrue(baseReqLetter.isalpha() and len(baseReqLetter) == 1)
+        self.assertTrue(baseUserLetters.isalpha() and len(baseUserLetters) == 7)
         
         userInput = "pangram"
         baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
         print(baseReqLetter)
         print(baseUserLetters)
-        assert len(baseReqLetter) == 0
-        assert len(baseUserLetters) == 0
+        self.assertEqual(len(baseReqLetter), 0)
+        self.assertEqual(len(baseUserLetters), 0)
+
+if __name__ == '__main__':
+    unittest.main()
