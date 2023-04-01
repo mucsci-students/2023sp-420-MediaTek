@@ -10,34 +10,34 @@ the changes are valid.
 import IdentifyBaseWord_test
 import savegame_test
 import Model_test
+import unittest
 
-class run:
+def suite():
     
-    # Initializes the class
-    def __init__(self):
-        self.test1 = IdentifyBaseWord_test.IdentifyBaseWord_test()
-        self.test2 = savegame_test.savegame_test()
-        self.modeltest = Model_test.Model_test()
+    suite = unittest.TestSuite()
+    suite.addTest(Model_test.Model_test('test_getGameState'))
+    suite.addTest(Model_test.Model_test('test_getLetters'))
+    suite.addTest(Model_test.Model_test('test_getReqLetter'))
+    suite.addTest(Model_test.Model_test('test_getGuessedWords'))
+    suite.addTest(Model_test.Model_test('test_getWordList'))
+    suite.addTest(Model_test.Model_test('test_getPoints'))
+    suite.addTest(Model_test.Model_test('test_getPuzzleState'))
+    suite.addTest(Model_test.Model_test('test_getPuzzleTotal'))
+    suite.addTest(Model_test.Model_test('test_getPuzzleRank'))
+    suite.addTest(Model_test.Model_test('test_updatePuzzleStateZero'))
+    suite.addTest(Model_test.Model_test('test_updatePuzzleStateOne'))
+    suite.addTest(Model_test.Model_test('test_calculateTotalPoints'))
+    suite.addTest(Model_test.Model_test('test_checkPangram'))
+    suite.addTest(Model_test.Model_test('test_NewPuzzleAuto'))
+    suite.addTest(Model_test.Model_test('test_NewPuzzleBase'))
+    suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_autoGame'))
+    suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_baseGame'))
+    suite.addTest(savegame_test.savegame_test('test_savegame'))
     
-    # runs all the tests implemented so far
-    def run(self):
-        
-        self.test1.autoGame_test()
-        self.test1.baseGame_test()
-        
-        self.test2.savegame_test()
-        
-        self.modeltest.getGameState_test()
-        self.modeltest.getGuessedWords_test()
-        self.modeltest.getHoneyCombList_test()
-        self.modeltest.getLetters_test()
-        self.modeltest.getPoints_test()
-        self.modeltest.getPuzzleRank_test()
-        self.modeltest.getPuzzleState_test()
-        self.modeltest.getPuzzleTotal_test()
-        self.modeltest.getReqLetter_test()
-        self.modeltest.getWordList_test()
-        
-        
-testRun = run()
-testRun.run()
+    return suite
+
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner()
+    runner.run(suite())
+
+
