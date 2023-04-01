@@ -43,22 +43,41 @@ class view:
     def grid(self):
         x = self.controller.gridHint()
 
-        # Formats Matrix
-        cell_width = 2
-        fmt = '{:>' + str(cell_width) + '}'
-        for i in range(0, x.shape[0]):
-            for j in range(0, x.shape[1]):
-                if x[i,j] is not None:
-                    x[i,j] = fmt.format(x[i,j])
-        # Prints Matrix
+        # Removes columns if there are no words in them
+        removeCol = []
+        for j in range(1, x.shape[1] - 1):
+            if any(x[i, j] != 0 for i in range(1, x.shape[0] - 1)):
+                removeCol.append(j)
+
+        # Calculate the maximum cell width
+        cell_width = max(len(str(x[i, j])) for i in range(x.shape[0]) for j in removeCol)
+
         print("Grid Hint:")
-        print(x)
+
+        # Formats each cell to cell length above
+        fmt = '{:>' + str(cell_width) + '}'
+
+        # Loop that goes through each columns and compares it to previous loop to see if it need to be displayed
+        # If it does need to be displayed it is appended to row variable
+        for i in range(0, x.shape[0]):
+            row = []
+            for j in range(0, x.shape[1]):
+                if j == 0 or j == x.shape[1] - 1:
+                    row.append(fmt.format(x[i, j]))
+                elif j in removeCol:
+                    row.append(fmt.format(x[i, j]))
+                else:
+                    continue
+            print(" ".join(row))
         print("\n")
         
     def hintCount (self):
         count = self.controller.firstTwo()
         print("Two Word List:")
-        print(count)
+        # Iterates through list and removes brackets and quotes
+        for key, value in count.items():
+            print(f"{key}: {value}")
+
         print("\n")
 
     def totHint(self):
