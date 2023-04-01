@@ -1,23 +1,13 @@
-import time
-import re
 from MVC.controller import Controller as ctrl
 from MVC.model import Commands as Commands
 import random
-import json
 from MVC.model import loadgame as loadgame
-import sys
 import os
-import textwrap
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter as wrdcmp
+#see bottom of file for an explanation on our usage of prompt_toolkit
 
 
-#create controller object
-'''
-controller = ctrl.controller()
-print("Hello! Welcome to MediaTek's Spelling bee!")
-print("The goal of this game is to guess as many words as you can to accumulate points!")
-controller.ensureYesOrNo()'''
 class view:
     instance = None
 
@@ -226,22 +216,7 @@ To get started, you can type:
 
 We hope you enjoy playing!
         ''')
-        '''
-        Documentation using prompt toolkit for tab-completion of commands
-        Completion class:
-            wrdcmp (word completer): this bascially just provides a way for auto completion based on specific words (which is self.x list we are passing to it)
-            wrdcmp(self.x,ignore_case=True,match_middle=True)
-                self.x: list of words we would like for auto completion to use
-                ignore_case: case sensitviity variable (set to true since we allow A-Z characters)
-                match_middle: variable that allows the command to be matched if the user is in the middle of typing it.
-        Prompt class:
-            prompt: This libraries wayh to get input from the user
-            prompt(message,completer)
-                message: some type of text for the user to see
-                completer: this is built into the library defined by it, allows the user to press tab and autocomplete the commands we give it)
-                Due to this, this is why we set cmdautocomplete = wrdcmp(self.b4commands,ignore_case=True,match_middle=True) because it will allow tab completion to
-                happen with word completer.
-        '''
+
         while (True):
             if self.controller.controllerGetPuzzleState() == 1:
                  #once a game is started the user will have access to all of the commands, so uses this instead.
@@ -253,8 +228,8 @@ We hope you enjoy playing!
                 checkInput = self.controller.checkInputCLI(userInput)
             while(len(userInput) < 4) or (len(userInput) > 15):
                 userInput = prompt("Input must be between 4 and 15 characters! Please reenter your input: ",completer=cmdautocomplete)
-            # controller user guess function
 
+            # pattern matching for commands
             match userInput.lower():
                 case "newpuzzle":
                     self.newPuzzle()
@@ -304,3 +279,20 @@ To get started, you can type:
 #singleton design pattern
 view = view()
 view.startGame()
+
+'''
+Documentation using prompt toolkit for tab-completion of commands
+Completion class:
+    wrdcmp (word completer): this bascially just provides a way for auto completion based on specific words (which is self.x list we are passing to it)
+    wrdcmp(self.x,ignore_case=True,match_middle=True)
+        self.x: list of words we would like for auto completion to use
+        ignore_case: case sensitviity variable (set to true since we allow A-Z characters)
+        match_middle: variable that allows the command to be matched if the user is in the middle of typing it.
+Prompt class:
+    prompt: This libraries wayh to get input from the user
+    prompt(message,completer)
+        message: some type of text for the user to see
+        completer: this is built into the library defined by it, allows the user to press tab and autocomplete the commands we give it)
+        Due to this, this is why we set cmdautocomplete = wrdcmp(self.b4commands,ignore_case=True,match_middle=True) because it will allow tab completion to
+        happen with word completer.
+'''

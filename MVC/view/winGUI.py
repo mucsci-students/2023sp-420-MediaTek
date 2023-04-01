@@ -149,7 +149,7 @@ class View:
         return tk.Button(self.canvas, text= x, width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command= lambda: self.sendInput(x))
 
     '''
-    Function creates the hexagons for the puzzles.
+    Function creates the hexagons and buttons for the puzzles.
     '''
     def drawPuzzleUI(self, reqLetter, hexagonLetters):
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
@@ -180,7 +180,6 @@ class View:
             self.canvas.create_text(365, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
             self.canvas.create_text(30, 485, text="Rank:", fill="black", font=('Helvetica 12 bold'))
    
-    
     '''
     Function deletes the right most characte from the inputbox
     '''
@@ -213,7 +212,9 @@ class View:
         #clears the input box everytime.
         self.clearInput()
 
-    # Function that creates a hexagon
+    '''
+    Function that creates the hexagons according to size.
+    '''
     def draw_hexagon(self, canvas, x, y, radius, fill, outline):
         angle = 60
         points = []
@@ -306,7 +307,9 @@ class View:
         #see gameHelper's documentation for an explanation on parameters
         self.gameHelper(0, 0, 1, 0)
 
-
+    '''
+    Function that prompts for loading and executes the proper action.
+    '''
     def loadPuzzle(self):
         #if puzzle in progress, prompt for saving
         if(self.controller.controllerGetPuzzleState() == 1):
@@ -357,12 +360,16 @@ class View:
             except Exception as e:
                 messagebox.showerror("Error", f"Error exiting game: {e}")
 
-    #function for how to play button
+    '''
+    Function that displays How To Play text.
+    '''
     def playInstructions(self):
         messagebox.showinfo("How To Play", '''The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them (the middle letter!) being required for all created words. Letters may be repeated but words must be 4 to 15 letters.
 Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. You are free to use your own pangram to create a personalized puzzle by pressing the New Puzzle Base button!''')
 
-    #shuffle function which just shuffles the list of letters, deletes all the widgets on the canvas and remakes them
+    '''
+    Function that shuffles letters which works by deleting and remaking the whole canvas.
+    '''
     def shuffle(self):
         if (self.controller.controllerGetPuzzleState() != 1):
             return
@@ -372,7 +379,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
     
-    # Function randomly picks a hint from the hint functions
+    '''
+    Function that creates the hints popup.
+    '''
     def pickHint(self):
         if (self.controller.controllerGetPuzzleState() != 1):
             return

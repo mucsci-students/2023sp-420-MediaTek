@@ -135,6 +135,9 @@ class View:
     def clearInput(self):
         self.e.delete(0, tk.END)
 
+    '''
+    Function clears the list box completely.
+    '''
     def clearListbox(self):
         self.listBox.delete(0, tk.END)
 
@@ -150,6 +153,9 @@ class View:
     def createButton(self, x):
         return tk.Button(self.canvas, text= x, width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command= lambda: self.sendInput(x))
 
+    '''
+    Function creates the hexagons and buttons for the puzzles.
+    '''
     def drawPuzzleUI(self, reqLetter, hexagonLetters):
                 self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
                 hexReq = self.draw_hexagon(self.canvas, 375, 250, self.hex_radius, 'yellow', 'black')
@@ -181,7 +187,7 @@ class View:
 
     
     '''
-    Function deletes the right most characte from the inputbox
+    Function deletes the right most character from the inputbox
     '''
     def backspace(self):
         self.e.delete(len(self.e.get()) - 1, tk.END)
@@ -208,18 +214,17 @@ class View:
         else:
             messagebox.showinfo("Invalid input", "Required letter was not used.")
 
-
         #update the points and rank after every guess.
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
-        #self.rank.set(str(self.controller.controllerGetPuzzleRank()))
         print(self.controller.controllerGetPuzzleRank())
         print(self.controller.controllerGetPoints())
         #clears the input box everytime.
         self.clearInput()
 
-
-    # Function that creates a hexagon
+    '''
+    Function that creates the hexagons according to size.
+    '''
     def draw_hexagon(self, canvas, x, y, radius, fill, outline):
         angle = 60
         points = []
@@ -229,7 +234,11 @@ class View:
             points.append((x_i, y_i))
         canvas.create_polygon(points, fill=fill, outline=outline)
 
-    #GABE WROTE THIS
+    '''
+    Function shows up message asking if the user would like to save
+    If so then it runs from view->controller->model save function.
+    else throws errrors.
+    '''
     def savePuzzle(self):
          if(self.controller.controllerGetPuzzleState() == 0):
                 messagebox.showinfo("Error!", "No game started!")
@@ -243,7 +252,9 @@ class View:
             except Exception as e:
                 messagebox.showerror("Error", f"Error saving game: {e}")
 
-    #GABE WROTE THIS
+    '''
+    Function gets the filename from the user.
+    '''
     def get_filename(self):
         filename = ""
         while not filename:
@@ -291,20 +302,24 @@ class View:
         #get required letter
         self.reqLetter = self.controller.controllerGetReqLetter()
         print(self.reqLetter)
-        #hoping this removes the required letter from the list.
+        #removes the required letter from the list.
         self.hexagonLetters.remove(self.reqLetter)
         #creates the hexagon shapes
         self.canvas.delete("all")
         self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
         self.controller.controllerUpdatePuzzleState1()
 
-    #GABE WROTE THIS
+    '''
+    Function asks if the user wants to save first, end result is loading data from a json file into the game.
+    '''
     def loadHelper(self,filename):
         self.controller.controllerGameLoadGUI(filename)
         messagebox.showinfo("Loaded", "Game loaded successfully!")
         self.gameHelper(0, 0, 1, 0)
 
-
+    '''
+    Function that prompts for loading and executes the proper action.
+    '''
     def loadPuzzle(self):
         #if puzzle in progress, prompt for saving
         if(self.controller.controllerGetPuzzleState() == 1):
@@ -334,7 +349,9 @@ class View:
             except Exception as e:
                 messagebox.showerror("Error", f"Error loading game: {e}")
             
-    #GABE WROTE THIS
+    '''
+    Function will prompt user if they'd like to save, exits the program.
+    '''
     def exitPuzzle(self):
         if(self.controller.controllerGetPuzzleState() == 0):
                 main.destroy()
@@ -353,12 +370,16 @@ class View:
             except Exception as e:
                 messagebox.showerror("Error", f"Error exiting game: {e}")
 
-    #function for how to play button
+    '''
+    Function that displays How To Play text.
+    '''
     def playInstructions(self):
         messagebox.showinfo("How To Play", '''The goal of our Spelling Bee game is to guess words given a choice of 7 letters, with 1 of them (the middle letter!) being required for all created words. Letters may be repeated but words must be 4 to 15 letters.
 Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 unique letters. You are free to use your own pangram to create a personalized puzzle by pressing the New Puzzle Base button!''')
         
-    #shuffle function which just shuffles the list of letters, deletes all the widgets on the canvas and remakes them
+    '''
+    Function that shuffles letters which works by deleting and remaking the whole canvas.
+    '''
     def shuffle(self):
         if (self.controller.controllerGetPuzzleState() != 1):
             return
@@ -368,7 +389,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
     
-    # Function randomly picks a hint from the hint functions
+    '''
+    Function that creates the hints popup.
+    '''
     def pickHint(self):
         if (self.controller.controllerGetPuzzleState() != 1):
             return
