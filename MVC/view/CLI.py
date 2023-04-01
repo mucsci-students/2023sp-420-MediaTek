@@ -26,7 +26,7 @@ class view:
         self.displayLetters = []
         self.check = False
         self.b4commands = ["!newpuzzle","!loadpuzzle","!help","!exit"]
-        self.commands = ["!newpuzzle","!showpuzzle","!showfoundwords","!shuffle","!savepuzzle","!loadpuzzle","!showstatus","!help","!exit"]
+        self.commands = ["!newpuzzle","!showpuzzle","!showfoundwords","!shuffle","!savepuzzle","!loadpuzzle","!showstatus","!help","!hint","!exit"]
 
     def grid(self):
         x = self.controller.gridHint()
