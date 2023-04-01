@@ -86,7 +86,7 @@ class View:
         self.menu.add_cascade(label="Help",menu=help_menu)
         help_menu.add_command(label = "How to play",command = self.playInstructions)
         help_menu.add_separator()
-        help_menu.add_command(label = "Hints",command = self.pickHint)
+        help_menu.add_command(label = "Hints",command = self.displayAll)
 
         # create the frame
         self.frame = tk.Frame(self.parent)
@@ -377,17 +377,29 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     '''
     Function that creates the pop up windows for hints.
     '''
-    def hintDisplay(self,title,message,width,height):
+    def hintDisplay(self,title,message1,message2,message3,width,height):
         # Creates top level message
         hintMessage = Toplevel()
         hintMessage.title(title)
          # set the size of the message
         hintMessage.geometry(f"{width}x{height}")
-        # create a label and change font
-        label = Label(hintMessage, text=message, font=("Courier New",12))
+        # create a label for each hint and change font
+        gridLabel = Label(hintMessage, text=message1, font=("Courier New",12))
+        totLabel = Label(hintMessage, text=message2, font=("Courier New",12))
+        countLabel = Label(hintMessage, text=message3, font=("Courier New",12))
         # Add padding
-        label.pack(padx=40, pady=40)
+        gridLabel.pack(padx=40, pady=40)
+        totLabel.pack(padx=40, pady=40)
+        countLabel.pack(padx=40, pady=40)
 
+    '''
+    Helper function that forms the functions into varibles and passes them through the hint display function
+    '''
+    def displayAll(self):
+        gridHint = self.grid()
+        countHint = self.hintCount()
+        totalHint = self.totHint()
+        self.hintDisplay("All Hints",gridHint,countHint,totalHint,750,750)
     '''
     Function that creates the matrix of letters and their counts.
     '''
@@ -395,8 +407,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         x = self.controller.gridHint()
         cell_width = 2
         fmt = '{:>' + str(cell_width) + '}'
-        message = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
-        self.hintDisplay("Grid Hint:", message, 400, 200)
+        return "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
         
     '''
     Function that creates the list of two letters in words and their counts.
@@ -404,9 +415,8 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     def hintCount (self):
         count = self.controller.firstTwo()
         # Formats how the list will print when transferred to a window
-        message = "Two Letter List Hint:\n" + "\n".join([f"{k}: {v}" for k, v in count.items()])
-        print(self.controller.controllerGetWordList())
-        self.hintDisplay("First Two Letters Hint:",message,250,700)
+        return  "Two Letter List Hint:\n" + "\n".join([f"{k}: {v}" for k, v in count.items()])
+        
     
     '''
     Function that finds the total number of words, points, and pangrams.
@@ -414,8 +424,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     def totHint(self):
         x,y = self.controller.totalHint()
         # Formats message to display propertly on message window 
-        message = f"WORDS: {self.controller.getTotalWords()}\nPOINTS: {self.controller.controllerGetPuzzleTotal()}\nPANGRAMS: {x} ({y} Perfect)"
-        self.hintDisplay("Puzzle Total Hint:", message, 250, 150)
+        return f"WORDS: {self.controller.getTotalWords()}\nPOINTS: {self.controller.controllerGetPuzzleTotal()}\nPANGRAMS: {x} ({y} Perfect)"
 
     '''
     Function is meant for automatically generating a puzzle for the user to play.

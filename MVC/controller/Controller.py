@@ -286,7 +286,8 @@ class controller:
                 count[two] +=1
             else:
                 count[two] = 1
-        return count
+        sort = {k: count[k] for k in sorted(count)}
+        return sort
 
     # Displays a matrix where the top row is the lengths of words, the first column is the letters for the puzzle.
     # Each row displays the letter the word begins with as well as how many words start with that letter and what their length is.
@@ -308,7 +309,7 @@ class controller:
         x = numpy.empty((9,14),dtype=object)
         i = 1
         x[0,0] = ''
-        x[0,13] = ''
+        x[0,13] = "\u03A3"
         # Sets first row excluding the first and last row with letters
         for letter in totalLetters:
             x[i,0] = letter
@@ -345,7 +346,7 @@ class controller:
             colTotal = 0 
         # Sets corner spots to desired values
         x[8,13] = wordSum
-        x[8,0] = ""
+        x[8,0] = "\u03A3"
         return x
    
     # Gets total number of words
