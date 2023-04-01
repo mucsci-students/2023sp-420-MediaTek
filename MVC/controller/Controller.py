@@ -13,15 +13,13 @@ class controller:
     '''
     def controllerGetLetters(self):
         return self.model.getLetter()
-    
-    
+
     def controllerGetGuessedWordsGUI(self):
         return self.model.getGuessedWords()
     def controllerGetGuessedWordsCLI(self):
         words = self.model.getGuessedWords()
         return ', '.join(words)
-
-        
+ 
     def controllerGetWordList(self):
         return self.model.getWordList()
     def controllerShuffleAuto(self):
@@ -40,16 +38,12 @@ class controller:
         return self.model.getGameState()
     def controllerGetHoneyCombList(self):
         return self.model.getHoneyCombList()
-    
-    
-
     def controllerToHoneyComblist(self):
         self.model.lettersToList()
 
-    
 
     '''
-    These functions below all specifically modify the puzzle in some shape or form.
+    The functions below all specifically modify the puzzle in some shape or form.
     Information gets passed from the view, which then the controller passes into the model where all the logic happens to modify everything.
     '''
 
@@ -59,13 +53,6 @@ class controller:
     '''
     def controllerShuffleAuto(self):
         return self.model.shuffleAuto()
-        
-    '''
-    Calls the shuffleBase function
-    Returns the shuffled letters.
-    '''
-    def controllerShuffleBase(self,userLetters):
-        return self.model.shuffleBase(userLetters)
 
     '''
     Calls the userGuess function and will pass the userinput from view into it.
@@ -80,32 +67,36 @@ class controller:
     def controllerGameRank(self):
         return self.model.gameRank()
 
-
     '''
     Calls the updatPuzzleState1 function, which just updates the puzzleStarted variable.
     '''
     def controllerUpdatePuzzleState1(self):
         self.model.updatePuzzleState1()
+
     '''
     Calls the updatePuzzleState0 function, which just updates the puzzleStarted variable.
     '''
     def controllerUpdatePuzzleState0(self):
-        self.model.updatePuzzleState0()  
+        self.model.updatePuzzleState0() 
+
     '''
     Calls the New Puzzle Auto function
     ''' 
     def controllerRunAutoGame(self):
         self.model.NewPuzzleAuto()
+
     '''
     Calls the New Puzzle Base function
     '''
     def controllerRunBaseGame(self,userInput):
         self.model.NewPuzzleBase(userInput)
+
     '''
     Calls the save game function
     '''
     def controllerSaveGame(self, inputFile):
         self.model.saveGame(inputFile)
+
     '''
     Calls the game load gui function
     '''
@@ -113,53 +104,37 @@ class controller:
         with open(inputFile) as save:
             loaded = json.load(save)
         self.model.gameLoad(loaded)
+
     '''
-    calls the game load cli function
+    Calls the game load cli function
     '''
     def controllerGameLoadCLI(self, inputFile):
         with open(inputFile + ".json", "r") as save:
             loaded = json.load(save)
         self.model.gameLoad(loaded)
+
     '''
-    calls the resetGame function
+    Calls the resetGame function
     '''
     def controllerNewGame(self):
         self.model.resetGame()
+
     '''
     Calls the start commands function
     '''
     def controllerStartCommands(self):
         self.model.startCommands()
+
     '''
     Calls the help command function
     '''
     def controllerHelpCommand(self):
         self.model.helpCommand()
+
     '''
     Calls the gameExit function
     '''
     def controllerGameExit(self):
-        '''
-           if self.p1.puzzleStarted:
-            gamesave = input("Do you wish to save your game? (yes/no): ")
-            if gamesave == "yes":
-                # if so, save it
-                inputFile = input("Please enter a name for the save file: ")
-                self.saveGame(inputFile)
-                print("Puzzle saved! Goodbye!")
-                exit()
-            elif gamesave == "no":
-                # if not, don't.
-                print("Okay! See you on the other side!")
-                exit()
-            else:
-                print("Please enter \"yes\" or \"no\"!")
-                self.gameExit()
-        # If a puzzle isn't loaded, just leave.
-        else:
-            print("Okay... bye.")
-            exit()
-        '''
         if self.model.getPuzzleState() == 1:
             gamesave = input("Do you wish to save your game? (yes/no): ")
             if gamesave == "yes":
@@ -178,22 +153,13 @@ class controller:
         else:
             print("Okay... bye.")
             exit()
-    '''
-    Calls the new puzzle base gui function, passing userInput.
-    '''
-    '''def controllerRunBaseGameGUI(self,userInput):
-        self.model.NewPuzzleBaseGUI(userInput)'''
-
-    
+   
     '''
     Funciton calls the checkPangram function and passes user input into it
     '''
-
     def controllerCheckPangram(self,input):
         return self.model.checkPangram(input)
 
-
-    
     '''
      Both functions will append the puzzle letters into a list so they can be used to display on the honeycombs.
      Returns: list of letters
@@ -208,7 +174,6 @@ class controller:
             for x in letters:
                 cliList.append(x)
             return cliList
-
 
 
     '''
@@ -230,9 +195,9 @@ class controller:
             return True
         else:
             return False
+        
     '''
     Upon the game starting it asks if the user wants to play the game or not.
-    Added this to not clutter the CLI
     '''
     def ensureYesOrNo(self):
         userInput = input("Would you like to play the game? (yes/no): ")
@@ -243,9 +208,10 @@ class controller:
             self.controllerGameExit()
         else:
             return
-        
 
-    # Functions displays the total number of words, max points, and pangrams    
+    '''
+    Functions displays the total number of words, max points, and pangrams
+    '''      
     def totalHint(self):
         lowerList = []
         getLetter = self.controllerGetLetters()
@@ -273,7 +239,10 @@ class controller:
                 totPan += 1
         return totPan,totPerf
 
-    # Function iterates through list of words and finds how many words start with a specific two letters then displays the total amount of words that begin with those two letters
+    '''
+    Function iterates through list of words and finds how many words start with a specific two letters then displays
+    the total amount of words that begin with those two letters
+    '''
     def firstTwo(self):
         count = {}
         self.totalWords = self.controllerGetWordList()
@@ -286,9 +255,11 @@ class controller:
                 count[two] = 1
         return count
 
-    # Displays a matrix where the top row is the lengths of words, the first column is the letters for the puzzle.
-    # Each row displays the letter the word begins with as well as how many words start with that letter and what their length is.
-    #The final column combines the total words for each letter and the final row displays the total words with the specific length.
+    '''
+    Displays a matrix where the top row is the lengths of words, the first column is the letters for the puzzle.
+    Each row displays the letter the word begins with as well as how many words start with that letter and what their length is.
+    The final column combines the total words for each letter and the final row displays the total words with the specific length.
+    '''
     def gridHint(self):
         lowerList = []
         length = [4,5,6,7,8,9,10,11,12,13,14,15]
@@ -346,7 +317,9 @@ class controller:
         x[8,0] = ""
         return x
    
-    # Gets total number of words
+    '''
+    Function that gets total number of words
+    '''
     def getTotalWords(self):
         wordSum =len (self.controllerGetWordList())
         return wordSum
