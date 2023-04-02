@@ -7,6 +7,7 @@
 [![Issues][issues-shield]][issues-url]
 ![Repo Size][repo-size-shield]
 ![Last Commit][last-commit-shield]
+![Language][language-shield]
 [![MIT License][license-shield]][license-url]
 
 
@@ -102,6 +103,7 @@ The game should now be properly installed and ready to play.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Test File
+[![CodeCov][codecov-shield]][codecov-url]
   
 To run the test file, navigate to the test folder with  
   WINDOWS:
@@ -115,7 +117,7 @@ To run the test file, navigate to the test folder with
 then run the command  
   WINDOWS:
    ```sh
-   py test/run.py
+   py test\run.py
    ```
   macOS:
    ```sh
@@ -162,7 +164,9 @@ Below is a list of design patterns used in our program and where to find them!
 * Singleton  
     MVC/view/CLI.py contains the singleton design pattern, where it only has one instance and returns the same object.  
 * Iterator  
-    MVC/view/winGUI.py contains the iterator design pattern, where an iterator object is used to loop through a list and restrict user inputs.
+    MVC/view/winGUI.py contains the iterator design pattern, where an iterator object is used to loop through a list and restrict user inputs.  
+* Observer  
+    MVC/Controller/controller.py contains the Observer and Subject classes that notify MVC/view/macGUI.py of changes to load.
     
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -193,5 +197,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [last-commit-shield]: https://img.shields.io/github/last-commit/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=9cf
 [issues-shield]: https://img.shields.io/github/issues/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=yellow
 [issues-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/issues
-[license-shield]: https://img.shields.io/github/license/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=blueviolet
+[codecov-shield]: https://codecov.io/gh/mucsci-students/2023sp-420-MediaTek/branch/develop/graph/badge.svg?token=jJq0BIhixt
+[codecov-url]: https://codecov.io/gh/mucsci-students/2023sp-420-MediaTek
+[language-shield]: https://img.shields.io/github/languages/top/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=blueviolet
+[language-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/languages/top
+[license-shield]: https://img.shields.io/github/license/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=ff69b4
 [license-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/blob/develop/LICENSE

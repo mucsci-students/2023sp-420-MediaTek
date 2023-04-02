@@ -1,12 +1,6 @@
-import sys
-#import MVC.model.IdentifyBaseWord as np
-from MVC.model import IdentifyBaseWord as np
-#import MVC.model.wordlist as wl
 from MVC.model import wordlist as wl
 from MVC.model import savegame as savegame
 from MVC.model import loadgame as loadgame
-
-
 
 #run function that displays all the commands the user can type
 def help():
@@ -45,26 +39,8 @@ To get started, you can type:
     gameexit: To exit the program.
           ''')
 
-#def newPuzzle():
-    #exit()
-
-def showPuzzle():
-    print()
-
 def showFoundWords():
     print(*wl.userWordList)
 
-def guess():
-    print()
-
-def shuffle():
-    print()
-
 def savePuzzle(userLetters, requiredLetter, guessedWords, wordBank, totalPoints, maxPoints, inputFile):
     savegame.savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints, maxPoints, inputFile)
-
-def loadPuzzle():
-    print()
-
-def showStatus():
-    print()
