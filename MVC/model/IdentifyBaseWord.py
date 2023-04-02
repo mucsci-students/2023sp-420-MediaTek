@@ -1,7 +1,7 @@
 import random
 import re
-from MVC.database import wordstuff as ws
-from MVC.database import pangramdb as pgdb
+from MVC.model import wordstuff as ws
+from MVC.model import pangramdb as pgdb
 
 '''
 Note for team: to properly run this program, you must have the file in the same directory as your json files. Also make sure your json files match my pangram_files name
