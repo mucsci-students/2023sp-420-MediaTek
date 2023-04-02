@@ -40,6 +40,10 @@ class view:
         self.b4commands = ["newpuzzle","loadpuzzle","gamehelp","gameexit"]
         self.commands = ["newpuzzle","showpuzzle","showfoundwords","shuffleletters","savepuzzle","loadpuzzle","showstatus","showhints","gamehelp","gameexit"]
 
+    '''
+    Formats the grid in the CLI so that there is no brackets apostrophies.
+    It also removes the rows that contain no words in them.
+    '''
     def grid(self):
         x = self.controller.gridHint()
 
@@ -70,7 +74,11 @@ class view:
                     continue
             print(" ".join(row))
         print("\n")
-        
+    
+    '''
+    Function that takes controller function and displays all of the words first two letters and shows how many of them start
+    with those first two letters. It formats them in the CLI so that brackets and quotes are removed.
+    '''
     def hintCount (self):
         count = self.controller.firstTwo()
         print("Two Word List:")
@@ -80,6 +88,9 @@ class view:
 
         print("\n")
 
+    '''
+    Prints the total number of words, max points a user can achieve, number of pangrams as well as perfect ones.
+    '''
     def totHint(self):
         x,y = self.controller.totalHint()
         # Prints

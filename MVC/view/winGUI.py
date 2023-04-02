@@ -82,7 +82,7 @@ class View:
         self.helpMenu = tk.Menu(self.menu)
         self.menu.add_cascade(label="Help",menu=self.helpMenu)
         self.helpMenu.add_command(label = "How to play",command = self.playInstructions)
-        self.helpMenu.add_command(label = "Hints",command = self.pickHint)
+        self.helpMenu.add_command(label = "Hints",command = self.displayAll)
         
         #variables for displaying information to the screen
         self.hexagonLetters = []
@@ -372,45 +372,34 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
     
-    # Function randomly picks a hint from the hint functions
-    def pickHint(self):
-        if (self.controller.controllerGetPuzzleState() != 1):
-            return
-        hints = [self.grid(),self.hintCount(),self.totHint()]
-        hint = random.choice(hints)
-
     '''
     Function that creates the pop up windows for hints.
     '''
-    def hintDisplay(self,title,message,width,height):
+    def hintDisplay(self,title,message1,message2,message3,width,height):
         # Creates top level message
         hintMessage = Toplevel()
         hintMessage.title(title)
          # set the size of the message
         hintMessage.geometry(f"{width}x{height}")
         # create a label and change font
-        label = Label(hintMessage, text=message, font=("Courier New", 10))
+        gridLabel = Label(hintMessage, text=message1, font=("Courier New",12))
+        twoLabel = Label(hintMessage, text=message2, font=("Courier New",12))
+        totalLabel = Label(hintMessage, text=message3, font=("Courier New",12))
         # Add padding
-        label.pack(padx=40, pady=40)
+        gridLabel.pack(padx=40, pady=40)
+        twoLabel.pack(padx=40, pady=40)
+        totalLabel.pack(padx=40, pady=40)
 
-    '''
-    Function that creates the matrix of letters and their counts.
-    '''
-    def grid(self):
-        x = self.controller.gridHint()
-        cell_width = 2
-        fmt = '{:>' + str(cell_width) + '}'
-        grid = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
-        self.hintDisplay("Grid Hint:", grid, 450, 250)
-        
     '''
     Function that creates the list of two letters in words and their counts.
     '''
     def hintCount (self):
         count = self.controller.firstTwo()
-        # Formats how the list will print when transferred to a window
-        twoCount = "Two Letter List Hint:\n" + "\n".join([f"{k}: {v}" for k, v in count.items()])
-        self.hintDisplay("First Two Letters Hint:", twoCount, 250, 500)
+         # Format strings in alphabetical order
+        message_list = [f"{key}: {value}" for key, value in sorted(count.items())]
+        # Join the list into a single string
+        message = "Two Word List:\n"+ "\n".join(message_list)
+        return message
     
     '''
     Function that finds the total number of words, points, and pangrams.
@@ -418,8 +407,30 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     def totHint(self):
         x,y = self.controller.totalHint()
         # Formats message to display propertly on message window 
-        totalWords = f"WORDS: {self.controller.getTotalWords()}\nPOINTS: {self.controller.controllerGetPuzzleTotal()}\nPANGRAMS: {x} ({y} Perfect)"
-        self.hintDisplay("Puzzle Total Hint:", totalWords, 300, 180)
+        message = f"WORDS: {self.controller.getTotalWords()}\nPOINTS: {self.controller.controllerGetPuzzleTotal()}\nPANGRAMS: {x} ({y} Perfect)"
+        return message
+
+    '''
+    Function that displays all the hints using the return values of functions
+    '''
+    def displayAll(self):
+        # Sets functions to variables
+        hint1 = self.grid()
+        hint2 = self.hintCount()
+        hint3 = self.totHint()
+
+        # Displays all hints
+        self.hintDisplay("Hints",hint1,hint2,hint3,1000,1000)
+
+    '''
+    Function that creates the matrix of letters and their counts.
+    '''
+    def grid(self):
+        x = self.controller.gridHint()
+        cell_width = 3
+        fmt = '{:>' + str(cell_width) + '}'
+        grid = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
+        return grid
 
     '''
     Function is meant for automatically generating a puzzle for the user to play.
