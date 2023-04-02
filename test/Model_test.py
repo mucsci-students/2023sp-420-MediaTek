@@ -134,20 +134,21 @@ class Model_test (unittest.TestCase):
         # We're making sure a new puzzle is generated. All bases are covered in this test.
         self.assertTrue(self.testmodel.p1.gaUserLetters.isalpha() and len(self.testmodel.p1.gaUserLetters) == 7)
         self.assertTrue(self.testmodel.p1.gaReqLetter.isalpha() and len(self.testmodel.p1.gaReqLetter) == 1)      
-        self.assertEqual(self.model.p1.points, 0)
+        self.assertEqual(self.testmodel.p1.points, 0)
         self.assertGreater(len(self.testmodel.p1.getList), 0)
         self.assertGreater(self.testmodel.p1.puzzleTotal, 0)
         self.assertEqual(len(self.testmodel.p1.guessedList), 0)
     
+    # Tests NewPuzzleBase
     def test_NewPuzzleBase(self):
         self.testmodel = Model.model()
-        self.testPangram = "jibberish" # Don't question it... just go with it.
+        self.testPangram = "staring"
         self.testmodel.NewPuzzleBase(userInput=self.testPangram)
         
         # We're making sure a new puzzle is generated. All bases are covered in this test.
         self.assertTrue(self.testmodel.p1.gaUserLetters.isalpha() and len(self.testmodel.p1.gaUserLetters) == 7)
         self.assertTrue(self.testmodel.p1.gaReqLetter.isalpha() and len(self.testmodel.p1.gaReqLetter) == 1)      
-        self.assertEqual(self.model.p1.points, 0)
+        self.assertEqual(self.testmodel.p1.points, 0)
         self.assertGreater(len(self.testmodel.p1.getList), 0)
         self.assertGreater(self.testmodel.p1.puzzleTotal, 0)
         self.assertEqual(len(self.testmodel.p1.guessedList), 0)
@@ -162,31 +163,32 @@ class Model_test (unittest.TestCase):
         
         # Force the required letter to be "k" for testing.
         self.testmodel.p1.gaReqLetter = "k"
+        self.testmodel.p1.getList = self.wl.generateWordList("k", "whiskey")
         
         # First guess: input "whisk" expecting it to be true.
         guessOne = self.testmodel.userGuess(userInput="whisk")
         self.assertTrue(guessOne)
-        self.assertTrue(self.testmodel.p1.guessedList.__contains__("whisk"))
+        self.assertTrue(self.testmodel.p1.guessedList.__contains__('whisk'))
         
         # Second guess: input "keys" expexcting it to be true.
         guessTwo = self.testmodel.userGuess(userInput="keys")
         self.assertTrue(guessTwo)
-        self.assertTrue(self.testmodel.p1.guessedList.__contains__("keys"))
+        self.assertTrue(self.testmodel.p1.guessedList.__contains__('keys'))
         
         # Third guess: input "shy" expecting it to be false.
         guessThree = self.testmodel.userGuess(userInput="shy")
         self.assertFalse(guessThree)
-        self.assertFalse(self.testmodel.p1.guessedList.__contains__("shy"))
+        self.assertFalse(self.testmodel.p1.guessedList.__contains__('shy'))
         
         # Fourth guess: input "high" expecting it to be false.
         guessFour = self.testmodel.userGuess(userInput="high")
         self.assertFalse(guessFour)
-        self.assertFalse(self.testmodel.p1.guessedList.__contains__("high"))
+        self.assertFalse(self.testmodel.p1.guessedList.__contains__('high'))
         
         # Final guess: input "whiskey" expecting it to be true.
         guessFive = self.testmodel.userGuess(userInput="whiskey")
         self.assertTrue(guessFive)
-        self.assertTrue(self.testmodel.p1.guessedList.__contains__("whiskey"))
+        self.assertTrue(self.testmodel.p1.guessedList.__contains__('whiskey'))
     
     # Tests gameRank
     def test_gameRank(self):

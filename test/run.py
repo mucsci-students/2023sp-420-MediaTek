@@ -10,6 +10,7 @@ the changes are valid.
 import IdentifyBaseWord_test
 import savegame_test
 import Model_test
+import wordlist_test
 import unittest
 
 '''
@@ -42,6 +43,8 @@ def suite():
     suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_autoGame'))
     suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_baseGame'))
     suite.addTest(savegame_test.savegame_test('test_savegame'))
+    suite.addTest(wordlist_test.wordlist_test('test_generateWordList'))
+    suite.addTest(wordlist_test.wordlist_test('test_checkLetters'))
     
     return suite
 
