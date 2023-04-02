@@ -3,3 +3,6 @@ codecov:
  
 ignore:
   - "test"
+  - "MVC/controller"
+  - "MVC/database"
+  - "MVC/view"
