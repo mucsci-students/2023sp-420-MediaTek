@@ -277,7 +277,7 @@ class controller:
         x = numpy.empty((9,14),dtype=object)
         i = 1
         x[0,0] = ''
-        x[0,13] = ''
+        x[0,13] = "\u03A3"
         # Sets first row excluding the first and last row with letters
         for letter in totalLetters:
             x[i,0] = letter
@@ -314,7 +314,7 @@ class controller:
             colTotal = 0 
         # Sets corner spots to desired values
         x[8,13] = wordSum
-        x[8,0] = ""
+        x[8,0] = "\u03A3"
         return x
    
     '''
