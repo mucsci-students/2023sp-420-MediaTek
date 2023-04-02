@@ -1,5 +1,5 @@
 '''
-This file runs all the tests in the test directory.
+This file runs all the tests in the test directory using unittest.
 It is not intended to be modified. Please submit a request if you
 want to make changes to this file and the devlopers will decide if
 the changes are valid.
@@ -12,6 +12,13 @@ import savegame_test
 import Model_test
 import unittest
 
+'''
+A test suite for unittest and code coverage.
+All the functions from previous test files are
+run in this suite. This suite can be run by
+calling 'coverage run test/run.py' in a
+terminal.
+'''
 def suite():
     
     suite = unittest.TestSuite()
@@ -30,12 +37,15 @@ def suite():
     suite.addTest(Model_test.Model_test('test_checkPangram'))
     suite.addTest(Model_test.Model_test('test_NewPuzzleAuto'))
     suite.addTest(Model_test.Model_test('test_NewPuzzleBase'))
+    suite.addTest(Model_test.Model_test('test_userGuess'))
+    suite.addTest(Model_test.Model_test('test_gameRank'))
     suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_autoGame'))
     suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_baseGame'))
     suite.addTest(savegame_test.savegame_test('test_savegame'))
     
     return suite
 
+# Unittest will want this. It runs the suite when prompted.
 if __name__ == '__main__':
     runner = unittest.TextTestRunner()
     runner.run(suite())
