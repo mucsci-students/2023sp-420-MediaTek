@@ -1,9 +1,6 @@
-import sqlite3
-import json
-import os
 from MVC.database import connectDB as cdb
-#cursor.execute('''CREATE TABLE dict (word TEXT)''')
 
+#cursor.execute('''CREATE TABLE dict (word TEXT)''')
 
 # Start with getting every word in the wordlist json.
 '''
@@ -24,12 +21,6 @@ We want checkWord to return true
 Because inside of IdentifyBaseWord we can set a variable equal to the function passing the userInput
 If this is true we can manipulate the userInput and get the unique letters, and the required letter
 '''
-
-'''
-For the random function, if it's possible to return the word that's randomly chosen from the database that would be great.s
-'''
-
-#for base game
 def checkWord(userInput):
     con = cdb.connect()
     cursor = con.cursor()

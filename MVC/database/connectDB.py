@@ -7,8 +7,6 @@ db_dir = os.path.join(check_dir,".","pangrams.db")
 abs_path = os.path.abspath(db_dir)
 #print(abs_path)
 
-
-
 check_dir2 = os.path.dirname(os.path.abspath(__file__))
 db_dir2 = os.path.join(check_dir2,".","wordbank.db")
 abs_path2 = os.path.abspath(db_dir2)
@@ -20,6 +18,7 @@ def pangramConnect():
    if pangramConnection is None:
       pangramConnection = sqlite3.connect(abs_path)
       return pangramConnection
+
 def connect():
     conn = None
     if conn is None:
