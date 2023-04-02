@@ -117,11 +117,11 @@ To run the test file, navigate to the test folder with
 then run the command  
   WINDOWS:
    ```sh
-   py test\run.py
+   py run.py
    ```
   macOS:
    ```sh
-   python3 test/run.py
+   python3 run.py
    ```  
 
 
