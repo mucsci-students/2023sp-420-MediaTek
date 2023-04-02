@@ -1,12 +1,5 @@
-import sqlite3
-import json
 import os
 from MVC.database import connectDB as cdb
-#con = sqlite3.connect('pangrams.db')
-#cursor = con.cursor()
-
-#SQLITE initializes table. do not need to run again since the table is already created !!!
-#cursor.execute('''CREATE TABLE pangrams (pangram TEXT)''')
 
 
 # Start with getting every word in the wordlist json.
@@ -23,9 +16,11 @@ displayWords = cursor.fetchall()
 for test2 in displayWords:
     print(test2)
 '''
+
 check_dir = os.path.dirname(os.path.abspath(__file__))
 db_dir = os.path.join(check_dir,".","pangrams.db")
 abs_path = os.path.abspath(db_dir)
+
 # function to choose a random pangram for use as the base word in a puzzle
 def randomBase():
     con = cdb.pangramConnect()
@@ -35,15 +30,7 @@ def randomBase():
     str = ''
     for item in randomPangram:
         str = str + item
-    #print(str)
     #return randomly chosen pangram
     con.commit()
     con.close()
     return str
-
-
-
-#test = randomBase()
-#while len(test) != 15:
-    #test = randomBase()
-#randomBase()
