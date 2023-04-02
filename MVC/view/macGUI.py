@@ -1,6 +1,7 @@
 import tkinter as tk
 from turtle import width
 from MVC.controller import Controller as ctrl
+from MVC.controller import GameObserver
 import math
 import random
 import os
@@ -15,9 +16,16 @@ class View:
     '''
     Default constructor. Contains all the set up needed for the TKinter GUI. 
     '''
-    def __init__(self, parent, ctrl):
+    def __init__(self, parent, ctrl, game_controller):
         self.controller = ctrl.controller()
         self.parent = parent
+        #assigns game_model instance passed to view
+        self.game_controller = game_controller
+        #create new instance of GameObserver, passing self.observerLoad as a callback. 
+        #GameObserver calls this whenever receives an update from the model
+        game_observer = GameObserver(self.observerLoad)
+        #attaches game_observer instance to game_model by calling the attach 
+        self.game_controller.attach(game_observer)
 
         # created a frame
         self.myFrame = tk.Frame(parent, bg='#F4F4F4')
@@ -314,8 +322,14 @@ class View:
     '''
     def loadHelper(self,filename):
         self.controller.controllerGameLoadGUI(filename)
-        messagebox.showinfo("Loaded", "Game loaded successfully!")
+        #Notify the observer when the game is loaded
+        self.game_controller.notify()
         self.gameHelper(0, 0, 1, 0)
+    
+    #Passed as a callback to GameObserver. When model's notify method is called, triggers update method
+    # of GameObserver which then calls observerLoad which indicates the puzzle was loaded successfully.
+    def observerLoad(self):
+        messagebox.showinfo("Loaded", "Game loaded successfully!")
 
     '''
     Function that prompts for loading and executes the proper action.
@@ -486,7 +500,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
            self.gameHelper(2, input, 0, 1)
 
 # Runs the GUI
-main = tk.Tk()
-main.title("MediaTek's Spelling Bee!")
-View(main,ctrl)
-main.mainloop()
+if __name__ == "__main__":
+    main = tk.Tk()
+    main.title("MediaTek's Spelling Bee!")
+    game_controller = ctrl.controller()
+    View(main, ctrl, game_controller)
+    main.mainloop()

@@ -2,10 +2,29 @@ from MVC.model import Model as mdl
 import sys
 import re
 import json
-import numpy 
+import numpy
 
-class controller:
+class Observer:
+    def update(self, subject):
+        pass
+
+class Subject:
     def __init__(self):
+        self._observers = []
+
+    def attach(self, observer):
+        self._observers.append(observer)
+
+    def detach(self, observer):
+        self._observers.remove(observer)
+
+    def notify(self):
+        for observer in self._observers:
+            observer.update(self)
+
+class controller(Subject):
+    def __init__(self):
+        super().__init__()
         self.model = mdl.model()
 
     '''
@@ -104,6 +123,7 @@ class controller:
         with open(inputFile) as save:
             loaded = json.load(save)
         self.model.gameLoad(loaded)
+        self.notify()
 
     '''
     Calls the game load cli function
@@ -323,4 +343,10 @@ class controller:
     def getTotalWords(self):
         wordSum =len (self.controllerGetWordList())
         return wordSum
+
+class GameObserver(Observer):
+    def __init__(self, callback):
+        self.callback = callback
         
+    def update(self, subject):
+        self.callback()
