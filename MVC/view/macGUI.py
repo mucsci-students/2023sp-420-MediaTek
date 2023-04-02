@@ -86,7 +86,7 @@ class View:
         self.menu.add_cascade(label="Help",menu=help_menu)
         help_menu.add_command(label = "How to play",command = self.playInstructions)
         help_menu.add_separator()
-        help_menu.add_command(label = "Hints",command = self.pickHint)
+        help_menu.add_command(label = "Hints",command = self.displayAll)
 
         # create the frame
         self.frame = tk.Frame(self.parent)
@@ -171,13 +171,13 @@ class View:
                 self.btn2 = self.createButton(hexagonLetters[1])
                 self.btn2.place(x=342, y=110)
                 self.btn3 = self.createButton(hexagonLetters[2])
-                self.btn3.place(x=231, y=282)
+                self.btn3.place(x=235, y=282)
                 self.btn4 = self.createButton(hexagonLetters[3])
-                self.btn4.place(x=452, y=282)
+                self.btn4.place(x=446, y=282)
                 self.btn5 = self.createButton(hexagonLetters[4])
-                self.btn5.place(x=231, y=168)
+                self.btn5.place(x=235, y=168)
                 self.btn6 = self.createButton(hexagonLetters[5])
-                self.btn6.place(x=452, y=168)
+                self.btn6.place(x=446, y=168)
                 self.btn7 = tk.Button(self.canvas,text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
                 self.btn7.place(x=342, y=225)
 
@@ -388,39 +388,34 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.canvas.delete("all")
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
-    
-    '''
-    Function that creates the hints popup.
-    '''
-    def pickHint(self):
-        if (self.controller.controllerGetPuzzleState() != 1):
-            return
-        hints = [self.grid(),self.hintCount(),self.totHint()]
-        hint = random.choice(hints)
 
     '''
     Function that creates the pop up windows for hints.
     '''
-    def hintDisplay(self,title,message,width,height):
+    def hintDisplay(self,title,message1,message2,message3,width,height):
         # Creates top level message
         hintMessage = Toplevel()
         hintMessage.title(title)
          # set the size of the message
         hintMessage.geometry(f"{width}x{height}")
         # create a label and change font
-        label = Label(hintMessage, text=message, font=("Courier New",12))
+        gridLabel = Label(hintMessage, text=message1, font=("Courier New",12))
+        twoLabel = Label(hintMessage, text=message2, font=("Courier New",12))
+        totalLabel = Label(hintMessage, text=message3, font=("Courier New",12))
         # Add padding
-        label.pack(padx=40, pady=40)
+        gridLabel.pack(padx=40, pady=40)
+        twoLabel.pack(padx=40, pady=40)
+        totalLabel.pack(padx=40, pady=40)
 
     '''
     Function that creates the matrix of letters and their counts.
     '''
     def grid(self):
         x = self.controller.gridHint()
-        cell_width = 2
+        cell_width = 3
         fmt = '{:>' + str(cell_width) + '}'
         message = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
-        self.hintDisplay("Grid Hint:", message, 400, 200)
+        return message
         
     '''
     Function that creates the list of two letters in words and their counts.
@@ -429,8 +424,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         count = self.controller.firstTwo()
         # Formats how the list will print when transferred to a window
         message = "Two Letter List Hint:\n" + "\n".join([f"{k}: {v}" for k, v in count.items()])
-        print(self.controller.controllerGetWordList())
-        self.hintDisplay("First Two Letters Hint:",message,250,700)
+        return message
     
     '''
     Function that finds the total number of words, points, and pangrams.
@@ -439,7 +433,19 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         x,y = self.controller.totalHint()
         # Formats message to display propertly on message window 
         message = f"WORDS: {self.controller.getTotalWords()}\nPOINTS: {self.controller.controllerGetPuzzleTotal()}\nPANGRAMS: {x} ({y} Perfect)"
-        self.hintDisplay("Puzzle Total Hint:", message, 250, 150)
+        return message 
+    
+    '''
+    Function that displays all the hints on a single window
+    '''
+    def displayAll(self):
+        # Sets functions to variables
+        hint1 = self.grid()
+        hint2 = self.hintCount()
+        hint3 = self.totHint()
+
+        # Displays all hints
+        self.hintDisplay("Hints",hint1,hint2,hint3,1000,1000)
 
     '''
     Function is meant for automatically generating a puzzle for the user to play.
