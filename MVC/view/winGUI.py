@@ -402,7 +402,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     '''
     def grid(self):
         x = self.controller.gridHint()
-        cell_width = 2
+        cell_width = 3
         fmt = '{:>' + str(cell_width) + '}'
         message = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
         return message

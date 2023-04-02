@@ -73,7 +73,7 @@ class view:
     def totHint(self):
         x,y = self.controller.totalHint()
         # Prints
-        print(f"WORDS:{self.controller.getTotalWords()} POINTS:{self.controller.controllerGetPuzzleTotal()} PANGRAMS:{x} ({y} Perfect)")
+        print(f"WORDS:{self.controller.getTotalWords()}\nPOINTS:{self.controller.controllerGetPuzzleTotal()}\nyesPANGRAMS:{x} ({y} Perfect)")
     
     def hint(self):
         hints = [self.grid(),self.hintCount(),self.totHint()]
@@ -85,7 +85,6 @@ class view:
     Displays the user letter, req letter, and honeycomb in the end.
     '''
     def newPuzzleHelper(self,game):
-        print(game.lower())
         if game.lower() == "yes":
             self.controller.controllerRunAutoGame()
         elif game.lower() == "no":
