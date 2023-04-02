@@ -7,6 +7,7 @@
 [![Issues][issues-shield]][issues-url]
 ![Repo Size][repo-size-shield]
 ![Last Commit][last-commit-shield]
+![Language][language-shield]
 [![MIT License][license-shield]][license-url]
 
 
@@ -198,5 +199,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [issues-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/issues
 [codecov-shield]: https://codecov.io/gh/mucsci-students/2023sp-420-MediaTek/branch/develop/graph/badge.svg?token=jJq0BIhixt
 [codecov-url]: https://codecov.io/gh/mucsci-students/2023sp-420-MediaTek
-[license-shield]: https://img.shields.io/github/license/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=blueviolet
+[language-shield]: https://img.shields.io/github/languages/top/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=blueviolet
+[language-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/languages/top
+[license-shield]: https://img.shields.io/github/license/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=ff69b4
 [license-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/blob/develop/LICENSE
