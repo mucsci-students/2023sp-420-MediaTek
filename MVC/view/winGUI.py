@@ -393,9 +393,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         twoLabel = Label(hintMessage, text=message2, font=("Courier New",12))
         totalLabel = Label(hintMessage, text=message3, font=("Courier New",12))
         # Add padding
-        gridLabel.pack(padx=40, pady=40)
-        twoLabel.pack(padx=40, pady=40)
-        totalLabel.pack(padx=40, pady=40)
+        gridLabel.pack(padx=40, pady=10)
+        twoLabel.pack(padx=40, pady=10)
+        totalLabel.pack(padx=40, pady=10)
 
     '''
     Function that creates the matrix of letters and their counts.
@@ -404,7 +404,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         x = self.controller.gridHint()
         cell_width = 3
         fmt = '{:>' + str(cell_width) + '}'
-        message = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
+        message = "Grid Hint: \n" + "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
         return message
         
     '''
@@ -425,6 +425,9 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         message = f"WORDS: {self.controller.getTotalWords()}\nPOINTS: {self.controller.controllerGetPuzzleTotal()}\nPANGRAMS: {x} ({y} Perfect)"
         return message 
     
+    '''
+    Function that displays all hints
+    '''
     def displayAll(self):
         # Sets functions to variables
         hint1 = self.grid()

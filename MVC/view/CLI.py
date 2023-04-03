@@ -30,37 +30,23 @@ class view:
         self.b4commands = ["newpuzzle","loadpuzzle","gamehelp","gameexit"]
         self.commands = ["newpuzzle","showpuzzle","showfoundwords","shuffleletters","savepuzzle","loadpuzzle","showstatus","showhints","gamehelp","gameexit"]
 
+    '''
+    Formats return value of grid controller function so that it is clean and visable
+    '''
     def grid(self):
         x = self.controller.gridHint()
 
-        # Removes columns if there are no words in them
-        removeCol = []
-        for j in range(1, x.shape[1] - 1):
-            if any(x[i, j] != 0 for i in range(1, x.shape[0] - 1)):
-                removeCol.append(j)
-
-        # Calculate the maximum cell width
-        cell_width = max(len(str(x[i, j])) for i in range(x.shape[0]) for j in removeCol)
-
-        print("Grid Hint:")
-
-        # Formats each cell to cell length above
+        # Sets cell with and formats it
+        cell_width = 3
         fmt = '{:>' + str(cell_width) + '}'
-
-        # Loop that goes through each columns and compares it to previous loop to see if it need to be displayed
-        # If it does need to be displayed it is appended to row variable
-        for i in range(0, x.shape[0]):
-            row = []
-            for j in range(0, x.shape[1]):
-                if j == 0 or j == x.shape[1] - 1:
-                    row.append(fmt.format(x[i, j]))
-                elif j in removeCol:
-                    row.append(fmt.format(x[i, j]))
-                else:
-                    continue
-            print(" ".join(row))
+        # Goes through grid formaating each row
+        message = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
+        print("Grid Hint:\n" + message)
         print("\n")
         
+    '''
+    Formats return value of firstTwo so that brackets and quotes are removed
+    '''
     def hintCount (self):
         count = self.controller.firstTwo()
         print("Two Word List:")
@@ -70,11 +56,17 @@ class view:
 
         print("\n")
 
+    '''
+    Displays total words, max points a player can earn
+    '''
     def totHint(self):
         x,y = self.controller.totalHint()
         # Prints
-        print(f"WORDS:{self.controller.getTotalWords()}\nPOINTS:{self.controller.controllerGetPuzzleTotal()}\nyesPANGRAMS:{x} ({y} Perfect)")
+        print(f"WORDS:{self.controller.getTotalWords()}\nPOINTS:{self.controller.controllerGetPuzzleTotal()}\nPANGRAMS:{x} ({y} Perfect)")
     
+    '''
+    Displays hints in CLI
+    '''
     def hint(self):
         hints = [self.grid(),self.hintCount(),self.totHint()]
         hint = random.choice(hints)
