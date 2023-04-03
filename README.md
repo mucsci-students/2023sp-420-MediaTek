@@ -5,39 +5,23 @@
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Issues][issues-shield]][issues-url]
+![Repo Size][repo-size-shield]
+![Last Commit][last-commit-shield]
+![Language][language-shield]
 [![MIT License][license-shield]][license-url]
-
 
 
 <!-- PROJECT LOGO -->
 <br />
 
-  <h3 align="center">MediaTek's Spelling Bee Game</h3>
+  # <div align="center">MediaTek's Spelling Bee Game</div>
 
-  <p align="center">
-    Created by Austin An, Devon Fair, Gabriel Zimmermann, Noah Barger, and Tess Hughes
+  <div align="center">
+    Created by Austin An, Devon Fair, Gabriel Zimmermann, Noah Barger, and Tess Hughes</div>
     <br />
   
 
-
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#test-file">Testing</a></li>
-    <li><a href="#commands">Commands</a></li>
-    <li><a href="#meet-the-team">Team</a></li>
-    <li><a href="#license">License</a></li>
-  </ol>
-</details>
+  
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -46,85 +30,144 @@ To run our game locally, you will need to follow these steps.
 
 ### Prerequisites
 
-
 * Python version 3.11.2, which can be downloaded at https://www.python.org/downloads/
-
+* Run this command for pip  
+  WINDOWS:
+  ```sh
+  py -m ensurepip --upgrade
+  ```  
+  macOS:
+  ```sh
+  python3 -m ensurepip --upgrade
+  ```  
 ### Installation
 
 
 
-1. Clone the repo
+1. Clone the repo  
    ```sh
    git clone https://github.com/mucsci-students/2023sp-420-MediaTek
    ```
-2. Navigate to the folder inside your terminal
+2. Navigate to the folder inside your terminal  
+  WINDOWS:
    ```sh
    cd path\to\folder\2023sp-420-MediaTek
-   ```
-3. While inside the directory, check for mock, setuptools, and mediatekpackages with the path file
+   ```   
+    macOS:
+     ```sh
+     cd path to folder 2023sp-420-MediaTek
+     ``` 
+3. Install dependencies with the following command  
+  WINDOWS:
    ```sh
-   pip list
+   pip install -r requirements.txt 
    ```
-   If mock or setup tools is missing, run ```pip install <mock or setuptools>```.    
-   If mediatekpackages is missing, proceed to the next step.  
-4. To build the program, run the following command while still inside the directory
+    macOS:
+     ```sh
+     pip3 install -r requirements.txt 
+     ```
+4. To build the program, run the following command while still inside the directory  
+  WINDOWS:
    ```sh
    pip install -e .
    ```
+    macOS:
+     ```sh
+     pip3 install -e .
+     ```  
   
-The game should be properly installed and ready to play. From here there are several options you can choose from.
-  
-1. To launch the game in GUI mode for Windows
+The game should now be properly installed and ready to play.
+ 
+ ### Running  
+ 
+ 
+1. To launch the game in GUI mode  
+  WINDOWS:
    ```sh
    py SpellingBee.py
    ```
-2. To launch the game in GUI mode for macOS
-   ```sh
-   py SpellingBee.py --mac
-   ```
-3. To launch the game in CLI mode
+    macOS:
+     ```sh
+     python3 SpellingBee.py
+     ```
+2. To launch the game in CLI mode    
+  WINDOWS:
    ```sh
    py SpellingBee.py --cli
    ```
+    macOS:
+     ```sh
+     python3 SpellingBee.py --cli
+     ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Test File
+[![CodeCov][codecov-shield]][codecov-url]
   
-To run the test file, navigate to the test folder with
+To run the test file, navigate to the test folder with  
+  WINDOWS:
    ```sh
    cd path\to\folder\2023sp-420-MediaTek\test
    ```
-then run the command
+  macOS:
    ```sh
-   py unittest.py
+   cd path to folder 2023sp-420-MediaTek test
    ```
+then run the command  
+  WINDOWS:
+   ```sh
+   py run.py
+   ```
+  macOS:
+   ```sh
+   python3 run.py
+   ```  
+
 
 
 <!-- COMMANDS EXAMPLES -->
 ## Commands
 
-See below for a list of CLI-specific commands and their functionality!
+See below for a list of CLI-specific commands and their functionality! All commands support tab-completion.
   
-* ```!newpuzzle```  
+* ```newpuzzle```  
   Generates a new puzzle. You will be given the option to provide your own pangram for puzzle creation.
-* ```!showpuzzle```  
+* ```showpuzzle```  
   Displays the current puzzle, including all kinds of fun stats.
-* ```!showfoundwords```  
+* ```showfoundwords```  
   Lists all of the correctly guessed words.
-* ```!shuffle```  
+* ```shuffleletters```  
   Shuffles the given letters in a random arangement (except the required letter which stays in the center).
-* ```!savepuzzle```  
+* ```savepuzzle```  
   Saves your puzzle to the root directory.  **NOTE: The GUI version lets you save anywhere on your machine.
-* ```!loadpuzzle```  
+* ```loadpuzzle```  
   Allows you to load a saved puzzle from the root directory.  **NOTE: The GUI version lets you load from anywhere on your machine.
-* ```!showstatus```  
+* ```showstatus```  
   Shows your current rank, points earned, and total points possible.
-* ```!help```  
+* ```showhints```  
+  Shows useful stats for solving a puzzle, including how many words start with each letter.
+* ```gamehelp```  
   Displays the list of commands currently accessible.
-* ```!exit```  
+* ```gameexit```  
   Exits the game. You will be asked if you want to save your puzzle to not lose progress.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- DESIGN PATTERN LIST -->
+## Design Patterns
+
+Below is a list of design patterns used in our program and where to find them!
+
+* MVC  
+    Our codebase follows a general Model-View-Controller schema, which can be seen within the MVC directory.  
+* Singleton  
+    MVC/view/CLI.py contains the singleton design pattern, where it only has one instance and returns the same object.  
+* Iterator  
+    MVC/view/winGUI.py contains the iterator design pattern, where an iterator object is used to loop through a list and restrict user inputs.  
+* Observer  
+    MVC/Controller/controller.py contains the Observer and Subject classes that notify MVC/view/macGUI.py of changes to load.
+    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -132,7 +175,7 @@ See below for a list of CLI-specific commands and their functionality!
   
 | [![Tessa Hughes](https://avatars.githubusercontent.com/u/122769747?v=4)](https://github.com/tmhughes1) | [![Austin An](https://avatars.githubusercontent.com/u/113960168?v=4)](https://github.com/auanmu) | [![Devon Fair](https://avatars.githubusercontent.com/u/20361090?v=4)](https://github.com/SteamsDev) | [![Noah Barger](https://avatars.githubusercontent.com/u/98166939?v=4)](https://github.com/noahbarger) | [![Gabe Zimmermann](https://avatars.githubusercontent.com/u/80365452?v=4)](https://github.com/gabe2762) | 
 |---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| [Tessa Hughes](https://github.com/tmhughes1)                                                          | [Austin An](https://https://github.com/auanmu)                                                  | [Devon Fair](https://github.com/SteamsDev)                                                          | [Noah Barger](https://github.com/nahbarger)                                                           | [Gabe Zimmermann](https://github.com/gabe2762)                                                          |
+| [Tessa Hughes](https://github.com/tmhughes1)                                                          | [Austin An](https://https://github.com/auanmu)                                                  | [Devon Fair](https://github.com/SteamsDev)                                                          | [Noah Barger](https://github.com/noahbarger)                                                           | [Gabe Zimmermann](https://github.com/gabe2762)                                                          |
   
   
 <!-- LICENSE -->
@@ -148,9 +191,15 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=red
 [contributors-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/graphs/contributors
-[issues-shield]: https://img.shields.io/github/issues/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge
+[repo-size-shield]: https://img.shields.io/github/repo-size/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=success
+[last-commit-shield]: https://img.shields.io/github/last-commit/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=9cf
+[issues-shield]: https://img.shields.io/github/issues/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=yellow
 [issues-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/issues
-[license-shield]: https://img.shields.io/github/license/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge
-[license-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/blob/master/LICENSE.txt
+[codecov-shield]: https://codecov.io/gh/mucsci-students/2023sp-420-MediaTek/branch/develop/graph/badge.svg?token=jJq0BIhixt
+[codecov-url]: https://codecov.io/gh/mucsci-students/2023sp-420-MediaTek
+[language-shield]: https://img.shields.io/github/languages/top/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=blueviolet
+[language-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/languages/top
+[license-shield]: https://img.shields.io/github/license/mucsci-students/2023sp-420-MediaTek.svg?style=for-the-badge&color=ff69b4
+[license-url]: https://github.com/mucsci-students/2023sp-420-MediaTek/blob/develop/LICENSE

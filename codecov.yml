@@ -1,0 +1,8 @@
+codecov: 
+ token: 5dbe9f82-3165-417e-9d94-29a0a5e76d75
+ 
+ignore:
+  - "test"
+  - "MVC/controller"
+  - "MVC/database"
+  - "MVC/view"

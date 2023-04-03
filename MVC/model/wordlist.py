@@ -1,3 +1,5 @@
+from MVC.database import connectDB as cdb
+
 '''
     File: wordlist.py
     Author: Devon F.
@@ -8,12 +10,8 @@
                  the reequired letter.
     Version: 0.1
 '''
-# imports the json library
-import json
-# imports the sql library
-import sqlite3
-import os
-from MVC.model import connectDB as cdb
+
+
 # Actual function itself
 #words that user has guessed correctly
 userWordList = []

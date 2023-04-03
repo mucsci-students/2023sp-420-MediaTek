@@ -1,26 +1,34 @@
-import argparse
+import platform
+import os
 import subprocess
 import sys
-import os
+import argparse
 
+clipath = os.path.abspath("MVC/view/CLI.py")
+winpath = os.path.abspath("MVC/view/winGUI.py")
+macpath = os.path.abspath("MVC/view/macGUI.py")
+linuxpath = os.path.abspath("MVC/view/winGUI.py")
 
-parser = argparse.ArgumentParser()
-#cli and mac arguments for project.
-parser.add_argument('--cli', action='store_true', help='Run in CLI mode')
-parser.add_argument('--mac', action='store_true', help=' Run the mac version of GUI')
+def run_appropriate_file():
+    parser = argparse.ArgumentParser(description="Run the appropriate version of the application based on the operating system")
+    parser.add_argument('--cli', action='store_true', help='run the command-line version')
+    args = parser.parse_args()
+    
+    os_name = platform.system()
+    
+    if os_name == "Windows":
+        if args.cli:
+            subprocess.run([sys.executable, clipath])
+        else:
+            subprocess.run([sys.executable, winpath])
+    elif os_name == "Darwin":
+        if args.cli:
+            subprocess.run([sys.executable, clipath])
+        else:
+            subprocess.run([sys.executable, macpath])
+    else:
+        if args.cli:
+            subprocess.run([sys.executable, clipath])
 
-args = parser.parse_args()
+run_appropriate_file()
 
-#get aboslute path for clirefactor and austinguitest.py
-clipath = os.path.abspath("MVC/view/CLIrefactor.py")
-guipath = os.path.abspath("MVC/view/austinguitest.py")
-macpath = os.path.abspath("MVC/view/noahmac.py")
-
-if args.cli:
-    # Run CLI mode
-    subprocess.run([sys.executable, clipath])
-elif args.mac:
-    subprocess.run([sys.executable, macpath])
-else:
-    # Run GUI mode
-    subprocess.run([sys.executable, guipath])

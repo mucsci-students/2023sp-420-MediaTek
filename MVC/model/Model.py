@@ -1,17 +1,12 @@
-import time
-import re
 from MVC.model import IdentifyBaseWord as np
 from MVC.model import wordlist as wl
 from MVC.model import Commands as Commands
 import random
-import json
 from MVC.model import loadgame as loadgame
-import sys
-import os
 
-#controller file should use model functions to manipulate the data 
-#controller file should also have a method for every single function that is inside of the model class
-#instantiate player and model at correct time.
+'''
+Player class with variables for the whole program.
+'''
 class player:
     def __init__(self): 
         self.gaUserLetters = ""
@@ -39,41 +34,10 @@ class model:
 
     
     '''
-    Function used for loading a game into the GUI
-    Just updates the player objects variable with the information side of the file.
-    '''
-    def gameLoadGUI(self, inputFile):
-        # open the json file and load its contents
-        loadGame = list()
-        with open(inputFile) as save:
-            loaded = json.load(save)
-
-        #print(loaded['RequiredLetter'])
-        #print(loaded['WordList'])
-
-        self.p1.gaReqLetter = loaded['RequiredLetter']
-        self.p1.gaUserLetters = loaded['PuzzleLetters']
-        self.p1.points = loaded['CurrentPoints']
-        self.p1.puzzleTotal = loaded['MaxPoints']
-        self.p1.guessedList = loaded['GuessedWords']
-        self.p1.getList = loaded['WordList']
-
-
-        print("Required Letter: " + self.p1.gaReqLetter)
-        print("User Letters: " + self.p1.gaUserLetters) 
-        print("Points Earned: " + str(self.p1.points))
-        print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
-        print("Guessed Words: " + str(self.p1.guessedList))
-    '''
-    Function used for loading a game into the CLI
-    Just updates the player objects variable with the information side of the file.
+    Function used for loading a game.
+    Just updates the player objects variable with the information inside the file.
     '''  
-    def gameLoadCLI(self, inputFile):
-        # open the json file and load its contents
-        with open(inputFile + ".json", "r") as save:
-            loaded = json.load(save)
-
-
+    def gameLoad(self, loaded):
         self.p1.gaReqLetter = loaded['RequiredLetter']
         self.p1.gaUserLetters = loaded['PuzzleLetters']
         self.p1.points = loaded['CurrentPoints']
@@ -86,9 +50,8 @@ class model:
         print("Points Earned: " + str(self.p1.points))
         print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
         print("Guessed Words: " + ", ".join(self.p1.guessedList))
-    
+        self.gameRank()
         self.p1.puzzleStarted = 1
-
 
 
     '''
@@ -100,9 +63,7 @@ class model:
         return self.p1.gaUserLetters.upper()
     def getReqLetter(self):
         return self.p1.gaReqLetter.upper()
-    def getGuessedWordsCLI(self):
-        return ', '.join(self.p1.guessedList)
-    def getGuessedWordsGUI(self):
+    def getGuessedWords(self):
         return self.p1.guessedList
     def getWordList(self):
         return self.p1.getList
@@ -129,7 +90,6 @@ class model:
     This function just calculates the total points by checking the length, and if it's a pangram.
     It gets run once when a new game is started, so the total for the puzzle can be calculated 
     '''
-
     def calculateTotalPoints(self, wordBank):
         for x in wordBank:
             toSet = set(x)
@@ -141,6 +101,7 @@ class model:
                     self.p1.puzzleTotal += (length + 7)
                 else:
                     self.p1.puzzleTotal += length
+
     '''
     Function will check what the user entered is actually a pangram, then check if it actually exists within the file.
     '''
@@ -163,27 +124,14 @@ class model:
     '''
     Function will create a game based on the users input.
     '''
-    def NewPuzzleBase(self):
-        self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame()
-        while (self.p1.gaUserLetters == "empty") and (self.p1.gaReqLetter == "empty"):
-             self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame()
+    def NewPuzzleBase(self,userInput):
+        self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame(userInput)
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
-    
-
-    '''
-    Function will create a game based on the users input.
-    '''
-    def NewPuzzleBaseGUI(self,userInput):
-        self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGameGUI(userInput)
-        self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
-        self.calculateTotalPoints(self.p1.getList)
-        #print(self.p1.getList)
 
     '''
     Function returns a list of the userLetters and removes the required letter from it.
     '''
-
     def lettersToList(self):
         #remove the required letter from the string.
         self.p1.displayLetters.clear()
@@ -191,11 +139,10 @@ class model:
         #store this new string into a list
         for x in removeReqLetter:
             self.p1.displayLetters.append(x.upper())
-
+    
     '''
     Shuffles the users letters
     '''
-
     def shuffleAuto(self):
         #SHUFFLE ALGO
         #replace the brackets within the user letters string
@@ -210,18 +157,6 @@ class model:
         #before abcdef, after fedcba
         self.lettersToList()
         return self.p1.gaUserLetters
-    '''
-    Shuffles the users letters
-    '''
-    '''def shuffleBase(self,userLetters):
-        #SHUFFLE ALGO
-        replaceString = userLetters.replace("[","").replace("]","")
-        toList = list(replaceString)
-        random.shuffle(toList)
-        shuffledLetters = ''.join(toList)
-        self.p1.gaUserLetters = shuffledLetters
-        self.lettersToList()
-        return self.p1.gaUserLetters'''
     
     '''
     This function will take in the user input and check if it's a valid guess.
@@ -277,7 +212,9 @@ class model:
         Commands.help()
     
 
-    #This needs to be rewritten.
+    '''
+    Function that updates the rank as the user points increases.
+    '''
     def gameRank(self):
         #variable to store ranks
         #for a game in progress, matches point values to ranks
@@ -300,28 +237,3 @@ class model:
             self.p1.showRank = "Master"
         else:
             self.p1.showRank = "Puzzle Finished! Good Job!"
-    
-    
-    # exits the game
-    def gameExit(self):
-        # if a puzzle is started, as if the user wants to save the game
-        if self.p1.puzzleStarted:
-            gamesave = input("Do you wish to save your game? (yes/no): ")
-            if gamesave == "yes":
-                # if so, save it
-                inputFile = input("Please enter a name for the save file: ")
-                self.saveGame(inputFile)
-                print("Puzzle saved! Goodbye!")
-                exit()
-            elif gamesave == "no":
-                # if not, don't.
-                print("Okay! See you on the other side!")
-                exit()
-            else:
-                print("Please enter \"yes\" or \"no\"!")
-                self.gameExit()
-        # If a puzzle isn't loaded, just leave.
-        else:
-            print("Okay... bye.")
-            exit()
-            
