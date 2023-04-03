@@ -254,10 +254,10 @@ class controller(Subject):
         # If all the letters are in a word it adds one to total pangram if one is 7 letters long and a pangram adds to total perfect
         for word in self.words:
             if set(totalLetters).issubset(set(word)):
-                if len(word) == 7 and len(set(word)) == 7:
-                    totPerf += 1
                 totPan += 1
-        return totPan,totPerf
+                if len(word) == 7:
+                    totPerf += 1
+        return totPan, totPerf
 
     '''
     Function iterates through list of words and finds how many words start with a specific two letters then displays
@@ -273,7 +273,8 @@ class controller(Subject):
                 count[two] +=1
             else:
                 count[two] = 1
-        return count
+        sort = dict(sorted(count.items()))
+        return sort
 
     '''
     Displays a matrix where the top row is the lengths of words, the first column is the letters for the puzzle.
@@ -282,60 +283,64 @@ class controller(Subject):
     '''
     def gridHint(self):
         lowerList = []
-        length = [4,5,6,7,8,9,10,11,12,13,14,15]
         getLetter = self.controllerGetLetters()
         reqLetter = self.controllerGetReqLetter()
         hexagonLetters = []
-        hexagonLetters = self.controllerToList(getLetter,hexagonLetters)
+        hexagonLetters = self.controllerToList(getLetter, hexagonLetters)
         # Turns hexagons list lowercase
         for letter in hexagonLetters:
-            lowerList.append(letter.lower()) 
+            lowerList.append(letter.lower())
         # Combines new hexagon list and reqLetter
-        totalLetters =  lowerList + [reqLetter.lower()]
+        totalLetters = lowerList + [reqLetter.lower()]
         self.totalWords = self.controllerGetWordList()
-        # Initializes 9 by 14 matrix with object type
-        x = numpy.empty((9,14),dtype=object)
+        # Calculate unique lengths from word list
+        lengths = sorted(set(len(word) for word in self.totalWords))
+        # Initializes 9 by (2 + len(lengths)) matrix with zeros
+        x = numpy.zeros((9, 2 + len(lengths)), dtype=object)
         i = 1
-        x[0,0] = ''
-        x[0,13] = "\u03A3"
+        x[0, 0] = ''
+        x[0, -1] = "\u03A3"
         # Sets first row excluding the first and last row with letters
         for letter in totalLetters:
-            x[i,0] = letter
+            x[i, 0] = letter
             i += 1
         j = 1
-        for lengths in length:
-            x[0][j] = lengths
+        for length in lengths:
+            x[0][j] = length
             # Count the number of words that start with each letter and have the given length
             for i, letter in enumerate(totalLetters):
                 count = 0
                 for word in self.totalWords:
-                    # Compares letter  and checks the length and adds count to cell
-                    if word.startswith(letter) and len(word) == lengths:
+                    # Compares letter and checks the length and adds count to cell
+                    if word.startswith(letter) and len(word) == length:
                         count += 1
-                x[i+1, j] = count
+                x[i + 1, j] = count
             j += 1
         # Adds up rows and sets the value equal to the final element of row
         rowTotal = 0
-        for k in range(1,8):
-            for m in range(1,12):
-                rowTotal += x[k,m]
-            x[k,13] = rowTotal
-            rowTotal = 0 
-        # Adds up columns and sets the value equal to the final element of column   
+        for k in range(1, 8):
+            for m in range(1, 1 + len(lengths)):
+                rowTotal += x[k, m]
+            x[k, -1] = rowTotal
+            rowTotal = 0
+        # Adds up columns and sets the value equal to the final element of column
         colTotal = 0
         wordSum = 0
         # Adds up all words
         for word in self.totalWords:
             wordSum += 1
-        for l in range(1,13):
-            for n in range(1,8):
-                colTotal += x[n,l]
-            x[8,l] = colTotal
-            colTotal = 0 
+        for l in range(1, 1 + len(lengths)):
+            for n in range(1, 8):
+                colTotal += x[n, l]
+            x[8, l] = colTotal
+            colTotal = 0
         # Sets corner spots to desired values
-        x[8,13] = wordSum
-        x[8,0] = "\u03A3"
+        x[8, -1] = wordSum
+        x[8, 0] = "\u03A3"
         return x
+
+
+
    
     '''
     Function that gets total number of words
