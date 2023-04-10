@@ -213,6 +213,19 @@ class View:
         self.clearInput()
 
     '''
+    Function that takes screenshot of tkinter screen
+    '''
+    def screenShot(self):
+        # Finds coordinates of window
+        x,y = main.winfo_x(),main.winfo_y()
+        # Finds width and heigh of window
+        w,h = main.winfo_width(),main.winfo_height()
+        screenshot = pyautogui.screenshot(region=(x,y,w,h))
+        # Creates the screenshot file
+        screenshot.save("screenshot.png")
+        messagebox.showinfo("Message", "Screen Shot Saved!")
+        
+    '''
     Function that creates the hexagons according to size.
     '''
     def draw_hexagon(self, canvas, x, y, radius, fill, outline):

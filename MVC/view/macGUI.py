@@ -11,6 +11,7 @@ from tkinter import simpledialog
 from tkinter import filedialog
 from numpy import *
 from tkinter import Toplevel, Label
+import pyautogui
 
 class View:
     '''
@@ -40,6 +41,8 @@ class View:
         self.bg = PhotoImage(file=abs_path, height=2000, width=2000)
         self.img = Label(parent, image = self.bg)
         self.img.place(x = 0,y = 0)
+
+        # creates geometry for screenshot
 
         #menu
         self.menu = tk.Menu(self.parent)
@@ -87,6 +90,8 @@ class View:
         file_menu.add_command(label="Open",command = self.loadPuzzle)
         file_menu.add_separator()
         file_menu.add_command(label="Save",command = self.savePuzzle)
+        file_menu.add_separator()
+        file_menu.add_command(label="Export Score",command=self.screenShot)
         file_menu.add_separator()
         file_menu.add_command(label="Exit",command=self.exitPuzzle)
         
@@ -230,6 +235,19 @@ class View:
         #clears the input box everytime.
         self.clearInput()
 
+    '''
+    Function that takes screenshot of tkinter screen
+    '''
+    def screenShot(self):
+        # Finds coordinates of window
+        x,y = main.winfo_x(),main.winfo_y()
+        # Finds width and heigh of window
+        w,h = main.winfo_width(),main.winfo_height()
+        screenshot = pyautogui.screenshot(region=(x,y,w,h))
+        # Creates the screenshot file
+        screenshot.save("screenshot.png")
+        messagebox.showinfo("Message", "Screen Shot Saved!")
+        
     '''
     Function that creates the hexagons according to size.
     '''
