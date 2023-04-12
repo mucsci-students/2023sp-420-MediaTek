@@ -356,10 +356,15 @@ class GameObserver(Observer):
     def update(self, subject):
         self.callback()
 
+'''
+Savegame command functionality for CLI.
+'''
 class SavePuzzle():
     def __init__(self, controller):
         self.controller = controller
 
+    # Works virtually the same from the original:
+    # If game loaded, save it. Else do not.
     def Command(self):
         if (self.controller.controllerGetPuzzleState() == 0):
             print("No game started!")
