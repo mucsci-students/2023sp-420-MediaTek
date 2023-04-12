@@ -355,3 +355,15 @@ class GameObserver(Observer):
         
     def update(self, subject):
         self.callback()
+
+class SavePuzzle():
+    def __init__(self, controller):
+        self.controller = controller
+
+    def Command(self):
+        if (self.controller.controllerGetPuzzleState() == 0):
+            print("No game started!")
+        else:
+            inputFile = input("Please enter a name for the file: ")
+            self.controller.controllerSaveGame(inputFile)
+            print("Game saved!")

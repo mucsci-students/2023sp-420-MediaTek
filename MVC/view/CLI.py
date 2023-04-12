@@ -161,11 +161,8 @@ class view:
     Function that asks for user to input a file name they'd like to create a save of.
     '''
     def savePuzzle(self):
-        if (self.controller.controllerGetPuzzleState() == 0):
-            print("No game started!")
-        else:
-            inputFile = input("Please enter a name for the file: ")
-            self.controller.controllerSaveGame(inputFile)
+        self.savegame = ctrl.SavePuzzle(self.controller)
+        self.savegame.Command()
 
     '''
     Function loads an existing puzzle into the game.
