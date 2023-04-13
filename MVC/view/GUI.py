@@ -1,3 +1,4 @@
+import platform
 import tkinter as tk
 from MVC.controller import Controller as ctrl
 import math
@@ -11,39 +12,20 @@ from tkinter import filedialog
 class ViewFactory:
 
     #create labels for the GUI
-    def createLabels(self, canvas, points, rank):
+    def createLabels(self, canvas, points, rank, fontstyle, pointsx, pointsy, rankx, ranky):
         #adds the points
-        self.pointLabel = tk.Label(canvas, textvariable = points, font=('Helvetica 12 bold'), background='#FFFFFF')
-        self.pointLabel.place(x=410,y=40)
+        self.pointLabel = tk.Label(canvas, textvariable = points, font=(fontstyle), background='#FFFFFF')
+        self.pointLabel.place(x=pointsx,y=pointsy)
         #adds the rank
-        self.rankLabel = tk.Label(canvas, textvariable  = rank, font=('Helvetica 12 bold'), background='#FFFFFF')
-        self.rankLabel.place(x=60,y=474)
+        self.rankLabel = tk.Label(canvas, textvariable  = rank, font=(fontstyle), background='#FFFFFF')
+        self.rankLabel.place(x=rankx,y=ranky)
     
-    #create buttons for GUI
-    def createButtons(self,frame,txt,cmd):
-        return tk.Button(frame, text=txt, command=cmd, relief=FLAT)
-    
-    '''
-    Function that creates the hexagons according to size.
-    '''
-    def draw_hexagon(self, canvas, x, y, radius, fill, outline):
-        angle = 60
-        points = []
-        for i in range(6):
-            x_i = x + radius * math.cos(math.radians(angle * i))
-            y_i = y + radius * math.sin(math.radians(angle * i))
-            points.append((x_i, y_i))
-        canvas.create_polygon(points, fill=fill, outline=outline)
+    def placeButtons(self, name, ex, why):
+        name.place(x=ex, y=why)
 
-
-    '''
-    Function to create hexagons.
-    '''
-    def drawHex(self, x, y, canvas, hex_radius):
-        return ViewFactory.draw_hexagon(self,canvas, x, y, hex_radius, 'white', 'black')
 
    
-class windowsGUI:
+class GUI:
     '''
     Default constructor. Contains all the set up needed for the TKinter GUI. 
     '''
@@ -84,7 +66,7 @@ class windowsGUI:
         self.hex_width = math.sqrt(3) * self.hex_radius
         self.hex_height = 2 * self.hex_radius
 
-        # Creates a 500 x 500 canvas with a white background along with title
+         # Creates a 500 x 500 canvas with a white background along with title
         self.canvas = tk.Canvas(self.parent, width=750, height=500,bg='#FFFFFF')
         self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
         self.canvas.pack()
@@ -94,11 +76,11 @@ class windowsGUI:
         self.buttonFrame.pack(pady=5)
 
         # created some buttons
-        self.guessButton = ViewFactory.createButtons(self, self.buttonFrame,"Enter", self.makeGuess)
+        self.guessButton = tk.Button(self.buttonFrame, text="Enter", command=self.makeGuess, relief=FLAT)
         self.guessButton.pack(pady=10, padx=15, side='left')
-        self.backButton = ViewFactory.createButtons(self, self.buttonFrame, "Delete", self.backspace)
+        self.backButton = tk.Button(self.buttonFrame, text="Delete", command=self.backspace, relief=FLAT)
         self.backButton.pack(pady=10, padx=15, side='left')
-        self.shuffleButton = ViewFactory.createButtons(self, self.buttonFrame, "Shuffle", self.shuffle)
+        self.shuffleButton = tk.Button(self.buttonFrame, text="Shuffle", command=self.shuffle, relief=FLAT)
         self.shuffleButton.pack(pady=10, padx=15, side='left')
 
         #menu
@@ -132,6 +114,8 @@ class windowsGUI:
 
         self.test = 0
         # empty state for the buttons
+
+        self.os_name = platform.system()
 
     '''
     Function created to only allow users to type in the letters given for the puzzle
@@ -171,41 +155,63 @@ class windowsGUI:
     def clearListbox(self):
         self.listBox.delete(0, tk.END)
     
+    '''
+    Function to create hexagons.
+    '''
+    def drawHex(self, x, y):
+        return self.draw_hexagon(self.canvas, x, y, self.hex_radius, 'white', 'black')
     
     '''
     Function to create buttons.
     '''
-    def createButton(self, x):
-        return tk.Button(self.canvas, text= x, width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command= lambda: self.sendInput(x))
+    def createButton(self, hex, name, ex, why):
+        name = tk.Button(self.canvas, text= hex, width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command= lambda: self.sendInput(hex))
+        ViewFactory.placeButtons(self, name, ex, why)
 
     '''
     Function creates the hexagons and buttons for the puzzles.
     '''
     def drawPuzzleUI(self, reqLetter, hexagonLetters):
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
-            hexReq = ViewFactory.draw_hexagon(self, self.canvas, 375, 250, self.hex_radius, 'yellow', 'black')
-            hex1 = ViewFactory.drawHex(self, 375, 365, self.canvas, self.hex_radius)
-            hex2 = ViewFactory.drawHex(self, 375, 135, self.canvas, self.hex_radius)
-            hex3 = ViewFactory.drawHex(self, 270, 307.5, self.canvas, self.hex_radius)
-            hex4 = ViewFactory.drawHex(self, 480, 307.5, self.canvas, self.hex_radius)
-            hex5 = ViewFactory.drawHex(self, 270, 194, self.canvas, self.hex_radius)
-            hex6 = ViewFactory.drawHex(self, 480, 194, self.canvas, self.hex_radius)
-            #creates the buttons with the letters and input functionality
-            self.btn1 = self.createButton(hexagonLetters[0])
-            self.btn1.place(x=349, y=325)
-            self.btn2 = self.createButton(hexagonLetters[1])
-            self.btn2.place(x=349, y=94)
-            self.btn3 = self.createButton(hexagonLetters[2])
-            self.btn3.place(x=242, y=270)
-            self.btn4 = self.createButton(hexagonLetters[3])
-            self.btn4.place(x=452, y=270)
-            self.btn5 = self.createButton(hexagonLetters[4])
-            self.btn5.place(x=242, y=158)
-            self.btn6 = self.createButton(hexagonLetters[5])
-            self.btn6.place(x=452, y=158)
-            self.btn7 = tk.Button(self.canvas, text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
-            self.btn7.place(x=349, y=210)
-            self.btn7.configure(bg = "yellow")
+            hexReq = self.draw_hexagon(self.canvas, 375, 250, self.hex_radius, 'yellow', 'black')
+            hex1 = self.drawHex(375, 365)
+            hex2 = self.drawHex(375, 135)
+            hex3 = self.drawHex(270, 307.5)
+            hex4 = self.drawHex(480, 307.5)
+            hex5 = self.drawHex(270, 194)
+            hex6 = self.drawHex(480, 194)
+            #creates the buttons with the letters and input functionality FACTORY just placements differ
+            if (self.os_name == 'Windows'): 
+                self.createButton(hexagonLetters[0], "btn1", 349, 325)
+                #self.btn1.place(x=349, y=325)
+                self.createButton(hexagonLetters[1], "btn2", 349, 94)
+                #self.btn2.place(x=349, y=94)
+                self.createButton(hexagonLetters[2], "btn3", 242, 270)
+                #self.btn3.place(x=242, y=270)
+                self.createButton(hexagonLetters[3], "btn4", 452, 270)
+                #self.btn4.place(x=452, y=270)
+                self.createButton(hexagonLetters[4], "btn5", 242, 158)
+                #self.btn5.place(x=242, y=158)
+                self.createButton(hexagonLetters[5], "btn5", 452, 158)
+                #self.btn6.place(x=452, y=158)
+                self.btn7 = tk.Button(self.canvas, text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
+                self.btn7.place(x=349, y=210)
+                self.btn7.configure(bg = "yellow")
+            else:
+                self.createButton(hexagonLetters[0], "btn1", 342, 340)
+                #self.btn1.place(x=342, y=340)
+                self.createButton(hexagonLetters[1], "btn2", 342, 110)
+                #self.btn2.place(x=342, y=110)
+                self.createButton(hexagonLetters[2], "btn3", 235, 282)
+                #self.btn3.place(x=235, y=282)
+                self.createButton(hexagonLetters[3], "btn4", 446, 282)
+                #self.btn4.place(x=446, y=282)
+                self.createButton(hexagonLetters[4], "btn5", 235, 168)
+                #self.btn5.place(x=235, y=168)
+                self.createButton(hexagonLetters[5], "btn6", 446, 168)
+                #self.btn6.place(x=446, y=168)
+                self.btn7 = tk.Button(self.canvas,text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
+                self.btn7.place(x=342, y=225)
             #text for points and rank
             self.canvas.create_text(365, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
             self.canvas.create_text(30, 485, text="Rank:", fill="black", font=('Helvetica 12 bold'))
@@ -242,6 +248,17 @@ class windowsGUI:
         #clears the input box everytime.
         self.clearInput()
 
+    '''
+    Function that creates the hexagons according to size.
+    '''
+    def draw_hexagon(self, canvas, x, y, radius, fill, outline):
+        angle = 60
+        points = []
+        for i in range(6):
+            x_i = x + radius * math.cos(math.radians(angle * i))
+            y_i = y + radius * math.sin(math.radians(angle * i))
+            points.append((x_i, y_i))
+        canvas.create_polygon(points, fill=fill, outline=outline)
 
     '''
     Function shows up message asking if the user would like to save
@@ -302,7 +319,12 @@ class windowsGUI:
                 self.listBox.insert(tk.END, x)
         #enables use of enter button on keyboard
         self.e.bind("<Return>",self.makeGuess)
-        ViewFactory.createLabels(self, self.canvas, self.points, self.rank)
+
+        if (self.os_name == 'Windows'):
+            ViewFactory.createLabels(self, self.canvas, self.points, self.rank, 'Helvetica 12 bold', 410, 40, 60, 474)
+        else:
+            ViewFactory.createLabels(self, self.canvas, self.points, self.rank, 'Helvetica 20 bold', 410, 46, 60, 471)
+
         #get required letter
         self.reqLetter = self.controller.controllerGetReqLetter()
         #hoping this removes the required letter from the list.
@@ -494,5 +516,5 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
 # Runs the GUI
 main = tk.Tk()
 main.title("MediaTek's Spelling Bee!")
-windowsGUI(main,ctrl)
+GUI(main,ctrl)
 main.mainloop()
