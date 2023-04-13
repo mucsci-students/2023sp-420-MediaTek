@@ -5,9 +5,7 @@ import sys
 import argparse
 
 clipath = os.path.abspath("MVC/view/CLI.py")
-winpath = os.path.abspath("MVC/view/winGUI.py")
-macpath = os.path.abspath("MVC/view/macGUI.py")
-linuxpath = os.path.abspath("MVC/view/winGUI.py")
+guipath = os.path.abspath("MVC/view/GUI.py")
 
 def run_appropriate_file():
     parser = argparse.ArgumentParser(description="Run the appropriate version of the application based on the operating system")
@@ -20,15 +18,17 @@ def run_appropriate_file():
         if args.cli:
             subprocess.run([sys.executable, clipath])
         else:
-            subprocess.run([sys.executable, winpath])
+            subprocess.run([sys.executable, guipath])
     elif os_name == "Darwin":
         if args.cli:
             subprocess.run([sys.executable, clipath])
         else:
-            subprocess.run([sys.executable, macpath])
+            subprocess.run([sys.executable, guipath])
     else:
         if args.cli:
             subprocess.run([sys.executable, clipath])
+        else:
+            subprocess.run([sys.executable, guipath])
 
 run_appropriate_file()
 
