@@ -59,6 +59,9 @@ class controller(Subject):
         return self.model.getHoneyCombList()
     def controllerToHoneyComblist(self):
         self.model.lettersToList()
+    #carries over the game_id from the model to controller
+    def controllerGetGameID(self):
+        return self.model.get_game_id()
 
 
     '''
