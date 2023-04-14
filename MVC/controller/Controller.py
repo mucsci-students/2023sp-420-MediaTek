@@ -60,6 +60,13 @@ class controller(Subject):
     def controllerToHoneyComblist(self):
         self.model.lettersToList()
 
+    '''
+    Functions to call encryption/decryption functions from model.
+    '''
+    def controllerEncryptWords(self):
+        self.model.encryptWords()
+    def controllerDecryptWords(self):
+        self.model.decryptWords()
 
     '''
     The functions below all specifically modify the puzzle in some shape or form.
@@ -115,6 +122,9 @@ class controller(Subject):
     '''
     def controllerSaveGame(self, inputFile):
         self.model.saveGame(inputFile)
+    
+    def controllerSaveEncryptedGame(self, inputFile):
+        self.model.saveEncryptedGame(inputFile)
 
     '''
     Calls the game load gui function

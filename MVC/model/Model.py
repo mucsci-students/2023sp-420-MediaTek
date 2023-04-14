@@ -3,6 +3,8 @@ from MVC.model import wordlist as wl
 from MVC.model import Commands as Commands
 import random
 from MVC.model import loadgame as loadgame
+from cryptography.fernet import Fernet
+import json
 
 '''
 Player class with variables for the whole program.
@@ -22,6 +24,8 @@ class player:
         self.puzzleTotal = 0
         #list to store correctly guessed words.
         self.guessedList = list()
+        self.encryptedList = list()
+        self.storeKey = None
 
 class model:
     #should be called before gameLoad function, becauese it will reset all of the variables to their default state, and then gameLoad will update them
@@ -32,7 +36,78 @@ class model:
     def __init__(self):
         self.p1 = player()
 
-    
+    '''
+    If you need more help understanding msg me in discord, or see documentation on functions below.
+    Plenty of examples online on using Fernet for encryption/decryption, encode and decode too (geeksforgeeks, tutorialspoint, crypotgraphy.io, programwiz, etc)
+    Function will encrypt the user word list
+    Fernet(key) - symmetric encryption, ensures that something can't be read without the key, the key will be used to encrypt and decrypt data.
+    encrypt(token) - this encrypts the data we pass into it, however the token MUST be in bytes. Our token variable is toBytes
+    encode() - converts python string to bytes. *Important because tokens MUST be in bytes.
+    decode() - converts the bytes back into the original string. *Important because we want to append the word BACK into the word bank after decrypting it.
+    '''
+    def encryptWords(self):
+        #if the user is trying to encrypt when theres already an encrypted list clear the list beforehand.
+        if len(self.p1.encryptedList) > 0:
+            self.p1.encryptedList.clear()
+        #ensure we grabbed the key for encryption.
+        self.grabOurKey()
+        if (self.p1.storeKey == None):
+            print("Hey did you delete the secretkey.json? reclone the repo!")
+            return
+        #create a Fernet object with the key.
+        f = Fernet(self.p1.storeKey)
+        #iterate through the list of the word bank.
+        for x in self.p1.getList:
+            #convert each word (x) into bytes, by default uses utf-8.
+            toBytes = x.encode()
+            #encrypts the bytes using Fernet.
+            encryptedBytes = f.encrypt(toBytes)
+            #since we're storing strings into the json file, it's a must to use decode on the encrypted variable.
+            #this will give us a string version of the bytes, which can later be used for decryption.
+            encryptedString = encryptedBytes.decode()
+            #append each new encrypted word into the encrypted list
+            self.p1.encryptedList.append(encryptedString)
+        #just printing the list out for testing purposes.
+        print(self.p1.encryptedList)
+        
+    '''
+    Function will decrypt the loaded encrytped list and append it to the word bank.
+    Run this only after a user loads in an encrypted puzzle.
+    decrypt(token) - we are passing x (word in the list), which is going to be bytes after loading in an encrypted puzzle. 
+    which then the function decrypts and gives us the original plaintext.
+    '''
+    def decryptWords(self):
+        #ensure we grabbed the key for decryption
+        self.grabOurKey()
+        #first clear the current word list, I forget the exact reason why I put this here, but I think it had to do with some edge case.
+        if len(self.p1.getList) > 0:
+            self.p1.getList.clear()
+        #next create a Fernet object that takes in the key our json file.
+        f = Fernet(self.p1.storeKey)
+        #iterate through the encrypted list to decrypt each word.
+        for x in self.p1.encryptedList:
+            #decrypt each byte string that was stored
+            decryptByteString = f.decrypt(x)
+            #decode the bytes into its original string.
+            decryptedWord = decryptByteString.decode()
+            #append this word into the word bank as it's a valid guess.
+            self.p1.getList.append(decryptedWord)
+        #also I believe it's important to clear the encryptedList after decryption, since our implementation will just be asking if they want to save as
+        #an encrypted game during the save command, could avoid errors down the road.
+        if len(self.p1.encryptedList) > 0:
+            self.p1.encryptedList.clear()
+        #print for testing.
+        print(self.p1.getList)
+
+
+    '''
+    Function just grabs the key from the json file.
+    First I created a file that stored the generated key, however just hardcoding it in is fine.
+    String is just the ouput from generate_key() function using Fernet.
+    '''
+    def grabOurKey(self):
+        keyAsString = "ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts="
+        self.p1.storeKey = keyAsString.encode()
     '''
     Function used for loading a game.
     Just updates the player objects variable with the information inside the file.
@@ -43,13 +118,21 @@ class model:
         self.p1.points = loaded['CurrentPoints']
         self.p1.puzzleTotal = loaded['MaxPoints']
         self.p1.guessedList = loaded['GuessedWords']
-        self.p1.getList = loaded['WordList']
+
+        #checks the json file, if it has a field WordList we know that it's a regular file and not an encrypted one.
+        if 'WordList' in loaded:
+            self.p1.getList = loaded['WordList']
+        else:
+            self.p1.encryptedList = loaded['secretwordlist']
+            self.decryptWords()
 
         print("Required Letter: " + self.p1.gaReqLetter.upper())
         print("User Letters: " + self.p1.gaUserLetters.upper())
         print("Points Earned: " + str(self.p1.points))
         print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
         print("Guessed Words: " + ", ".join(self.p1.guessedList))
+        #added print statement below for testing encryption/decryption
+        #print(self.p1.getList)
         self.gameRank()
         self.p1.puzzleStarted = 1
 
@@ -206,6 +289,10 @@ class model:
     '''
     def saveGame(self, inputFile):
         Commands.savePuzzle(self.p1.gaReqLetter, self.p1.gaUserLetters, self.p1.points, self.p1.puzzleTotal, self.p1.guessedList, self.p1.getList,inputFile)
+    def saveEncryptedGame(self, inputFile):
+        self.encryptWords()
+        Commands.saveSecretPuzzle(self.p1.gaReqLetter, self.p1.gaUserLetters, self.p1.points, self.p1.puzzleTotal, self.p1.guessedList, self.p1.encryptedList,inputFile)
+
     def startCommands(self):
         Commands.commandsStart()
     def helpCommand(self):
