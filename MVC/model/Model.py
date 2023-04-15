@@ -26,6 +26,7 @@ class player:
         self.guessedList = list()
         self.encryptedList = list()
         self.storeKey = None
+        self.game_id = None
 
 class model:
     #should be called before gameLoad function, becauese it will reset all of the variables to their default state, and then gameLoad will update them
@@ -217,7 +218,6 @@ class model:
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
         self.game_id = self.generateGameID()
-        return self.game_id
 
     '''
     Function will create a game based on the users input.
@@ -227,6 +227,11 @@ class model:
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
         self.game_id = self.generateGameID()
+        
+    '''
+    Getter function to get the game_id
+    '''
+    def getGameID(self):
         return self.game_id
 
     '''
