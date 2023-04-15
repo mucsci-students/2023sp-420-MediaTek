@@ -46,5 +46,5 @@ def savePuzzle(userLetters, requiredLetter, guessedWords, wordBank, totalPoints,
     savegame.savegame(userLetters, requiredLetter, guessedWords, wordBank, totalPoints, maxPoints, inputFile)
 
 #for saving an encrypted game, same as above but just passing in the encrypted word bank.
-def saveSecretPuzzle(userLetters,requiredLetter,guessedWords,encryptedBank,totalPoints,maxPoints,inputFile):
-    savegame.saveencryptedgame(userLetters, requiredLetter, guessedWords, encryptedBank, totalPoints, maxPoints, inputFile)
+def saveSecretPuzzle(userLetters,requiredLetter,guessedWords,encryptedBank,totalPoints,maxPoints, author, inputFile):
+    savegame.saveencryptedgame(userLetters, requiredLetter, guessedWords, encryptedBank, totalPoints, maxPoints, author, inputFile)
