@@ -9,34 +9,68 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import filedialog
+from PIL import ImageGrab
+from tkinter import PhotoImage, Label, Canvas
 
 class ViewFactory:
 
-    #create labels for the GUI
+    '''
+    Factory method that defines the basic behavior of creating labels.
+    '''
     def createLabels(self, canvas, points, rank, fontstyle, pointsx, pointsy, rankx, ranky):
-        #adds the points
+
         self.pointLabel = tk.Label(canvas, textvariable = points, font=(fontstyle), background='#FFFFFF')
         self.pointLabel.place(x=pointsx,y=pointsy)
-        #adds the rank
+ 
         self.rankLabel = tk.Label(canvas, textvariable  = rank, font=(fontstyle), background='#FFFFFF')
         self.rankLabel.place(x=rankx,y=ranky)
+
+    def createText(self, canvas, ex, why, label, fontstyle):
+        canvas.create_text(ex, why, text=label, fill="black", font=(fontstyle))
     
+    '''
+    Factory method that defines the basic behavior of placing buttons.
+    '''
     def placeButtons(self, name, ex, why):
         name.place(x=ex, y=why)
 
 
-   
+class WindowsFactory:
+
+    '''
+    Uses the Factory method to define specific values for windows labels.
+    '''
+    def windowsLabels(self, canvas, points, rank):
+        return ViewFactory.createLabels(self, canvas, points, rank, 'Helvetica 12 bold', 410, 40, 60, 474)
+    
+    def windowsText(self, canvas, ex, why, label):
+        return ViewFactory.createText(self, canvas, ex, why, label, 'Helvetica 14 bold')
+
+class MacFactory:
+
+    '''
+    Uses the Factory method to define specific values for mac labels.
+    '''
+    def macLabels(self, canvas, points, rank):
+        return ViewFactory.createLabels(self, canvas, points, rank, 'Helvetica 20 bold', 410, 46, 60, 471)
+    
+    def macText(self, canvas, ex, why, label):
+        return ViewFactory.createText(self, canvas, ex, why, label, 'Helvetica 20 bold')
+
+
+
 class GUI:
     '''
     Default constructor. Contains all the set up needed for the TKinter GUI. 
     '''
     def __init__(self, parent, ctrl, game_controller):
+
         self.controller = ctrl.controller()
         self.parent = parent
 
         #assigns game_model instance passed to view
         self.game_controller = game_controller
-        #create new instance of GameObserver, passing self.observerLoad as a callback. 
+        #create new instance of GameObserver, passing self.observerLoad as a callback
         #GameObserver calls this whenever receives an update from the model
         game_observer = GameObserver(self.observerLoad)
         #attaches game_observer instance to game_model by calling the attach 
@@ -103,11 +137,14 @@ class GUI:
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Save",command = self.savePuzzle)
         self.fileMenu.add_separator()
+        self.fileMenu.add_command(label="Export Score",command=self.screenShot)
+        self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Exit",command=self.exitPuzzle)
         
         self.helpMenu = tk.Menu(self.menu)
         self.menu.add_cascade(label="Help",menu=self.helpMenu)
         self.helpMenu.add_command(label = "How to play",command = self.playInstructions)
+        self.helpMenu.add_separator()
         self.helpMenu.add_command(label = "Hints",command = self.displayAll)
         
         #variables for displaying information to the screen
@@ -143,6 +180,22 @@ class GUI:
                 return False
         return True
     
+    '''
+    Function that takes screenshot of tkinter screen
+    '''
+    def screenShot(self):
+         # Get the window's geometry information
+        self.parent.update_idletasks()
+        x,y = self.parent.winfo_rootx(),self.parent.winfo_rooty()
+        w,h = self.parent.winfo_width(), self.parent.winfo_height()
+
+        # Take a screenshot of the window
+        screenshot = ImageGrab.grab(bbox=(x, y, x + w, y + h))
+        screenshot.save("screenshot.png")
+    
+    '''
+    Function that adds the letter of the hexagon button to the input box.
+    '''
     def clicker(self):
         print(self.controller.controllerGetLetters())
     
@@ -192,38 +245,31 @@ class GUI:
             #creates the buttons with the letters and input functionality FACTORY just placements differ
             if (self.os_name == 'Windows'): 
                 self.createButton(hexagonLetters[0], "btn1", 349, 325)
-                #self.btn1.place(x=349, y=325)
                 self.createButton(hexagonLetters[1], "btn2", 349, 94)
-                #self.btn2.place(x=349, y=94)
                 self.createButton(hexagonLetters[2], "btn3", 242, 270)
-                #self.btn3.place(x=242, y=270)
                 self.createButton(hexagonLetters[3], "btn4", 452, 270)
-                #self.btn4.place(x=452, y=270)
                 self.createButton(hexagonLetters[4], "btn5", 242, 158)
-                #self.btn5.place(x=242, y=158)
                 self.createButton(hexagonLetters[5], "btn5", 452, 158)
-                #self.btn6.place(x=452, y=158)
                 self.btn7 = tk.Button(self.canvas, text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
                 self.btn7.place(x=349, y=210)
                 self.btn7.configure(bg = "yellow")
             else:
                 self.createButton(hexagonLetters[0], "btn1", 342, 340)
-                #self.btn1.place(x=342, y=340)
                 self.createButton(hexagonLetters[1], "btn2", 342, 110)
-                #self.btn2.place(x=342, y=110)
                 self.createButton(hexagonLetters[2], "btn3", 235, 282)
-                #self.btn3.place(x=235, y=282)
                 self.createButton(hexagonLetters[3], "btn4", 446, 282)
-                #self.btn4.place(x=446, y=282)
                 self.createButton(hexagonLetters[4], "btn5", 235, 168)
-                #self.btn5.place(x=235, y=168)
                 self.createButton(hexagonLetters[5], "btn6", 446, 168)
-                #self.btn6.place(x=446, y=168)
                 self.btn7 = tk.Button(self.canvas,text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
                 self.btn7.place(x=342, y=225)
+
             #text for points and rank
-            self.canvas.create_text(365, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
-            self.canvas.create_text(30, 485, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+            if (self.os_name == 'Windows'):
+                WindowsFactory.windowsText(self, self.canvas, 365, 50, "Points:")
+                WindowsFactory.windowsText(self, self.canvas, 30, 485, "Rank:")
+            else:
+                MacFactory.macText(self, self.canvas, 365, 60, "Points:")
+                MacFactory.macText(self, self.canvas, 30, 485, "Rank:")
    
     '''
     Function deletes the right most characte from the inputbox
@@ -330,9 +376,9 @@ class GUI:
         self.e.bind("<Return>",self.makeGuess)
 
         if (self.os_name == 'Windows'):
-            ViewFactory.createLabels(self, self.canvas, self.points, self.rank, 'Helvetica 12 bold', 410, 40, 60, 474)
+            WindowsFactory.windowsLabels(self, self.canvas, self.points, self.rank)
         else:
-            ViewFactory.createLabels(self, self.canvas, self.points, self.rank, 'Helvetica 20 bold', 410, 46, 60, 471)
+            MacFactory.macLabels(self, self.canvas, self.points, self.rank)
 
         #get required letter
         self.reqLetter = self.controller.controllerGetReqLetter()
