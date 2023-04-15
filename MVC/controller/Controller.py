@@ -59,6 +59,8 @@ class controller(Subject):
         return self.model.getHoneyCombList()
     def controllerToHoneyComblist(self):
         self.model.lettersToList()
+    def controllerGetGameID(self):
+        return self.model.getGameID()
 
     '''
     Functions to call encryption/decryption functions from model.
