@@ -109,13 +109,17 @@ class controller(Subject):
     Calls the New Puzzle Auto function
     ''' 
     def controllerRunAutoGame(self):
-        self.model.NewPuzzleAuto()
+        #carries over the game_id from the model to controller
+        game_id = self.model.NewPuzzleAuto()
+        return game_id
 
     '''
     Calls the New Puzzle Base function
     '''
     def controllerRunBaseGame(self,userInput):
-        self.model.NewPuzzleBase(userInput)
+        #carries over the game_id from the model to controller
+        game_id = self.model.NewPuzzleBase(userInput)
+        return game_id
 
     '''
     Calls the save game function
