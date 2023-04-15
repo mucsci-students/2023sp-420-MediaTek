@@ -164,20 +164,25 @@ class view:
 
     '''
     Function that asks for user to input a file name they'd like to create a save of.
+    * TO PUT INTO NEW CLI FILE.
     '''
+    #******************************************
     def savePuzzle(self):
         if (self.controller.controllerGetPuzzleState() == 0):
             print("No game started!")
         else:
             inputFile = input("Please enter a name for the file: ")
-            userInput = input("Would you like to encrypt the puzzle?")
+            userInput = input("Would you like to encrypt the puzzle? (yes/no): ")
             if (userInput.lower() == "no"):
                 self.controller.controllerSaveGame(inputFile)
             else:
                 self.controller.controllerSaveEncryptedGame(inputFile)
+    #*******************************************
 
     '''
     Function loads an existing puzzle into the game.
+    
+    CHANGES TO PUT IN NOAHS FILE: See *'S BELOW.
     '''
     def loadPuzzle(self):
         if self.controller.controllerGetPuzzleState() == 1:
@@ -190,8 +195,14 @@ class view:
         checkFile = inputFile + ".json"
         if os.path.exists(checkFile):
             self.controller.controllerGameLoadCLI(inputFile)
-            print("Puzzle loaded!")
-            self.showHoneyComb()
+            #*********************
+            if(self.controller.controllerGetAuthorField() != "MediaTek"):
+                print("Hey, we can't decrypt this puzzle!")
+                return
+            else:
+                print("Puzzle loaded!")
+                self.showHoneyComb()
+            #*********************
         else:
             print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
 
