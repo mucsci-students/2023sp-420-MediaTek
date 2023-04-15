@@ -61,6 +61,9 @@ class controller(Subject):
         self.model.lettersToList()
     def controllerGetAuthorField(self):
         return self.model.getAuthorField()
+    def controllerGetGameID(self):
+        return self.model.getGameID()
+
 
     '''
     Functions to call encryption/decryption functions from model.
