@@ -59,6 +59,8 @@ class controller(Subject):
         return self.model.getHoneyCombList()
     def controllerToHoneyComblist(self):
         self.model.lettersToList()
+    def controllerGetGameID(self):
+        return self.model.getGameID()
 
     '''
     Functions to call encryption/decryption functions from model.
@@ -109,17 +111,13 @@ class controller(Subject):
     Calls the New Puzzle Auto function
     ''' 
     def controllerRunAutoGame(self):
-        #carries over the game_id from the model to controller
-        game_id = self.model.NewPuzzleAuto()
-        return game_id
+        self.model.NewPuzzleAuto()
 
     '''
     Calls the New Puzzle Base function
     '''
     def controllerRunBaseGame(self,userInput):
-        #carries over the game_id from the model to controller
-        game_id = self.model.NewPuzzleBase(userInput)
-        return game_id
+        self.model.NewPuzzleBase(userInput)
 
     '''
     Calls the save game function
