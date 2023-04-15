@@ -3,4 +3,4 @@ setuptools
 prompt_toolkit
 numpy
 coverage
-
+cryptography
