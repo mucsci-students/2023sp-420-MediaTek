@@ -59,6 +59,8 @@ class controller(Subject):
         return self.model.getHoneyCombList()
     def controllerToHoneyComblist(self):
         self.model.lettersToList()
+    def controllerGetAuthorField(self):
+        return self.model.getAuthorField()
 
     '''
     Functions to call encryption/decryption functions from model.
@@ -169,8 +171,13 @@ class controller(Subject):
             gamesave = input("Do you wish to save your game? (yes/no): ")
             if gamesave == "yes":
                 # if so, save it
+
                 inputFile = input("Please enter a name for the save file: ")
-                self.model.saveGame(inputFile)
+                encryptedSave = input("Would you like to encrypt the puzzle? (yes/no): ")
+                if encryptedSave.lower() == "yes":
+                    self.controllerSaveEncryptedGame(inputFile)
+                else:
+                    self.model.saveGame(inputFile)
                 print("Puzzle saved! Goodbye!")
                 exit()
             elif gamesave == "no":
