@@ -12,31 +12,72 @@ from tkinter import filedialog
 
 class ViewFactory:
 
-    #create labels for the GUI
+    '''
+    Factory method that defines the basic behavior of creating labels.
+    '''
     def createLabels(self, canvas, points, rank, fontstyle, pointsx, pointsy, rankx, ranky):
-        #adds the points
+
         self.pointLabel = tk.Label(canvas, textvariable = points, font=(fontstyle), background='#FFFFFF')
         self.pointLabel.place(x=pointsx,y=pointsy)
-        #adds the rank
+ 
         self.rankLabel = tk.Label(canvas, textvariable  = rank, font=(fontstyle), background='#FFFFFF')
         self.rankLabel.place(x=rankx,y=ranky)
+
+    '''
+    Factory method that defines the basic behavior of creating text.
+    '''
+    def createText(self, canvas, ex, why, label, fontstyle):
+        canvas.create_text(ex, why, text=label, fill="black", font=(fontstyle))
     
+    '''
+    Factory method that defines the basic behavior of placing buttons.
+    '''
     def placeButtons(self, name, ex, why):
         name.place(x=ex, y=why)
 
 
-   
+class WindowsFactory:
+
+    '''
+    Uses the Factory method to define specific values for windows labels.
+    '''
+    def windowsLabels(self, canvas, points, rank):
+        return ViewFactory.createLabels(self, canvas, points, rank, 'Helvetica 12 bold', 410, 40, 60, 474)
+    
+    '''
+    Uses the Factory method to define specific values for windows text.
+    '''
+    def windowsText(self, canvas, ex, why, label):
+        return ViewFactory.createText(self, canvas, ex, why, label, 'Helvetica 14 bold')
+
+
+class MacFactory:
+
+    '''
+    Uses the Factory method to define specific values for mac labels.
+    '''
+    def macLabels(self, canvas, points, rank):
+        return ViewFactory.createLabels(self, canvas, points, rank, 'Helvetica 20 bold', 410, 46, 60, 471)
+    
+    '''
+    Uses the Factory method to define specific values for mac text.
+    '''
+    def macText(self, canvas, ex, why, label):
+        return ViewFactory.createText(self, canvas, ex, why, label, 'Helvetica 20 bold')
+
+
 class GUI:
     '''
     Default constructor. Contains all the set up needed for the TKinter GUI. 
     '''
     def __init__(self, parent, ctrl, game_controller):
+
         self.controller = ctrl.controller()
         self.parent = parent
 
         #assigns game_model instance passed to view
         self.game_controller = game_controller
-        #create new instance of GameObserver, passing self.observerLoad as a callback. 
+        #create new instance of GameObserver, passing self.observerLoad as a callback
         #GameObserver calls this whenever receives an update from the model
         game_observer = GameObserver(self.observerLoad)
         #attaches game_observer instance to game_model by calling the attach 
@@ -46,7 +87,7 @@ class GUI:
         self.myFrame = tk.Frame(parent, bg='#F4F4F4')
         self.myFrame.pack()
 
-        #find the path for the background image.
+        #find the path for the background image
         check_dir = os.path.dirname(os.path.abspath(__file__))
         db_dir = os.path.join(check_dir,".","combsbig.png")
         abs_path = os.path.abspath(db_dir)
@@ -108,6 +149,7 @@ class GUI:
         self.helpMenu = tk.Menu(self.menu)
         self.menu.add_cascade(label="Help",menu=self.helpMenu)
         self.helpMenu.add_command(label = "How to play",command = self.playInstructions)
+        self.helpMenu.add_separator()
         self.helpMenu.add_command(label = "Hints",command = self.displayAll)
         
         #variables for displaying information to the screen
@@ -135,7 +177,7 @@ class GUI:
             return True
         #create a list of the given letters for the puzzle
         letters = list(self.controller.controllerGetLetters())
-        #using list comprehension, we can check if the keys being pressed aren't in the list regardless of them entering capital letters.
+        #using list comprehension, we can check if the keys being pressed aren't in the list regardless of them entering capital letters
         # ITERATOR DESIGN PATTERN
         myIter = iter(text)
         for x in myIter:
@@ -143,6 +185,9 @@ class GUI:
                 return False
         return True
     
+    '''
+    Function that adds the letter of the hexagon button to the input box.
+    '''
     def clicker(self):
         print(self.controller.controllerGetLetters())
     
@@ -189,41 +234,34 @@ class GUI:
             hex4 = self.drawHex(480, 307.5)
             hex5 = self.drawHex(270, 194)
             hex6 = self.drawHex(480, 194)
-            #creates the buttons with the letters and input functionality FACTORY just placements differ
+            #creates the buttons with the letters and input functionality
             if (self.os_name == 'Windows'): 
                 self.createButton(hexagonLetters[0], "btn1", 349, 325)
-                #self.btn1.place(x=349, y=325)
                 self.createButton(hexagonLetters[1], "btn2", 349, 94)
-                #self.btn2.place(x=349, y=94)
                 self.createButton(hexagonLetters[2], "btn3", 242, 270)
-                #self.btn3.place(x=242, y=270)
                 self.createButton(hexagonLetters[3], "btn4", 452, 270)
-                #self.btn4.place(x=452, y=270)
                 self.createButton(hexagonLetters[4], "btn5", 242, 158)
-                #self.btn5.place(x=242, y=158)
                 self.createButton(hexagonLetters[5], "btn5", 452, 158)
-                #self.btn6.place(x=452, y=158)
                 self.btn7 = tk.Button(self.canvas, text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
                 self.btn7.place(x=349, y=210)
                 self.btn7.configure(bg = "yellow")
             else:
                 self.createButton(hexagonLetters[0], "btn1", 342, 340)
-                #self.btn1.place(x=342, y=340)
                 self.createButton(hexagonLetters[1], "btn2", 342, 110)
-                #self.btn2.place(x=342, y=110)
                 self.createButton(hexagonLetters[2], "btn3", 235, 282)
-                #self.btn3.place(x=235, y=282)
                 self.createButton(hexagonLetters[3], "btn4", 446, 282)
-                #self.btn4.place(x=446, y=282)
                 self.createButton(hexagonLetters[4], "btn5", 235, 168)
-                #self.btn5.place(x=235, y=168)
                 self.createButton(hexagonLetters[5], "btn6", 446, 168)
-                #self.btn6.place(x=446, y=168)
                 self.btn7 = tk.Button(self.canvas,text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
                 self.btn7.place(x=342, y=225)
+
             #text for points and rank
-            self.canvas.create_text(365, 50, text="Points:", fill="black", font=('Helvetica 14 bold'))
-            self.canvas.create_text(30, 485, text="Rank:", fill="black", font=('Helvetica 12 bold'))
+            if (self.os_name == 'Windows'):
+                WindowsFactory.windowsText(self, self.canvas, 365, 50, "Points:")
+                WindowsFactory.windowsText(self, self.canvas, 30, 485, "Rank:")
+            else:
+                MacFactory.macText(self, self.canvas, 365, 60, "Points:")
+                MacFactory.macText(self, self.canvas, 30, 485, "Rank:")
    
     '''
     Function deletes the right most characte from the inputbox
@@ -251,10 +289,10 @@ class GUI:
                 messagebox.showinfo("Invalid Guess", "Word is not in list.")
         else:
             messagebox.showinfo("Invalid input", "Required letter was not used.")
-        #update the points and rank after every guess.
+
+        #update the points and rank after every guess and clear input
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
-        #clears the input box everytime.
         self.clearInput()
 
     '''
@@ -272,7 +310,6 @@ class GUI:
     '''
     Function shows up message asking if the user would like to save
     If so then it runs from view->controller->model save function.
-    else throws errrors.
     '''
     def savePuzzle(self):
          if(self.controller.controllerGetPuzzleState() == 0):
@@ -313,7 +350,7 @@ class GUI:
         #gets points and rank from controller
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
-        # then we can run the function and pull the data from model->controller->view
+        #then we can run the function and pull the data from model->controller->view
         if x == 1:
             self.controller.controllerRunAutoGame()
         elif x == 2:
@@ -329,14 +366,15 @@ class GUI:
         #enables use of enter button on keyboard
         self.e.bind("<Return>",self.makeGuess)
 
+        #create points and rank labels
         if (self.os_name == 'Windows'):
-            ViewFactory.createLabels(self, self.canvas, self.points, self.rank, 'Helvetica 12 bold', 410, 40, 60, 474)
+            WindowsFactory.windowsLabels(self, self.canvas, self.points, self.rank)
         else:
-            ViewFactory.createLabels(self, self.canvas, self.points, self.rank, 'Helvetica 20 bold', 410, 46, 60, 471)
+            MacFactory.macLabels(self, self.canvas, self.points, self.rank)
 
         #get required letter
         self.reqLetter = self.controller.controllerGetReqLetter()
-        #hoping this removes the required letter from the list.
+        #hoping this removes the required letter from the list
         self.hexagonLetters.remove(self.reqLetter)
         #creates the hexagon shapes
         self.canvas.delete("all")
@@ -508,7 +546,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             answer = messagebox.askyesno("Would you like to save?", "Would you like to save the game?")
             if answer == True:
                     self.savePuzzle()
-        #self.controller.controllerNewGame()
+
         input = simpledialog.askstring("Please enter a pangram", "Choose a pangram to use")
         if (input == None):
             return
@@ -520,7 +558,6 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.check = self.controller.controllerCheckPangram(input)     
 
         #then we can run the function and pull the data from model->controller->view
-        #run base game function and input function
         if input == "" or len(input) < 7 or len(input) > 15:
             messagebox.showinfo("Invalid input!", "Ensure the input is an actual pangram (letters only) and the length is between 7-15")
             return
