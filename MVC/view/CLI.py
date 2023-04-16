@@ -5,12 +5,12 @@ from MVC.model import loadgame as loadgame
 import os
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter as wrdcmp
+
 #see bottom of file for an explanation on our usage of prompt_toolkit
-
-
+global controller 
+controller = ctrl.controller()
 class view:
     instance = None
-
     '''
     Creates a new single instance for the view if none exists already.
     '''
@@ -18,58 +18,247 @@ class view:
         if self.instance is None:
               self.instance = super().__new__(self)
         return self.instance
-    
+
     '''
     Default consturctor for our view.
     '''
     def __init__(self):
-        self.controller = ctrl.controller()
+        self.controller = controller
         #variable to store user letters into a list for displaying a honeycomb.
         self.displayLetters = []
         self.check = False
         self.b4commands = ["newpuzzle","loadpuzzle","gamehelp","gameexit"]
         self.commands = ["newpuzzle","showpuzzle","showfoundwords","shuffleletters","savepuzzle","loadpuzzle","showstatus","showhints","gamehelp","gameexit"]
-
-    '''
-    Formats return value of grid controller function so that it is clean and visable
-    '''
-    def grid(self):
-        x = self.controller.gridHint()
-
-        # Sets cell with and formats it
-        cell_width = 3
-        fmt = '{:>' + str(cell_width) + '}'
-        # Goes through grid formaating each row
-        message = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
-        print("Grid Hint:\n" + message)
-        print("\n")
-        
-    '''
-    Formats return value of firstTwo so that brackets and quotes are removed
-    '''
-    def hintCount (self):
-        count = self.controller.firstTwo()
-        print("Two Word List:")
-        # Iterates through list and removes brackets and quotes
-        for key, value in count.items():
-            print(f"{key}: {value}")
-
-        print("\n")
-
-    '''
-    Displays total words, max points a player can earn
-    '''
-    def totHint(self):
-        x,y = self.controller.totalHint()
-        # Prints
-        print(f"WORDS:{self.controller.getTotalWords()}\nPOINTS:{self.controller.controllerGetPuzzleTotal()}\nPANGRAMS:{x} ({y} Perfect)")
     
-    '''
-    Displays hints in CLI
-    '''
-    def hint(self):
-        hints = [self.grid(),self.hintCount(),self.totHint()]
-        hint = random.choice(hints)
+    class Receiver:
+        def __init__(self):
+            self.controller = controller
+
+        def hint(self):
+            hints = [self.grid(),self.hintCount(),self.totHint()]
+            hint = random.choice(hints)
+
+
+        '''
+        Function that asks for user to input a file name they'd like to create a save of.
+        * TO PUT INTO NEW CLI FILE.
+        '''
+        def save(self):
+            if (self.controller.controllerGetPuzzleState() == 0):
+                print("No game started!")
+            else:
+                inputFile = input("Please enter a name for the file: ")
+                userInput = input("Would you like to encrypt the puzzle? (yes/no): ")
+                if (userInput.lower() == "no"):
+                    self.controller.controllerSaveGame(inputFile)
+                else:
+                    self.controller.controllerSaveEncryptedGame(inputFile)
+
+        '''
+        Function loads an existing puzzle into the game.
+        
+        CHANGES TO PUT IN NOAHS FILE: See *'S BELOW.
+        '''
+        def load(self):
+            if self.controller.controllerGetPuzzleState() == 1:
+                wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
+                if wantSave.lower() == "yes":
+                    inputFile = input("Please choose a name for the file: ")
+                    print("Saving your game!")
+                    self.controller.controllerSaveGame(inputFile)
+            inputFile = input("Enter the name of the file you want to load: ")
+            checkFile = inputFile + ".json"
+            if os.path.exists(checkFile):
+                self.controller.controllerGameLoadCLI(inputFile)
+                #*********************
+                if(self.controller.controllerGetAuthorField() != "MediaTek"):
+                    print("Hey, we can't decrypt this puzzle!")
+                    return
+                else:
+                    print("Puzzle loaded!")
+                    self.showHoneyComb()
+                #*********************
+            else:
+                print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
+
+        '''
+        Function displays the honeycomb for the CLI
+        '''
+        def showHoneyComb(self):
+            self.controller.controllerToHoneyComblist()
+            self.displayLetters = self.controller.controllerGetHoneyCombList()
+            print('''  
+                        %s
+                    %s       %s
+                        %s
+                    %s       %s
+                        %s      
+            ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
+            
+        def shuffleLetters(self):
+            if (self.controller.controllerGetPuzzleState() == 0):
+                print("No game started!")
+            else:
+                self.controller.controllerShuffleAuto()
+                self.showHoneyComb()
+                print("Your letters: " + self.controller.controllerGetLetters())
+
+        def showFoundWords(self):
+            if (self.controller.controllerGetPuzzleState() == 0):
+                print("No game started!")
+            else:
+                print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
+
+        '''
+        Function that just displays the data related to the puzzle.
+        '''
+        def showPuzzle(self):
+            if (self.controller.controllerGetPuzzleState() == 0):
+                print("No game started!")
+            else:
+                print("Your letters: " + self.controller.controllerGetLetters())
+                print("Required letter: " + self.controller.controllerGetReqLetter())
+                print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
+                self.showHoneyComb()
+
+        def showStatus(self):
+            if (self.controller.controllerGetPuzzleState() == 0):
+                print("No game started!")
+            else:
+                print("Rank: " + self.controller.controllerGetPuzzleRank())
+                print("User Points: " + str(self.controller.controllerGetPoints()))
+                print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
+
+        def showHelp(self):
+            if(self.controller.controllerGetPuzzleState() == 0):
+                self.controller.controllerStartCommands()
+            else:
+                self.controller.controllerHelpCommand()
+        
+        '''
+        Formats return value of grid controller function so that it is clean and visable
+        '''
+        def grid(self):
+            x = self.controller.gridHint()
+
+            # Sets cell with and formats it
+            cell_width = 3
+            fmt = '{:>' + str(cell_width) + '}'
+            # Goes through grid formaating each row
+            message = "\n".join(" ".join(fmt.format(col) for col in row) for row in x)
+            print("Grid Hint:\n" + message)
+            print("\n")
+            
+        '''
+        Formats return value of firstTwo so that brackets and quotes are removed
+        '''
+        def hintCount (self):
+            count = self.controller.firstTwo()
+            print("Two Word List:")
+            # Iterates through list and removes brackets and quotes
+            for key, value in count.items():
+                print(f"{key}: {value}")
+
+            print("\n")
+
+        '''
+        Displays total words, max points a player can earn
+        '''
+        def totHint(self):
+            x,y = self.controller.totalHint()
+            # Prints
+            print(f"WORDS:{self.controller.getTotalWords()}\nPOINTS:{self.controller.controllerGetPuzzleTotal()}\nPANGRAMS:{x} ({y} Perfect)")
+
+    class Invoker:
+        def __init__(self):
+            self.commands = {}
+        def register(self, command_name, command):
+            "Register commands in the Invoker"
+            self.commands[command_name] = command
+
+        def execute(self, command):
+            "Execute any registered commands"
+            if command in self.commands.keys():
+                self.commands[command].execute()
+            else:
+                print(f"Command [{command}] not recognised")
+
+
+    class saveGame:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.save()
+
+    class Hint:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.hint()
+
+    class loadGame:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.load()
+
+    class Shuffle:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.shuffleLetters()
+
+    class showWords:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.showFoundWords()
+
+    class showStatus:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.showStatus()
+
+    class showHelp:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.showHelp()
+    class showPuzzle:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.showPuzzle()
+
+    class showFoundWords:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.showFoundWords()
+
+    # The CLient
+    # Create Receiver
+    RECEIVER = Receiver()
+    # Create Commands
+    statusCommand = showStatus(RECEIVER)
+    helpCommand = showHelp(RECEIVER)
+    hintCommand = Hint(RECEIVER)
+    shuffleCommand = Shuffle(RECEIVER)
+    loadCommand = loadGame(RECEIVER)
+    saveCommand = saveGame(RECEIVER)
+    showPuzzleCommand = showPuzzle(RECEIVER)
+    showFWCommand = showFoundWords(RECEIVER)
+    # Register the commands with the invoker  
+    INVOKER = Invoker()
+    INVOKER.register("showstatus", statusCommand)
+    INVOKER.register("gamehelp", helpCommand)
+    INVOKER.register("savepuzzle", saveCommand)
+    INVOKER.register("loadpuzzle", loadCommand)
+    INVOKER.register("shuffleletters", shuffleCommand)
+    INVOKER.register("showhints", hintCommand)
+    INVOKER.register("showpuzzle", showPuzzleCommand)
+    INVOKER.register("showfoundwords", showFWCommand)
     
     '''
     Helper function used in new puzzle command runs the game dependent on them answering yes or no for it being automatically generated
@@ -88,22 +277,9 @@ class view:
             self.controller.controllerRunBaseGame(userInput)
         print("User letters: " + self.controller.controllerGetLetters())
         print("Required letter: " + self.controller.controllerGetReqLetter())
-        self.showHoneyComb()
+        self.Receiver.showHoneyComb(self)
         self.controller.controllerUpdatePuzzleState1()
     
-    '''
-    Function displays the honeycomb for the CLI
-    '''
-    def showHoneyComb(self):
-        self.controller.controllerToHoneyComblist()
-        self.displayLetters = self.controller.controllerGetHoneyCombList()
-        print('''  
-                    %s
-                %s       %s
-                    %s
-                %s       %s
-                    %s      
-        ''' % (self.displayLetters[0], self.displayLetters[1],self.displayLetters[2], self.controller.controllerGetReqLetter(), self.displayLetters[3],self.displayLetters[4],self.displayLetters[5]))
 
     '''
     Function for new puzzle command, just asks for input and generates a new puzzle.
@@ -126,73 +302,13 @@ class view:
             self.newPuzzleHelper(isAuto)
 
     '''
-    Function that just displays the data related to the puzzle.
-    '''
-    def showPuzzle(self):
-        if (self.controller.controllerGetPuzzleState() == 0):
-            print("No game started!")
-        else:
-            print("Your letters: " + self.controller.controllerGetLetters())
-            print("Required letter: " + self.controller.controllerGetReqLetter())
-            print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
-            self.showHoneyComb()
-
-    '''
-    Function that displays the users guessed words.
-    '''    
-    def showFoundWords(self):
-        if (self.controller.controllerGetPuzzleState() == 0):
-            print("No game started!")
-        else:
-            print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
-
-    '''
-    Function that shuffles the users letters around.
-    '''
-    def shuffleLetters(self):
-        if (self.controller.controllerGetPuzzleState() == 0):
-            print("No game started!")
-        else:
-            self.controller.controllerShuffleAuto()
-            self.showHoneyComb()
-            print("Your letters: " + self.controller.controllerGetLetters())
-
-    '''
-    Function that asks for user to input a file name they'd like to create a save of.
-    '''
-    def savePuzzle(self):
-        if (self.controller.controllerGetPuzzleState() == 0):
-            print("No game started!")
-        else:
-            inputFile = input("Please enter a name for the file: ")
-            self.controller.controllerSaveGame(inputFile)
-
-    '''
-    Function loads an existing puzzle into the game.
-    '''
-    def loadPuzzle(self):
-        if self.controller.controllerGetPuzzleState() == 1:
-            wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
-            if wantSave.lower() == "yes":
-                inputFile = input("Please choose a name for the file: ")
-                print("Saving your game!")
-                self.controller.controllerSaveGame(inputFile)
-        inputFile = input("Enter the name of the file you want to load: ")
-        checkFile = inputFile + ".json"
-        if os.path.exists(checkFile):
-            self.controller.controllerGameLoadCLI(inputFile)
-            print("Puzzle loaded!")
-            self.showHoneyComb()
-        else:
-            print("Uh-oh! Couldn't find that file. Reenter the load command and try again.")
-
-    '''
     Function is the game itself and keeps running until the user exits.
     '''
     def startGame(self):
          #Set this before the loop runs since we only want to show the available commands instead of all of them.
         cmdautocomplete = wrdcmp(self.b4commands,ignore_case=True,match_middle=True)
         self.controller.ensureYesOrNo()
+
         print('''
 Welcome to MediaTek's Spelling Bee! 
 - The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
@@ -225,34 +341,23 @@ We hope you enjoy playing!
                 case "newpuzzle":
                     self.newPuzzle()
                 case "showpuzzle":
-                    self.showPuzzle()
+                    self.INVOKER.execute("showpuzzle")
                 case "showfoundwords":
-                    self.showFoundWords()
+                    self.INVOKER.execute("showfoundwords")
                 case "shuffleletters":
-                    self.shuffleLetters()
+                    self.INVOKER.execute("shuffleletters")
                 case "savepuzzle":
-                    self.savePuzzle()
+                    self.INVOKER.execute("savepuzzle")
                 case "loadpuzzle":
-                    self.loadPuzzle()
+                    self.INVOKER.execute("loadpuzzle")
                 case "showstatus":
-                        if (self.controller.controllerGetPuzzleState() == 0):
-                            print("No game started!")
-                        else:
-                            print("Rank: " + self.controller.controllerGetPuzzleRank())
-                            print("User Points: " + str(self.controller.controllerGetPoints()))
-                            print("Max points possible: " + str(self.controller.controllerGetPuzzleTotal()))
+                        self.INVOKER.execute("showstatus")
                 case "gamehelp":
-                       if(self.controller.controllerGetPuzzleState() == 0):
-                        self.controller.controllerStartCommands()
-                       else:
-                        self.controller.controllerHelpCommand()
+                      self.INVOKER.execute("gamehelp")
                 case "gameexit":
                         self.controller.controllerGameExit()
                 case "showhints":
-                    if(self.controller.controllerGetPuzzleState() == 0):
-                        print("No game started!")
-                    else:
-                        self.hint()
+                   self.INVOKER.execute("showhints")
                 case _:
                     if self.controller.controllerGetPuzzleState() != 1:
                         print('''
@@ -270,7 +375,6 @@ To get started, you can type:
 #singleton design pattern
 view = view()
 view.startGame()
-
 '''
 Documentation using prompt toolkit for tab-completion of commands
 Completion class:
