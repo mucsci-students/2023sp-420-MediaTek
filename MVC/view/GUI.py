@@ -9,6 +9,8 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import filedialog
+from PIL import ImageGrab
+from tkinter import PhotoImage, Label, Canvas
 
 class ViewFactory:
 
@@ -143,6 +145,10 @@ class GUI:
         self.fileMenu.add_command(label="Open",command = self.loadPuzzle)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Save",command = self.savePuzzle)
+        self.fileMenu.add_separator()
+        self.fileMenu.add_command(label="Export Score",command=self.screenShot)
+        self.fileMenu.add_separator()
+        self.fileMenu.add_command(label="Exit",command=self.exitPuzzle) 
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Exit",command=self.exitPuzzle)
         
@@ -478,6 +484,19 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.canvas.delete("all")
             self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
+
+    '''
+    Function that takes screenshot of tkinter screen
+    '''
+    def screenShot(self):
+         # Get the window's geometry information
+        self.parent.update_idletasks()
+        x,y = self.parent.winfo_rootx(),self.parent.winfo_rooty()
+        w,h = self.parent.winfo_width(), self.parent.winfo_height()
+
+        # Take a screenshot of the window
+        screenshot = ImageGrab.grab(bbox=(x, y, x + w, y + h))
+        screenshot.save("screenshot.png")
 
     '''
     Function that creates the pop up windows for hints.
