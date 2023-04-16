@@ -321,15 +321,22 @@ class GUI:
          if(self.controller.controllerGetPuzzleState() == 0):
                 messagebox.showinfo("Error!", "No game started!")
                 return
-         else:   
+         else: 
             try:
+                answer = messagebox.askyesno("Save", "Would you like to encrypt your puzzle?")
                 filename = filedialog.asksaveasfilename(defaultextension="")
-                if filename:
+                if filename and (not answer):
+                    if filename == "":
+                        return
                     self.controller.controllerSaveGame(filename)
                     messagebox.showinfo("Saved", "Game saved successfully!")
+                else:
+                    if filename == "":
+                        return
+                    self.controller.controllerSaveEncryptedGame(filename)
+                    messagebox.showinfo("Saved", "Encrypted Game saved successfully!")
             except Exception as e:
                 messagebox.showerror("Error", f"Error saving game: {e}")
-
     '''
     Function gets the filename from the user.
     '''
@@ -390,11 +397,15 @@ class GUI:
     '''
     Function asks if the user wants to save first, end result is loading data from a json file into the game.
     '''
-    def loadHelper(self,filename):
+    def loadHelper(self,filename): 
         self.controller.controllerGameLoadGUI(filename)
-        #Notify the observer when the game is loaded
-        self.game_controller.notify()
-        self.gameHelper(0, 0, 1, 0)
+        if(self.controller.controllerGetAuthorField() != "MediaTek"):
+            messagebox.showinfo("Error", "Can't decrypt, author of the file must be MediaTek!")
+            return
+        else:
+            #Notify the observer when the game is loaded
+            self.game_controller.notify()
+            self.gameHelper(0, 0, 1, 0)
 
     '''
     Passed as a callback to GameObserver; calls observerLoad which indicates the puzzle was loaded successfully.
