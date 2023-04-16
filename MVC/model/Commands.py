@@ -20,6 +20,8 @@ Commands:
     loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
     showstatus: Shows your current status.
     showhints: Shows hints for your current game.
+    giveup: 'Give up' on the puzzle and submit your score and provided username to the high scores board.
+    showhighscore: Displays the top ten local high scores for a given puzzle (if there are any existing scores).
     gamehelp: You just typed this command. Congrats.
     gameexit: Exits the game. You will be asked if you want to save your puzzle before exiting.
           ''')
