@@ -35,7 +35,24 @@ class Model_test (unittest.TestCase):
         self.p1.getList = game['WordList']
         
         self.wl = wordlist
-            
+    
+    #Tests resetGame
+    def test_resetGame(self):
+        self.model.resetGame()
+        
+        # Test to see if everything actually got reset.
+        self.assertEqual(len(self.model.p1.gaReqLetter), 0)
+        self.assertEqual(len(self.model.p1.gaUserLetters), 0)
+        self.assertEqual(self.model.p1.points, 0)
+        self.assertEqual(self.model.p1.puzzleTotal, 0)
+        self.assertEqual(len(self.model.p1.getList), 0)
+        self.assertEqual(self.model.p1.gameState, 0)
+        self.assertEqual(self.model.p1.puzzleStarted, 0)
+        self.assertEqual(len(self.model.p1.displayLetters), 0)
+        self.assertEqual(len(self.model.p1.encryptedList), 0)
+        self.assertEqual(self.model.p1.storeKey, None)
+        self.assertEqual(self.model.p1.author, "MediaTek")
+        self.assertEqual(self.model.p1.game_id, None)
         
     # Tests getGameState
     def test_getGameState(self):
@@ -152,6 +169,23 @@ class Model_test (unittest.TestCase):
         self.assertGreater(len(self.testmodel.p1.getList), 0)
         self.assertGreater(self.testmodel.p1.puzzleTotal, 0)
         self.assertEqual(len(self.testmodel.p1.guessedList), 0)
+        
+        self.testPangram = "notapangram"
+    
+    def test_lettersToList(self):
+        self.testModel = Model.model()
+        
+        # First test: "pangrams"
+        self.testModel.p1.gaUserLetters = "pangrms"
+        self.testModel.p1.gaReqLetter = "g"
+        self.testModel.lettersToList()
+        self.assertEqual(self.model.p1.displayLetters, "PANRMS")
+        
+        # Second Test: "whiskey"
+        self.testModel.p1.gaUserLetters = "whiskey"
+        self.testModel.p1.gaReqLetter = "e"
+        self.testModel.lettersToList()
+        self.assertEqual(self.model.p1.displayLetters, "WHISKY")
     
     # Tests userGuess
     def test_userGuess(self):
@@ -192,8 +226,48 @@ class Model_test (unittest.TestCase):
     
     # Tests gameRank
     def test_gameRank(self):
-        self.model.gameRank()
-        self.assertEqual(self.model.p1.showRank, "Great")
+        self.testModel = Model.model()
+        self.testModel.p1.puzzleTotal = 678
+        
+        self.testModel.p1.points = 0
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Beginner")
+        
+        self.testModel.p1.points = (1*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Beginner")
+        
+        self.testModel.p1.points = (3*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Good")
+        
+        self.testModel.p1.points = (6*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Great")
+        
+        self.testModel.p1.points = (10*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Novice")
+        
+        self.testModel.p1.points = (15*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Amazing")
+        
+        self.testModel.p1.points = (25*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Advanced")
+        
+        self.testModel.p1.points = (50*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Expert")
+        
+        self.testModel.p1.points = (75*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Master")
+        
+        self.testModel.p1.points = (100*self.testModel.p1.puzzleTotal)/100
+        self.testModel.gameRank()
+        self.assertEqual(self.testModel.p1.showRank, "Puzzle Finished! Good Job!")
 
 # Runs unittest.main() when prompted.
 if __name__ == '__main__':
