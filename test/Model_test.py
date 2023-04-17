@@ -179,23 +179,13 @@ class Model_test (unittest.TestCase):
         self.testModel.p1.gaUserLetters = "pangrms"
         self.testModel.p1.gaReqLetter = "g"
         self.testModel.lettersToList()
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("p"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("a"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("n"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("r"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("m"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("s"))
+        self.assertEqual(self.model.p1.displayLetters, "PANRMS")
         
         # Second Test: "whiskey"
         self.testModel.p1.gaUserLetters = "whiskey"
         self.testModel.p1.gaReqLetter = "e"
         self.testModel.lettersToList()
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("w"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("h"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("i"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("s"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("k"))
-        self.assertTrue(self.testModel.p1.displayLetters.__contains__("y"))
+        self.assertEqual(self.model.p1.displayLetters, "WHISKY")
     
     # Tests userGuess
     def test_userGuess(self):

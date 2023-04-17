@@ -15,7 +15,7 @@ class player:
         self.gaReqLetter = ""
         self.gameState = 0
         #this will be used for the CLI honeycomb.
-        self.displayLetters = []
+        self.displayLetters = list()
         self.points = 0
         self.puzzleStarted = 0
         #list of the word bank
