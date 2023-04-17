@@ -124,6 +124,7 @@ class model:
         self.p1.points = loaded['CurrentPoints']
         self.p1.puzzleTotal = loaded['MaxPoints']
         self.p1.guessedList = loaded['GuessedWords']
+        self.game_id = self.generateGameID()
 
         print("Required Letter: " + self.p1.gaReqLetter.upper())
         print("User Letters: " + self.p1.gaUserLetters.upper())
