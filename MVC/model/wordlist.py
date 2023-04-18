@@ -64,10 +64,6 @@ def checkLetters(word, unique):
             value = value + 1
     # return the value.
     return value
-    
-
-def storeWordList(theList):
-    return theList
 
 #generateWordList("e", "whisket")
 #generateWordList("a", "abdomen")

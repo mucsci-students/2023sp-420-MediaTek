@@ -73,3 +73,4 @@ class wordlist_test (unittest.TestCase):
         self.assertGreater(self.testSix, 0)
         
         
+        
