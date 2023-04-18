@@ -11,6 +11,8 @@ from tkinter import simpledialog
 from tkinter import filedialog
 from PIL import ImageGrab
 from tkinter import PhotoImage, Label, Canvas
+from MVC.model.Highscores import saveHighScore
+from MVC.model.Highscores import loadHighScore
 
 class ViewFactory:
 
@@ -148,7 +150,7 @@ class GUI:
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Export Score",command=self.screenShot)
         self.fileMenu.add_separator()
-        self.fileMenu.add_command(label="Exit",command=self.exitPuzzle) 
+        self.fileMenu.add_command(label="Give Up",command = self.giveUp)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Exit",command=self.exitPuzzle)
         
@@ -157,6 +159,8 @@ class GUI:
         self.helpMenu.add_command(label = "How to play",command = self.playInstructions)
         self.helpMenu.add_separator()
         self.helpMenu.add_command(label = "Hints",command = self.displayAll)
+        self.helpMenu.add_separator()
+        self.helpMenu.add_command(label = "High Scores",command= self.displayHighScores)
         
         #variables for displaying information to the screen
         self.hexagonLetters = []
@@ -501,7 +505,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     '''
     Function that creates the pop up windows for hints.
     '''
-    def hintDisplay(self,title,message1,message2,message3,width,height):
+    def hintDisplay(self,title, message1, message2, message3, width, height):
         # Creates top level message
         hintMessage = Toplevel()
         hintMessage.title(title)
@@ -548,13 +552,87 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     Function that displays all hints
     '''
     def displayAll(self):
-        # Sets functions to variables
-        hint1 = self.grid()
-        hint2 = self.hintCount()
-        hint3 = self.totHint()
+        if(self.controller.controllerGetPuzzleState() == 0):
+                messagebox.showinfo("Error!", "No game started!")
+                return
+        else:
+            # Sets functions to variables
+            hint1 = self.grid()
+            hint2 = self.hintCount()
+            hint3 = self.totHint()
 
-        # Displays all hints
-        self.hintDisplay("Hints",hint1,hint2,hint3,1000,1000)
+            # Displays all hints
+            self.hintDisplay("Hints", hint1, hint2, hint3, 1000, 1000)
+    
+    '''
+    Function that creates the pop up windows for high scores.
+    '''
+    def highScoreWindow(self, title, message1, width, height):
+        # Creates top level message
+        highScoreMessage = Toplevel()
+        highScoreMessage.title(title)
+         # set the size of the message
+        highScoreMessage.geometry(f"{width}x{height}")
+        # create a label and change font
+        highScoreLabel = Label(highScoreMessage, text=message1, font=("Courier New",20))
+        # Add padding
+        highScoreLabel.pack(padx=40, pady=10)
+    
+    '''
+    give up function/command that allows the player to say they are finished with a puzzle.
+    this sends the game id, player name, and points to the highscore database to update the
+    highscore for the puzzle referred to by the unique puzzle id.
+    '''   
+    def giveUp(self):
+        if(self.controller.controllerGetPuzzleState() == 0):
+                messagebox.showinfo("Error!", "No game started!")
+                return
+        else:
+            confirm = messagebox.askyesno("Give up", "Are you sure you want to give up?")
+            if confirm:
+                points = self.controller.controllerGetPoints()
+                game_id = self.controller.controllerGetGameID()
+                while True:
+                    player_name = simpledialog.askstring("Username", "Please enter your 3-character username: ")
+                    if player_name and len(player_name) == 3 and player_name.isalnum():
+                        player_name = player_name.upper()
+                        break
+                    else:
+                        messagebox.showerror("Error", "Invalid input. Please enter a 3-character alphanumeric username.")
+                # Save the highscore
+                saveHighScore(game_id, player_name, points)
+                # Display high scores
+                self.displayHighScores()
+                # Close the window
+            else:
+                return
+    '''
+    Function that returns the top ten local high scores
+    '''
+    def getHighScores(self):
+        game_id = self.controller.controllerGetGameID()
+        highScores = loadHighScore(game_id)
+        display_scores = []
+        if highScores:
+            header = "NAME    SCORE"
+            display_scores.append(header)
+            for row in highScores:
+                display_scores.append(f"{row[1]:<7}{row[2]:>5}")
+        else:
+            display_scores.append("No high scores yet!")
+        return display_scores
+    
+    '''
+    Displays the top ten local high scores in the window
+    '''
+    def displayHighScores(self):
+        if(self.controller.controllerGetPuzzleState() == 0):
+                messagebox.showinfo("Error!", "No game started!")
+                return
+        else:
+            highScores = self.getHighScores()
+            highScores_str = "\n".join(highScores)
+            self.highScoreWindow("High Scores", highScores_str, 350, 300)
 
     '''
     Function is meant for automatically generating a puzzle for the user to play.

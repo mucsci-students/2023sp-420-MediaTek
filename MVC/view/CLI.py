@@ -5,6 +5,8 @@ from MVC.model import loadgame as loadgame
 import os
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter as wrdcmp
+from MVC.model.Highscores import saveHighScore
+from MVC.model.Highscores import loadHighScore
 
 #see bottom of file for an explanation on our usage of prompt_toolkit
 global controller 
@@ -28,7 +30,7 @@ class view:
         self.displayLetters = []
         self.check = False
         self.b4commands = ["newpuzzle","loadpuzzle","gamehelp","gameexit"]
-        self.commands = ["newpuzzle","showpuzzle","showfoundwords","shuffleletters","savepuzzle","loadpuzzle","showstatus","showhints","gamehelp","gameexit"]
+        self.commands = ["newpuzzle","showpuzzle","showfoundwords","shuffleletters","savepuzzle","loadpuzzle","showstatus","showhints","gamehelp","gameexit","giveup","showhighscore"]
     
     class Receiver:
         def __init__(self):
@@ -120,6 +122,59 @@ class view:
                 print("Required letter: " + self.controller.controllerGetReqLetter())
                 print("Guessed words: " + str(self.controller.controllerGetGuessedWordsCLI()))
                 self.showHoneyComb()
+        
+        '''
+        give up function/command that allows the player to say they are finished with a puzzle.
+        this sends the game id, player name, and points to the highscore database to update the
+        highscore for the puzzle referred to by the unique puzzle id.
+        '''   
+        def giveUp(self):
+            while True:
+                confirm = input("Are you sure you want to give up? (yes/no): ")
+                if confirm.lower() == "yes":
+                    points = self.controller.controllerGetPoints()
+                    game_id = self.controller.controllerGetGameID()
+                    #ask for username
+                    while True:
+                        player_name = input("Please enter your 3-character username: ")
+                        if len(player_name) == 3 and player_name.isalnum():
+                            player_name = player_name.upper()
+                            break
+                        else:
+                            print("Invalid input. Please enter a 3-character alphanumeric username.")
+                    #save the highscore
+                    saveHighScore(game_id, player_name, points)
+                    #displays the highscores when giving up
+                    game_id = self.controller.controllerGetGameID()
+                    highScores = loadHighScore(game_id) 
+                    print(f"\nHIGH SCORES:\n")
+                    header = "NAME         SCORE"
+                    print(header)
+                    for row in highScores:
+                        padding = (len(header) - len(row[1])) // 2
+                        print(f"{row[1]:<13}{row[2]:^{padding}}")
+                    exit()
+                elif confirm.lower() == "no":
+                    print("Continuing the game.")
+                    return
+                else:
+                    print("Invalid input. Please enter 'yes' or 'no'.")
+                    
+        '''
+        Displays the top ten local high scores
+        '''
+        def showHighScore(self):
+            game_id = self.controller.controllerGetGameID()
+            highScores = loadHighScore(game_id)
+            if highScores:
+                print(f"\nHIGH SCORES:\n")
+                header = "NAME         SCORE"
+                print(header)
+                for row in highScores:
+                    padding = (len(header) - len(row[1])) // 2
+                    print(f"{row[1]:<13}{row[2]:^{padding}}")
+            else:
+                print(f"No high scores yet!")
 
         def showStatus(self):
             if (self.controller.controllerGetPuzzleState() == 0):
@@ -236,6 +291,18 @@ class view:
             self.receiver = receiver
         def execute(self):
             self.receiver.showFoundWords()
+    
+    class giveUp:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.giveUp()
+    
+    class showHighScore:
+        def __init__(self, receiver):
+            self.receiver = receiver
+        def execute(self):
+            self.receiver.showHighScore()
 
     # The CLient
     # Create Receiver
@@ -249,6 +316,8 @@ class view:
     saveCommand = saveGame(RECEIVER)
     showPuzzleCommand = showPuzzle(RECEIVER)
     showFWCommand = showFoundWords(RECEIVER)
+    giveUpCommand = giveUp(RECEIVER)
+    showHSCommand = showHighScore(RECEIVER)
     # Register the commands with the invoker  
     INVOKER = Invoker()
     INVOKER.register("showstatus", statusCommand)
@@ -259,6 +328,8 @@ class view:
     INVOKER.register("showhints", hintCommand)
     INVOKER.register("showpuzzle", showPuzzleCommand)
     INVOKER.register("showfoundwords", showFWCommand)
+    INVOKER.register("giveup", giveUpCommand)
+    INVOKER.register("showhighscore", showHSCommand)
     
     '''
     Helper function used in new puzzle command runs the game dependent on them answering yes or no for it being automatically generated
@@ -354,6 +425,10 @@ We hope you enjoy playing!
                         self.INVOKER.execute("showstatus")
                 case "gamehelp":
                       self.INVOKER.execute("gamehelp")
+                case "giveup":
+                        self.INVOKER.execute("giveup")
+                case "showhighscore":
+                        self.INVOKER.execute("showhighscore")
                 case "gameexit":
                         self.controller.controllerGameExit()
                 case "showhints":
