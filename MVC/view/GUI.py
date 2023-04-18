@@ -150,7 +150,7 @@ class GUI:
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Export Score",command=self.screenShot)
         self.fileMenu.add_separator()
-        self.fileMenu.add_command(label="Give up",command = self.giveUp)
+        self.fileMenu.add_command(label="Give Up",command = self.giveUp)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Exit",command=self.exitPuzzle)
         
@@ -160,7 +160,7 @@ class GUI:
         self.helpMenu.add_separator()
         self.helpMenu.add_command(label = "Hints",command = self.displayAll)
         self.helpMenu.add_separator()
-        self.helpMenu.add_command(label = "High scores",command= self.displayHighScores)
+        self.helpMenu.add_command(label = "High Scores",command= self.displayHighScores)
         
         #variables for displaying information to the screen
         self.hexagonLetters = []
@@ -505,7 +505,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     '''
     Function that creates the pop up windows for hints.
     '''
-    def hintDisplay(self,title,message1,message2,message3,width,height):
+    def hintDisplay(self,title, message1, message2, message3, width, height):
         # Creates top level message
         hintMessage = Toplevel()
         hintMessage.title(title)
@@ -562,12 +562,12 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             hint3 = self.totHint()
 
             # Displays all hints
-            self.hintDisplay("Hints",hint1,hint2,hint3,1000,1000)
+            self.hintDisplay("Hints", hint1, hint2, hint3, 1000, 1000)
     
     '''
     Function that creates the pop up windows for high scores.
     '''
-    def highScoreWindow(self,title,message1,width,height):
+    def highScoreWindow(self, title, message1, width, height):
         # Creates top level message
         highScoreMessage = Toplevel()
         highScoreMessage.title(title)
@@ -593,7 +593,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
                 points = self.controller.controllerGetPoints()
                 game_id = self.controller.controllerGetGameID()
                 while True:
-                    player_name = simpledialog.askstring("Username", "Please enter your 3-character username:")
+                    player_name = simpledialog.askstring("Username", "Please enter your 3-character username: ")
                     if player_name and len(player_name) == 3 and player_name.isalnum():
                         player_name = player_name.upper()
                         break
