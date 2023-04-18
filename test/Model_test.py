@@ -15,6 +15,7 @@ from MVC.model import Model as Model
 from MVC.model import wordlist as wordlist
 import unittest
 import json
+from cryptography.fernet import Fernet as fernet
 
 # Instantiates a test case for the model.
 class Model_test (unittest.TestCase):
@@ -53,6 +54,71 @@ class Model_test (unittest.TestCase):
         self.assertEqual(self.model.p1.storeKey, None)
         self.assertEqual(self.model.p1.author, "MediaTek")
         self.assertEqual(self.model.p1.game_id, None)
+    
+    # Tests encryptWords
+    def test_encryptWords(self):
+        self.testList = ['word', 'words', 'only', 'head', 'variable', 'undermind', 'salty']
+        self.testEncryptedList = list()
+        self.testModel = Model.model()
+        self.testModel.p1.getList = self.testList
+        
+        self.testModel.encryptWords()
+        f = fernet(self.testModel.p1.storeKey)
+        for x in self.testList:
+            toBytes = x.encode()
+            encryptBytes = f.encrypt(toBytes)
+            encryptString = encryptBytes.decode()
+            self.testEncryptedList.append(encryptString)
+        
+        i = 0
+        while (i < len(self.testEncryptedList)):
+            x = f.decrypt(self.testEncryptedList[i]).decode()
+            y = f.decrypt(self.testModel.p1.encryptedList[i]).decode()
+            self.assertEqual(x, y)
+            i = i + 1
+    
+    # Tests decryptWords
+    def test_decryptWords(self):
+        self.testList = ['word', 'words', 'only', 'head', 'variable', 'undermind', 'salty']
+        self.testEncryptedList = list()
+        self.testDecryptedList = list()
+        self.testModel = Model.model()
+        self.testModel.p1.getList = self.testList
+        
+        self.testModel.grabOurKey()
+        f = fernet(self.testModel.p1.storeKey)
+        for x in self.testList:
+            toBytes = x.encode()
+            encryptBytes = f.encrypt(toBytes)
+            encryptString = encryptBytes.decode()
+            self.testModel.p1.encryptedList.append(encryptString)
+        
+        f = fernet(self.testModel.p1.storeKey)
+        for x in self.testList:
+            toBytes = x.encode()
+            encryptBytes = f.encrypt(toBytes)
+            encryptString = encryptBytes.decode()
+            self.testEncryptedList.append(encryptString)
+        
+        self.testModel.decryptWords()
+        for x in self.testEncryptedList:
+            decryptByteString = f.decrypt(x)
+            decryptWord = decryptByteString.decode()
+            self.testDecryptedList.append(decryptWord)
+        
+        i = 0
+        while (i < len(self.testDecryptedList)):
+            x = self.testModel.p1.getList[i]
+            y = self.testDecryptedList[i]
+            self.assertEqual(x, y)
+            i = i + 1
+        
+    
+    # Tests grabOurKey
+    def test_grabOurKey(self):
+        self.model.grabOurKey()
+        decodeString = self.model.p1.storeKey.decode()
+        self.assertEqual(decodeString, "ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts=")
         
     # Tests getGameState
     def test_getGameState(self):
@@ -179,13 +245,13 @@ class Model_test (unittest.TestCase):
         self.testModel.p1.gaUserLetters = "pangrms"
         self.testModel.p1.gaReqLetter = "g"
         self.testModel.lettersToList()
-        self.assertEqual(self.model.p1.displayLetters, "PANRMS")
+        self.assertEqual(str(self.testModel.p1.displayLetters), "['P', 'A', 'N', 'R', 'M', 'S']")
         
         # Second Test: "whiskey"
         self.testModel.p1.gaUserLetters = "whiskey"
         self.testModel.p1.gaReqLetter = "e"
         self.testModel.lettersToList()
-        self.assertEqual(self.model.p1.displayLetters, "WHISKY")
+        self.assertEqual(str(self.testModel.p1.displayLetters), "['W', 'H', 'I', 'S', 'K', 'Y']")
     
     # Tests userGuess
     def test_userGuess(self):
