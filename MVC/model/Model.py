@@ -54,9 +54,6 @@ class model:
             self.p1.encryptedList.clear()
         #ensure we grabbed the key for encryption.
         self.grabOurKey()
-        if (self.p1.storeKey == None):
-            print("Hey did you delete the secretkey.json? reclone the repo!")
-            return
         #create a Fernet object with the key.
         f = Fernet(self.p1.storeKey)
         #iterate through the list of the word bank.
