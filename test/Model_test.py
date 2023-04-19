@@ -340,13 +340,15 @@ class Model_test (unittest.TestCase):
         self.testModel.p1.points = (100*self.testModel.p1.puzzleTotal)/100
         self.testModel.gameRank()
         self.assertEqual(self.testModel.p1.showRank, "Puzzle Finished! Good Job!")
-        
+
     def test_displayLetters(self):
         self.testModel = Model.model()
         self.testModel.p1.gaUserLetters = "special"
         self.testModel.p1.gaReqLetter = "c"
+        honeyCombList = self.testModel.getHoneyCombList()
         self.testModel.lettersToList()
         self.assertEqual(str(self.testModel.p1.displayLetters),"['S', 'P', 'E', 'I', 'A', 'L']")
+        self.assertEqual(str(honeyCombList),"['S', 'P', 'E', 'I', 'A', 'L']")
 
     def test_shuffleAuto(self):
         self.testModel = Model.model()
