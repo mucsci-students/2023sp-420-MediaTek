@@ -1,7 +1,6 @@
 from MVC.controller import Controller as ctrl
 from MVC.model import Commands as Commands
 import random
-from MVC.model import loadgame as loadgame
 import os
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter as wrdcmp
