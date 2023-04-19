@@ -101,6 +101,9 @@ class model:
     def grabOurKey(self):
         keyAsString = "ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts="
         self.p1.storeKey = keyAsString.encode()
+        
+    def updateAuthorField(self):
+        self.p1.author = "MediaTek"
     '''
     Function used for loading a game.
     Just updates the player objects variable with the information inside the file.

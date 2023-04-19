@@ -11,7 +11,8 @@ import os
 import sys
 getPath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'mvc'))
 sys.path.append(getPath)
-from MVC.model import savegame as savegame
+from MVC.model.savegame import savegame as savegame
+from MVC.model.savegame import saveencryptedgame as saveencryptedgame
 from MVC.model import wordlist as wordlist
 import unittest
 import json
@@ -33,7 +34,7 @@ class savegame_test (unittest.TestCase):
         maxPoints = 100
         
         # Unsure if this is the optimal way to test this but it's all I got with the knowlege I have.
-        savegame.savegame(reqLetter, userLetters, points, maxPoints, guessedWords, wordList, "pangram")
+        savegame(reqLetter, userLetters, points, maxPoints, guessedWords, wordList, "pangram")
         with open("pangram.json", "r") as save:
             self.assertTrue(json.load(save) != None)
     
@@ -55,7 +56,7 @@ class savegame_test (unittest.TestCase):
             encString = encBytes.decode()
             excryptList.append(encString)
         
-        savegame.saveencryptedgame(requiredLetter, userLetters, totalPoints, maxPoints, guessedWords, encryptedBank, author, inputFile)(reqLetter, userLetters, points, maxPoints, guessedWords, excryptList, author, "pangramenc")
+        saveencryptedgame(reqLetter, userLetters, points, maxPoints, guessedWords, excryptList, author, "pangramenc")
         with open("pangramenc.json", "r") as save:
             self.assertTrue(json.load(save) != None)
         
