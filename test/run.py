@@ -13,6 +13,7 @@ import Model_test
 import wordlist_test
 import pangramdb_test
 import wordstuff_test
+import Commands_test
 import unittest
 
 '''
@@ -48,6 +49,9 @@ def suite():
     suite.addTest(Model_test.Model_test('test_NewPuzzleBase'))
     suite.addTest(Model_test.Model_test('test_userGuess'))
     suite.addTest(Model_test.Model_test('test_gameRank'))
+    suite.addTest(Model_test.Model_test('test_displayLetters'))
+    suite.addTest(Model_test.Model_test('test_shuffleAuto'))
+    suite.addTest(Model_test.Model_test('test_AuthorField2'))
     suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_autoGame'))
     suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_baseGame'))
     suite.addTest(savegame_test.savegame_test('test_savegame'))
@@ -56,9 +60,8 @@ def suite():
     suite.addTest(wordlist_test.wordlist_test('test_checkLetters'))
     suite.addTest(pangramdb_test.pangramdb_test('test_randomBase'))
     suite.addTest(wordstuff_test.wordstuff_test('test_checkWord'))
-    suite.addTest(Model_test.Model_test('test_displayLetters'))
-    suite.addTest(Model_test.Model_test('test_shuffleAuto'))
-    suite.addTest(Model_test.Model_test('test_AuthorField2'))
+    suite.addTest(Commands_test.Commands_test('test_savePuzzle'))
+    suite.addTest(Commands_test.Commands_test('test_saveSecretPuzzle'))
     
     return suite
 
