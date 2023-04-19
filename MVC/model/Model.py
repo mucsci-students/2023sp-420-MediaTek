@@ -159,6 +159,8 @@ class model:
         return self.p1.displayLetters
     def getAuthorField(self):
         return self.p1.author
+    def updateAuthorField(self):
+        self.p1.author = "MediaTek"
     
     '''
     Update the puzzleStarted variable so we can track if a game has been started or not.
