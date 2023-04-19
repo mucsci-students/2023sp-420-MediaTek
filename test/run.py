@@ -29,6 +29,7 @@ def suite():
     suite.addTest(Model_test.Model_test('test_encryptWords'))
     suite.addTest(Model_test.Model_test('test_decryptWords'))
     suite.addTest(Model_test.Model_test('test_grabOurKey'))
+    suite.addTest(Model_test.Model_test('test_AuthorField'))
     suite.addTest(Model_test.Model_test('test_getGameState'))
     suite.addTest(Model_test.Model_test('test_getLetters'))
     suite.addTest(Model_test.Model_test('test_getReqLetter'))

@@ -112,7 +112,13 @@ class Model_test (unittest.TestCase):
             y = self.testDecryptedList[i]
             self.assertEqual(x, y)
             i = i + 1
-        
+
+    # Tests authorField
+    def test_AuthorField(self):
+        self.testModel = Model.model()
+        self.testModel.p1.author = "BLEH"
+        self.testModel.updateAuthorField()
+        self.assertEqual(self.testModel.p1.author, "MediaTek")
     
     # Tests grabOurKey
     def test_grabOurKey(self):

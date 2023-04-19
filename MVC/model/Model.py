@@ -101,6 +101,7 @@ class model:
     def grabOurKey(self):
         keyAsString = "ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts="
         self.p1.storeKey = keyAsString.encode()
+        
     '''
     Function used for loading a game.
     Just updates the player objects variable with the information inside the file.
