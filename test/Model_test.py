@@ -119,10 +119,11 @@ class Model_test (unittest.TestCase):
         self.testModel.p1.author = "BLEH"
         self.testModel.updateAuthorField()
         self.assertEqual(self.testModel.p1.author, "MediaTek")
-        
+
     def test_AuthorField2(self):
         self.testModel = Model.model()
-        self.assertEqual(self.testModel.getAuthorField(), self.testModel.p1.author)
+        someVariable = self.testModel.getAuthorField()
+        self.assertEqual(someVariable, self.testModel.p1.author)
     
     # Tests grabOurKey
     def test_grabOurKey(self):
