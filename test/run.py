@@ -56,6 +56,9 @@ def suite():
     suite.addTest(wordlist_test.wordlist_test('test_checkLetters'))
     suite.addTest(pangramdb_test.pangramdb_test('test_randomBase'))
     suite.addTest(wordstuff_test.wordstuff_test('test_checkWord'))
+    suite.addTest(Model_test.Model_test('test_displayLetters'))
+    suite.addTest(Model_test.Model_test('test_shuffleAuto'))
+    suite.addTest(Model_test.Model_test('test_AuthorField2'))
     
     return suite
 
