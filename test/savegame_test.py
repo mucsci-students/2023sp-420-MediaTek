@@ -37,6 +37,18 @@ class savegame_test (unittest.TestCase):
         savegame(reqLetter, userLetters, points, maxPoints, guessedWords, wordList, "pangram")
         with open("pangram.json", "r") as save:
             self.assertTrue(json.load(save) != None)
+        
+        userLetters = "delicat"
+        reqLetter = "a"
+        guessedWords = ["delicate", "late", "date", "dial", "tale", "tail", "call", "called"]
+        wordList = wordlist.generateWordList(reqLetter, userLetters)
+        points = 27
+        maxPoints = 678
+        
+        savegame(reqLetter, userLetters, points, maxPoints, guessedWords, wordList, "delicate")
+        with open("delicate.json", "r") as save:
+            self.assertTrue(json.load(save) != None)
+        os.remove("delicate.json")
     
     # Tests the savegame's encryption method
     def test_saveencryptedgame(self):
@@ -59,6 +71,27 @@ class savegame_test (unittest.TestCase):
         saveencryptedgame(reqLetter, userLetters, points, maxPoints, guessedWords, excryptList, author, "pangramenc")
         with open("pangramenc.json", "r") as save:
             self.assertTrue(json.load(save) != None)
+        
+        userLetters = "delicat"
+        reqLetter = "a"
+        guessedWords = ["delicate", "late", "date", "dial", "tale", "tail", "call", "called"]
+        wordList = wordlist.generateWordList(reqLetter, userLetters)
+        excryptList = list()
+        points = 27
+        maxPoints = 678
+        author = 'MediaTek'
+        
+        f = fernet("ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts=")
+        for x in wordList:
+            toBytes = x.encode()
+            encBytes = f.encrypt(toBytes)
+            encString = encBytes.decode()
+            excryptList.append(encString)
+        
+        saveencryptedgame(reqLetter, userLetters, points, maxPoints, guessedWords, excryptList, author, "delicant")
+        with open("delicant.json", "r") as save:
+            self.assertTrue(json.load(save) != None)
+        os.remove("delicant.json")
         
         
 
