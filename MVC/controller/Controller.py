@@ -63,6 +63,8 @@ class controller(Subject):
         return self.model.getAuthorField()
     def controllerGetGameID(self):
         return self.model.getGameID()
+    def controllerUpdateAuthorField(self):
+        self.model.updateAuthorField()
 
 
     '''
@@ -248,7 +250,15 @@ class controller(Subject):
             self.controllerGameExit()
         else:
             return
-
+        
+    def ensureYesOrNoSave(self):
+        userInput = input("Would you like to save the game? (yes/no): ")
+        while (userInput.lower() != 'yes') and (userInput.lower() != 'no'):
+            userInput = input("Would you like to save the game? (yes/no): ")
+        if userInput == "yes":
+            return True
+        else:
+            return False
     '''
     Functions displays the total number of words, max points, and pangrams
     '''      

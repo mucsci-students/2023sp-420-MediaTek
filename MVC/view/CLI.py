@@ -40,7 +40,6 @@ class view:
             hints = [self.grid(),self.hintCount(),self.totHint()]
             hint = random.choice(hints)
 
-
         '''
         Function that asks for user to input a file name they'd like to create a save of.
         * TO PUT INTO NEW CLI FILE.
@@ -51,11 +50,14 @@ class view:
             else:
                 inputFile = input("Please enter a name for the file: ")
                 userInput = input("Would you like to encrypt the puzzle? (yes/no): ")
+                while userInput.lower() != "yes" and userInput.lower() != "no":
+                    userInput = input("Invalid input, would you like to encrypt the puzzle? (yes/no): ")
                 if (userInput.lower() == "no"):
                     self.controller.controllerSaveGame(inputFile)
+
                 else:
                     self.controller.controllerSaveEncryptedGame(inputFile)
-
+                    
         '''
         Function loads an existing puzzle into the game.
         
@@ -63,11 +65,9 @@ class view:
         '''
         def load(self):
             if self.controller.controllerGetPuzzleState() == 1:
-                wantSave = input("Do you want to save the current game before loading a new puzzle? (yes/no): ")
-                if wantSave.lower() == "yes":
-                    inputFile = input("Please choose a name for the file: ")
-                    print("Saving your game!")
-                    self.controller.controllerSaveGame(inputFile)
+                check = self.controller.ensureYesOrNoSave()
+                if check == True:
+                    self.save()
             inputFile = input("Enter the name of the file you want to load: ")
             checkFile = inputFile + ".json"
             if os.path.exists(checkFile):
@@ -75,6 +75,7 @@ class view:
                 #*********************
                 if(self.controller.controllerGetAuthorField() != "MediaTek"):
                     print("Hey, we can't decrypt this puzzle!")
+                    self.controller.controllerUpdateAuthorField()
                     return
                 else:
                     print("Puzzle loaded!")
@@ -357,11 +358,10 @@ class view:
     '''
     def newPuzzle(self):
         if(self.controller.controllerGetPuzzleState() == 1):
-            wantSave = input("Hey do you want to save the game? (yes/no): ")
-            if (wantSave.lower() == "yes"):
-                inputFile = input("Please choose a name for the file: ")
+            wantSave = self.controller.ensureYesOrNoSave()
+            if (wantSave == True):
+                self.INVOKER.execute("savepuzzle")
                 print("Saving your game!")
-                self.controller.controllerSaveGame(inputFile)
             else:
                 print("Ok, lets generate a new puzzle! ")
         self.controller.controllerNewGame()
