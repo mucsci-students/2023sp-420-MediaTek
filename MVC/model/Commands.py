@@ -1,6 +1,5 @@
 from MVC.model import wordlist as wl
 from MVC.model import savegame as savegame
-from MVC.model import loadgame as loadgame
 
 #run function that displays all the commands the user can type
 def help():
