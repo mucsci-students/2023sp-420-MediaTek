@@ -13,6 +13,8 @@ from PIL import ImageGrab
 from tkinter import PhotoImage, Label, Canvas
 from MVC.model.Highscores import saveHighScore
 from MVC.model.Highscores import loadHighScore
+import time
+
 
 class ViewFactory:
 
@@ -341,6 +343,7 @@ class GUI:
                     messagebox.showinfo("Saved", "Encrypted Game saved successfully!")
             except Exception as e:
                 messagebox.showerror("Error", f"Error saving game: {e}")
+                
     '''
     Function gets the filename from the user.
     '''
@@ -490,17 +493,28 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
 
     '''
-    Function that takes screenshot of tkinter screen
+    Function that takes screenshot of tkinter canvas
     '''
     def screenShot(self):
-         # Get the window's geometry information
-        self.parent.update_idletasks()
-        x,y = self.parent.winfo_rootx(),self.parent.winfo_rooty()
-        w,h = self.parent.winfo_width(), self.parent.winfo_height()
+        if (self.controller.controllerGetPuzzleState() == 0):
+            messagebox.showinfo("Error!", "No game started!")
+            return
+        else:
+            try:
+                x,y = self.canvas.winfo_rootx(),self.canvas.winfo_rooty()
+                w,h = x + self.canvas.winfo_width(), y + self.canvas.winfo_height()
+                time.sleep(.4)
+                img = ImageGrab.grab(bbox=(x, y, w, h))
 
-        # Take a screenshot of the window
-        screenshot = ImageGrab.grab(bbox=(x, y, x + w, y + h))
-        screenshot.save("screenshot.png")
+                file_path = filedialog.asksaveasfilename(defaultextension=".png")
+                if file_path:
+                    img.save(file_path)
+                    messagebox.showinfo("Screenshot Saved", "Screenshot saved successfully!")
+                else:
+                    messagebox.showinfo("Screenshot Canceled", "Screenshot was not saved.")
+            except Exception as e:
+                messagebox.showerror("Error", f"Error taking screenshot: {e}")
+
 
     '''
     Function that creates the pop up windows for hints.
