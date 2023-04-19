@@ -11,12 +11,10 @@ from tkinter import simpledialog
 from tkinter import filedialog
 from PIL import ImageGrab
 from tkinter import PhotoImage, Label, Canvas
-<<<<<<< Updated upstream
 from MVC.model.Highscores import saveHighScore
 from MVC.model.Highscores import loadHighScore
-=======
 import time
->>>>>>> Stashed changes
+
 
 class ViewFactory:
 
