@@ -2,7 +2,6 @@ from MVC.model import IdentifyBaseWord as np
 from MVC.model import wordlist as wl
 from MVC.model import Commands as Commands
 import random
-from MVC.model import loadgame as loadgame
 from cryptography.fernet import Fernet
 import json
 
