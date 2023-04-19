@@ -6,7 +6,7 @@ the changes are valid.
 
 - Devon
 '''
-
+import random
 import os
 import sys
 getPath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'mvc'))
@@ -340,7 +340,35 @@ class Model_test (unittest.TestCase):
         self.testModel.p1.points = (100*self.testModel.p1.puzzleTotal)/100
         self.testModel.gameRank()
         self.assertEqual(self.testModel.p1.showRank, "Puzzle Finished! Good Job!")
+        
+    def test_displayLetters(self):
+        self.testModel = Model.model()
+        self.testModel.p1.gaUserLetters = "special"
+        self.testModel.p1.gaReqLetter = "c"
+        self.testModel.lettersToList()
+        self.assertEqual(str(self.testModel.p1.displayLetters),"['S', 'P', 'E', 'I', 'A', 'L']")
 
+    def test_shuffleAuto(self):
+        self.testModel = Model.model()
+        self.testModel.p1.gaUserLetters = "mediocr"
+        self.testModel.p1.gaReqLetter = "i"
+        replaceString = self.testModel.p1.gaUserLetters.replace("[","").replace("]","")
+        toList = list(replaceString)
+        random.shuffle(toList)
+        shuffledLetters = ''.join(toList)
+        self.testModel.p1.gaUserLetters = shuffledLetters
+        self.testModel.lettersToList()
+
+        self.wtf = self.testModel.shuffleAuto()
+        
+        self.assertIn('M',self.testModel.p1.displayLetters)
+        self.assertIn('E',self.testModel.p1.displayLetters)
+        self.assertIn('D',self.testModel.p1.displayLetters)
+        self.assertIn('O',self.testModel.p1.displayLetters)
+        self.assertIn('C',self.testModel.p1.displayLetters)
+        self.assertIn('R',self.testModel.p1.displayLetters)
+        self.assertEqual(set(shuffledLetters),set(self.testModel.p1.gaUserLetters))
+        self.assertEqual(set(self.wtf), set(self.testModel.p1.gaUserLetters))
 # Runs unittest.main() when prompted.
 if __name__ == '__main__':
     unittest.main()
