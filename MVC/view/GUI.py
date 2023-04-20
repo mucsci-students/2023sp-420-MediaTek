@@ -408,6 +408,7 @@ class GUI:
         self.controller.controllerGameLoadGUI(filename)
         if(self.controller.controllerGetAuthorField() != "MediaTek"):
             messagebox.showinfo("Error", "Can't decrypt, author of the file must be MediaTek!")
+            self.controller.controllerUpdateAuthorField()
             return
         else:
             #Notify the observer when the game is loaded
