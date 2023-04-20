@@ -41,11 +41,6 @@ class Model_test (unittest.TestCase):
         self.testModel = Model.model()
         self.testModel2 = Model.model()
         self.testModel3 = Model.model()
-        with open("test/whiskeyENC.json","r") as jsonFile:
-            game = json.load(jsonFile)
-        self.testModel.gameLoad(game)
-        self.assertEqual(self.testModel.p1.author, "Company")
-
 
 
 
@@ -61,6 +56,12 @@ class Model_test (unittest.TestCase):
         #self.assertEqual(checkList, self.testModel.p1.encryptedList)
         self.assertEqual(self.testModel2.p1.author, "MediaTek")
         self.assertEqual(self.testModel3.p1.getList, self.testModel2.p1.getList)
+
+        with open("test/whiskeyENC.json","r") as jsonFile:
+            game = json.load(jsonFile)
+        self.testModel.gameLoad(game)
+        checkAuthor = game['author']
+        self.assertEqual(self.testModel.p1.author, checkAuthor)
 
 
 
@@ -331,7 +332,7 @@ class Model_test (unittest.TestCase):
 
         guessSix = self.testmodel.userGuess(userInput="kbcdefg")
         self.assertFalse(guessSix)
-        
+
     # Tests gameRank
     def test_gameRank(self):
         self.testModel = Model.model()
