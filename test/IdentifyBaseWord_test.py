@@ -41,7 +41,15 @@ class IdentifyBaseWord_test (unittest.TestCase):
         self.assertEqual(baseReqLetter, "")
         self.assertEqual(baseUserLetters, "")
 
-        userInpuyt = "abcdefghijklmnopqrstuvwxyz"
+
+        userInput = "abcdefg"
+        baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
+        print(baseReqLetter)
+        print(baseUserLetters)
+        self.assertEqual(baseReqLetter, "")
+        self.assertEqual(baseUserLetters, "")
+
+        userInput = "aaabbbcccdddeeefffgg"
         baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
         self.assertEqual(baseReqLetter, "")
         self.assertEqual(baseUserLetters, "")
