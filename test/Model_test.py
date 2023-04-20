@@ -37,6 +37,34 @@ class Model_test (unittest.TestCase):
         
         self.wl = wordlist
     
+    def test_gameLoadEnc(self):
+        self.testModel = Model.model()
+        self.testModel2 = Model.model()
+        self.testModel3 = Model.model()
+        with open("test/whiskeyENC.json","r") as jsonFile:
+            game = json.load(jsonFile)
+        self.testModel.gameLoad(game)
+        self.assertEqual(self.testModel.p1.author, "Company")
+
+
+
+
+
+        #second test and third
+        with open("test/pangramenc.json","r") as jsonFile:
+            game2 = json.load(jsonFile)
+        self.testModel2.gameLoad(game2)
+        with open("test/pangramenc.json","r") as jsonFile:
+            game3 = json.load(jsonFile)
+        self.testModel3.gameLoad(game3)
+        checkList = game2['secretwordlist']
+        #self.assertEqual(checkList, self.testModel.p1.encryptedList)
+        self.assertEqual(self.testModel2.p1.author, "MediaTek")
+        self.assertEqual(self.testModel3.p1.getList, self.testModel2.p1.getList)
+
+
+
+
     #Tests resetGame
     def test_resetGame(self):
         self.model.resetGame()
@@ -300,7 +328,10 @@ class Model_test (unittest.TestCase):
         guessFive = self.testmodel.userGuess(userInput="whiskey")
         self.assertTrue(guessFive)
         self.assertTrue(self.testmodel.p1.guessedList.__contains__('whiskey'))
-    
+
+        guessSix = self.testmodel.userGuess(userInput="kbcdefg")
+        self.assertFalse(guessSix)
+        
     # Tests gameRank
     def test_gameRank(self):
         self.testModel = Model.model()

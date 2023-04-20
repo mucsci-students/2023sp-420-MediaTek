@@ -26,6 +26,7 @@ terminal.
 def suite():
     
     suite = unittest.TestSuite()
+    suite.addTest(Model_test.Model_test('test_gameLoadEnc'))
     suite.addTest(Model_test.Model_test('test_resetGame'))
     suite.addTest(Model_test.Model_test('test_encryptWords'))
     suite.addTest(Model_test.Model_test('test_decryptWords'))
@@ -62,6 +63,7 @@ def suite():
     suite.addTest(wordstuff_test.wordstuff_test('test_checkWord'))
     suite.addTest(Commands_test.Commands_test('test_savePuzzle'))
     suite.addTest(Commands_test.Commands_test('test_saveSecretPuzzle'))
+   
     
     return suite
 
