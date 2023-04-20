@@ -40,28 +40,43 @@ class Model_test (unittest.TestCase):
     def test_gameLoadEnc(self):
         self.testModel = Model.model()
         self.testModel2 = Model.model()
-        self.testModel3 = Model.model()
-
-
-
-
-        #second test and third
-        with open("test/pangramenc.json","r") as jsonFile:
-            game2 = json.load(jsonFile)
-        self.testModel2.gameLoad(game2)
-        with open("test/pangramenc.json","r") as jsonFile:
-            game3 = json.load(jsonFile)
-        self.testModel3.gameLoad(game3)
-        checkList = game2['secretwordlist']
-        #self.assertEqual(checkList, self.testModel.p1.encryptedList)
-        self.assertEqual(self.testModel2.p1.author, "MediaTek")
-        self.assertEqual(self.testModel3.p1.getList, self.testModel2.p1.getList)
-
         with open("test/whiskeyENC.json","r") as jsonFile:
             game = json.load(jsonFile)
         self.testModel.gameLoad(game)
         checkAuthor = game['author']
         self.assertEqual(self.testModel.p1.author, checkAuthor)
+
+
+        loaded = {
+        "RequiredLetter": "a",
+        "PuzzleLetters": "pangrms",
+        "CurrentPoints": 20,
+        "MaxPoints": 100,
+        "GuessedWords": [
+            "pangram",
+            "pangrams",
+            "grams",
+            "gram"
+        ],
+    "secretwordlist": [
+        "gAAAAABkQI6qASNuiDo9EV8tLb96XuF9QWlIseY9ns8yBmmxC_T0wH77IjBQF69Y7LlHYZ8zYH0NlsZdDPVCwVAiR-_wCyoRSw=="],
+        "author": "MediaTek"
+        }
+
+        # Call the gameLoad method with the sample 'loaded' dictionary
+        self.testModel2.gameLoad(loaded)
+
+        # Assert that the game object is updated with the correct values
+        self.assertEqual(self.testModel2.p1.author, "MediaTek")
+        self.assertEqual(self.testModel2.p1.author, loaded['author'])
+        self.assertEqual(self.testModel2.p1.encryptedList, loaded['secretwordlist'])
+        self.assertEqual(self.testModel2.p1.gaReqLetter, loaded['RequiredLetter'])
+        self.assertEqual(self.testModel2.p1.gaUserLetters, loaded['PuzzleLetters'])
+        self.assertEqual(self.testModel2.p1.points, loaded['CurrentPoints'])
+        self.assertEqual(self.testModel2.p1.puzzleTotal, loaded['MaxPoints'])
+        self.assertEqual(self.testModel2.p1.guessedList, loaded['GuessedWords'])
+        self.assertEqual(self.testModel2.p1.puzzleStarted, 1)
+
 
 
 
