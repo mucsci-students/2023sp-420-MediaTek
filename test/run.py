@@ -26,10 +26,12 @@ terminal.
 def suite():
     
     suite = unittest.TestSuite()
+    suite.addTest(Model_test.Model_test('test_gameLoad'))
     suite.addTest(Model_test.Model_test('test_resetGame'))
     suite.addTest(Model_test.Model_test('test_encryptWords'))
     suite.addTest(Model_test.Model_test('test_decryptWords'))
     suite.addTest(Model_test.Model_test('test_grabOurKey'))
+    suite.addTest(Model_test.Model_test('test_getDecryptionFlag'))
     suite.addTest(Model_test.Model_test('test_AuthorField'))
     suite.addTest(Model_test.Model_test('test_getGameState'))
     suite.addTest(Model_test.Model_test('test_getLetters'))
@@ -47,11 +49,14 @@ def suite():
     suite.addTest(Model_test.Model_test('test_lettersToList'))
     suite.addTest(Model_test.Model_test('test_NewPuzzleAuto'))
     suite.addTest(Model_test.Model_test('test_NewPuzzleBase'))
+    suite.addTest(Model_test.Model_test('test_getGameID'))
     suite.addTest(Model_test.Model_test('test_userGuess'))
     suite.addTest(Model_test.Model_test('test_gameRank'))
     suite.addTest(Model_test.Model_test('test_displayLetters'))
     suite.addTest(Model_test.Model_test('test_shuffleAuto'))
     suite.addTest(Model_test.Model_test('test_AuthorField2'))
+    suite.addTest(Model_test.Model_test('test_saveGame'))
+    suite.addTest(Model_test.Model_test('test_saveEncryptedGame'))
     suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_autoGame'))
     suite.addTest(IdentifyBaseWord_test.IdentifyBaseWord_test('test_baseGame'))
     suite.addTest(savegame_test.savegame_test('test_savegame'))
@@ -62,7 +67,6 @@ def suite():
     suite.addTest(wordstuff_test.wordstuff_test('test_checkWord'))
     suite.addTest(Commands_test.Commands_test('test_savePuzzle'))
     suite.addTest(Commands_test.Commands_test('test_saveSecretPuzzle'))
-    suite.addTest(Model_test.Model_test('test_gameLoadEnc'))
    
     
     return suite
