@@ -60,7 +60,6 @@ class model:
         #changes to our encryption from client feedback
         #this will create one big string with all the words from our getList
         x = ','.join(self.p1.getList)
-        print(x)
         #convert the whole string into bytes, by default uses utf-8.
         toBytes = x.encode()
         #encrypts the bytes
