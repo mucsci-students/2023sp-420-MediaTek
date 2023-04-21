@@ -38,7 +38,8 @@ class controller(Subject):
     def controllerGetGuessedWordsCLI(self):
         words = self.model.getGuessedWords()
         return ', '.join(words)
- 
+    def controllerGetDecryptionFlag(self):
+        return self.model.getDecryptionFlag()
     def controllerGetWordList(self):
         return self.model.getWordList()
     def controllerShuffleAuto(self):

@@ -16,8 +16,8 @@ def saveencryptedgame(requiredLetter, userLetters, totalPoints, maxPoints, guess
     try:
         # If file exists, write to it.
         with open(inputFile + ".json", "w") as save:
-            json.dump({"RequiredLetter": requiredLetter, "PuzzleLetters": userLetters, "CurrentPoints": totalPoints, "MaxPoints": maxPoints, "GuessedWords": guessedWords, "secretwordlist": encryptedBank, "author": author}, save, indent=4)
+            json.dump({"RequiredLetter": requiredLetter, "PuzzleLetters": userLetters, "CurrentPoints": totalPoints, "MaxPoints": maxPoints, "GuessedWords": guessedWords, "SecretWordList": encryptedBank, "Author": author}, save, indent=4)
     except FileNotFoundError():
         # If not, create the file and them write.
         with open(inputFile + ".json", "x") as save:
-            json.dump({"RequiredLetter": requiredLetter, "PuzzleLetters": userLetters, "CurrentPoints": totalPoints, "MaxPoints": maxPoints, "GuessedWords": guessedWords, "secretwordlist": encryptedBank, "author": author}, save, indent=4)
+            json.dump({"RequiredLetter": requiredLetter, "PuzzleLetters": userLetters, "CurrentPoints": totalPoints, "MaxPoints": maxPoints, "GuessedWords": guessedWords, "SecretWordList": encryptedBank, "Author": author}, save, indent=4)
