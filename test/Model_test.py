@@ -37,7 +37,7 @@ class Model_test (unittest.TestCase):
         
         self.wl = wordlist
     
-    def test_gameLoadEnc(self):
+    def test_gameLoad(self):
         self.testModel = Model.model()
         self.testModel2 = Model.model()
         with open("test/whiskeyENC.json","r") as jsonFile:
@@ -151,6 +151,12 @@ class Model_test (unittest.TestCase):
         self.model.grabOurKey()
         decodeString = self.model.p1.storeKey.decode()
         self.assertEqual(decodeString, "ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts=")
+    
+    # Tests getDecryptionFlag
+    def test_getDecryptionFlag(self):
+        self.decryptFlag = self.model.getDecryptionFlag()
+        self.testFlag = self.model.p1.DecryptionFlag
+        self.assertEqual(self.decryptFlag, self.testFlag)
         
     # Tests getGameState
     def test_getGameState(self):
@@ -268,7 +274,11 @@ class Model_test (unittest.TestCase):
         self.assertGreater(self.testmodel.p1.puzzleTotal, 0)
         self.assertEqual(len(self.testmodel.p1.guessedList), 0)
         
-        self.testPangram = "notapangram"
+    # Tests getGameID
+    def test_getGameID(self):
+        self.getID = self.model.getGameID()
+        self.testID = self.model.game_id
+        self.assertEqual(self.getID, self.testID)
     
     def test_lettersToList(self):
         self.testModel = Model.model()
@@ -400,6 +410,39 @@ class Model_test (unittest.TestCase):
         self.assertIn('R',self.testModel.p1.displayLetters)
         self.assertEqual(set(shuffledLetters),set(self.testModel.p1.gaUserLetters))
         self.assertEqual(set(self.wtf), set(self.testModel.p1.gaUserLetters))
+
+    # Tests saveGame
+    def test_saveGame(self):
+        self.testModel = Model.model()
+        self.testModel.p1.gaUserLetters = "pangrms"
+        self.testModel.p1.gaReqLetter = "a"
+        self.testModel.p1.guessedList = ["pangram", "pangrams", "grams", "gram"]
+        self.testModel.p1.getList = wordlist.generateWordList(self.testModel.p1.gaReqLetter, self.testModel.p1.gaUserLetters)
+        self.testModel.p1.points = 20
+        self.testModel.p1.puzzleTotal = 100
+        
+        # Unsure if this is the optimal way to test this but it's all I got with the knowlege I have.
+        self.testModel.saveGame("model_pangram")
+        with open("model_pangram.json", "r") as save:
+            self.assertTrue(json.load(save) != None)
+    
+    #Tests saveEncryotedGame
+    def test_saveEncryptedGame(self):
+        self.testModel = Model.model()
+        self.testModel.p1.gaUserLetters = "pangrms"
+        self.testModel.p1.gaReqLetter = "a"
+        self.testModel.p1.guessedList = ["pangram", "pangrams", "grams", "gram"]
+        self.testModel.p1.getList = wordlist.generateWordList(self.testModel.p1.gaReqLetter, self.testModel.p1.gaUserLetters)
+        self.testModel.p1.points = 20
+        self.testModel.p1.puzzleTotal = 100
+        self.testModel.p1.author = 'MediaTek'
+        
+        
+        # Unsure if this is the optimal way to test this but it's all I got with the knowlege I have.
+        self.testModel.saveEncryptedGame("model_pangram_enc")
+        with open("model_pangram_enc.json", "r") as save:
+            self.assertTrue(json.load(save) != None)
+            
 # Runs unittest.main() when prompted.
 if __name__ == '__main__':
     unittest.main()
