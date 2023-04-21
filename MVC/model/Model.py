@@ -24,7 +24,7 @@ class player:
         self.puzzleTotal = 0
         #list to store correctly guessed words.
         self.guessedList = list()
-        self.encryptedList = list()
+        self.encryptedList = str()
         self.storeKey = None
         self.author = "MediaTek"
         self.game_id = None
@@ -52,7 +52,7 @@ class model:
     def encryptWords(self):
         #if the user is trying to encrypt when theres already an encrypted list clear the list beforehand.
         if len(self.p1.encryptedList) > 0:
-            self.p1.encryptedList.clear()
+            self.p1.encryptedList = str()
         #ensure we grabbed the key for encryption.
         self.grabOurKey()
         #create a Fernet object with the key.
@@ -60,7 +60,6 @@ class model:
         #changes to our encryption from client feedback
         #this will create one big string with all the words from our getList
         x = ','.join(self.p1.getList)
-        print(x)
         #convert the whole string into bytes, by default uses utf-8.
         toBytes = x.encode()
         #encrypts the bytes
@@ -100,7 +99,7 @@ class model:
             self.p1.getList = tempWordBank
             #since the string should now be decrypted set string to None (originally using clear however no longer a list)
             if len(self.p1.encryptedList) > 0:
-                self.p1.encryptedList = None
+                self.p1.encryptedList = str()
         #When trying to load in another teams file that wasnt encrypted by us an error gets just kills the program called raise InvalidToken
         #Once this error is caught we can display an error message to the user and force the program to return back to normal.
         except InvalidToken:
