@@ -74,6 +74,23 @@ class Model_test (unittest.TestCase):
         self.assertEqual(self.testModel2.p1.guessedList, loaded['GuessedWords'])
         self.assertEqual(self.testModel2.p1.puzzleStarted, 1)
         
+        loaded = {
+        "RequiredLetter": "a",
+        "PuzzleLetters": "pangrms",
+        "CurrentPoints": 20,
+        "MaxPoints": 100,
+        "GuessedWords": [
+            "pangram",
+            "pangrams",
+            "grams",
+            "gram"
+        ],
+    "SecretWordList": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "Author": "MediaTek"
+        }
+        result = self.testModel2.gameLoad(loaded)
+        self.assertTrue(self.testModel2.p1.DecryptionFlag)
+        
     #Tests resetGame
     def test_resetGame(self):
         self.model.resetGame()
@@ -133,6 +150,10 @@ class Model_test (unittest.TestCase):
         self.testModel.decryptWords()
         self.testDecryptedList = f.decrypt(self.testEncryptedString.encode()).decode().split(',')
         self.assertEqual(self.testModel.p1.getList, self.testDecryptedList)
+        
+        self.testModel.p1.encryptedList = 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        result = self.testModel.decryptWords()
+        self.assertFalse(result)
 
     # Tests authorField
     def test_AuthorField(self):
@@ -380,6 +401,7 @@ class Model_test (unittest.TestCase):
         self.testModel.gameRank()
         self.assertEqual(self.testModel.p1.showRank, "Puzzle Finished! Good Job!")
 
+    # Tests displayLetters
     def test_displayLetters(self):
         self.testModel = Model.model()
         self.testModel.p1.gaUserLetters = "special"
