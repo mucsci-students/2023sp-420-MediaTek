@@ -72,8 +72,9 @@ class view:
             if os.path.exists(checkFile):
                 self.controller.controllerGameLoadCLI(inputFile)
                 #*********************
-                if(self.controller.controllerGetAuthorField() != "MediaTek"):
-                    print("Hey, we can't decrypt this puzzle!")
+                #print(self.controller.controllerGetDecryptionFlag())
+                if(self.controller.controllerGetAuthorField() != "MediaTek") or (self.controller.controllerGetDecryptionFlag() == True):
+                    print("Hey, we can't decrypt this puzzle! This is because we didn't encrypt it to begin with!")
                     self.controller.controllerUpdateAuthorField()
                     return
                 else:

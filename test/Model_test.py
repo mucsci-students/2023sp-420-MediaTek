@@ -43,10 +43,8 @@ class Model_test (unittest.TestCase):
         with open("test/whiskeyENC.json","r") as jsonFile:
             game = json.load(jsonFile)
         self.testModel.gameLoad(game)
-        checkAuthor = game['author']
+        checkAuthor = game['Author']
         self.assertEqual(self.testModel.p1.author, checkAuthor)
-
-
         loaded = {
         "RequiredLetter": "a",
         "PuzzleLetters": "pangrms",
@@ -58,9 +56,8 @@ class Model_test (unittest.TestCase):
             "grams",
             "gram"
         ],
-    "secretwordlist": [
-        "gAAAAABkQI6qASNuiDo9EV8tLb96XuF9QWlIseY9ns8yBmmxC_T0wH77IjBQF69Y7LlHYZ8zYH0NlsZdDPVCwVAiR-_wCyoRSw=="],
-        "author": "MediaTek"
+    "SecretWordList": "gAAAAABkQb0C1UjZJXKNe4ynA14cGFPsPJxjxYg5aDvo2rQl7CyPYGrGdPkKEWUv-5n0a9mN1TMVtuWmk2jCUNHNvRTd7u2BufyRH8jyGkSoeDl0XW6ujIQpTRBvFffS6eYt61v-_DeGertPS_SzvFtUs9xypRPpLUlJw8Qy2KPRQYz4tJ1KcVTDw5hOTsNLu0whJ7d2uVjaYIrQgDBJL4FjqgizutyAWx67d5leRMddC3vZrkSEKHBseqxfn84FtYX-fz8wyQIDOZpVoKK2_V88i9Las2nAZRrjMUvLS94MmaaAasumR1eOKttre-bx2Zh9QXB2J1i2R99U4GBgU-tWiJBZs3xXIW-9ImFtBblt4pKmu5GblAqlNgtt1_Tu4DLQ5HnAJq8aWDJZyrjYtJrkXSRk_8uErVcjLg-jO4tCnNeLhWdUgiBatTE11Ab_7NGyfrnwFKEhLXpMHraDmrwhNfdQDNr__ftoU2nL_Z73QiX9tTeQ23WN796GeV6QTIm4vbMrJk76CCw8rmycAVOshGUPs3cfdrXqgXkQfaqrkXJRkURqU2-Zzl_b3k10R45jJW5nKgRRWgQ0QQHMWsNtU5jf9CIla6jgt8_h9oWMzdYLwL4vgz8zfOYg15SbUhsu5Vtn93UNaoXxMGu1i-LYZ7OwS69vmEhb5sFwh7SzS_ac1pdAZpAcUBpUokTQhsGpTHSQ9mWRZUgQ7c5n1qz129i2w60nc0gy7Xks-xC-mwK4iHYD91A2-OGpnJchn-k4xL7z2RkqyDjls5OyRW6Zlod_NJ_UAeUWdsHUzRgGf4Ah9iUfLmCiCyLBIOSnBZd2RUco_BXw_N8RjyST0gWnAq75iEgoYywJnW1Y8B-E5LdRYpUQe5H98V8NaCEWVud2BMLRmfYTL4o7gAFnL9EuJE9bNOr50y_YVYm5nuj-JySPUrZgsUhn99WJHsU3ksTVbiYNDrCuW0NFYERqckRrbjLgavIzX_hvBqqTsW8u85M8UE5yX9d4IfdfZbTkD-1x-2RgZjOH4K_KYvmb7AY4iof8nLCrCmOWMH6Lz6ovk-HHZp2kyRNLLbkySId5YV8DfL8eZ_aBJq3HDdgrOyZEz8miAzK1YxY18uzpNOczZhpl8oIPZu7p6FlrFyW2o_RSure835V6BftHkfkg4W8oRNXUcmkaSTfIBNdfnANWe0MPjnWydPUx8UJXjEtdgAH3Rhc_SD2Fj5a74WcQE3GftQi2e7AcStCkCnVohyuGfbARsgmYaA-F7w0SYiJGLsQzjALvOsFfrTnS8MeiSkbV7fpLF9iAOG50MAQvMpIKdinSN19rIuBU-VvO7Q748sNPv7L6n9haWlXJSMpDmB_BDyP9X4eyA6DPg39HNoyf_XUTZIm78c39kdDPcuZ7EmmF1oQuNmRwrzR6KBdAPvVJQRlfNcKYNku2_k5QbFAdlMwmpwYA4kVSSQnjTgzj4WF1Nvzx8yfG-dHLRzGAmTLz6mSqtX-yTcjHsUoJFt1d_konPI3V5H2hYvcpsTiSV0yV4v7X8O6DWs2dmUeksKVaYaXtUjsIKPrAzSoewpEy90yFFhe6BUrtUs-AmpHvgr9j4cDE83UcZboOGPy0-sDeDAuXeN1Uz6PRrm8aj4o7nCDYFDILhjyLwqwSsX7NHo13derCbBtpfzeZxDNUOTjR2I3g1lcmzJ207N3LA8c136jjPL6jzmuAUuxTX5F0U44YWX0s5t_7yzVKaGgiCpEJL_w857efUWeoD4ycHYE8OV9hjE3zGrA89UGOvWVNgpkugTu5O032HU0N72XMH1l9WsgULx8oqw1jXovh9dWl-thlZVaB41EaFgN_KtS4OJvKY3TsSqQho1bvNrU4OfOzgIvvfhXuBTHJMrChgWuBUQ4lERXbBu0NqB7XaoY_fy2Fww_GImyJ",
+        "Author": "MediaTek"
         }
 
         # Call the gameLoad method with the sample 'loaded' dictionary
@@ -68,19 +65,15 @@ class Model_test (unittest.TestCase):
 
         # Assert that the game object is updated with the correct values
         self.assertEqual(self.testModel2.p1.author, "MediaTek")
-        self.assertEqual(self.testModel2.p1.author, loaded['author'])
-        self.assertEqual(self.testModel2.p1.encryptedList, loaded['secretwordlist'])
+        self.assertEqual(self.testModel2.p1.author, loaded['Author'])
+        self.assertEqual(self.testModel2.p1.encryptedList, None)
         self.assertEqual(self.testModel2.p1.gaReqLetter, loaded['RequiredLetter'])
         self.assertEqual(self.testModel2.p1.gaUserLetters, loaded['PuzzleLetters'])
         self.assertEqual(self.testModel2.p1.points, loaded['CurrentPoints'])
         self.assertEqual(self.testModel2.p1.puzzleTotal, loaded['MaxPoints'])
         self.assertEqual(self.testModel2.p1.guessedList, loaded['GuessedWords'])
         self.assertEqual(self.testModel2.p1.puzzleStarted, 1)
-
-
-
-
-
+        
     #Tests resetGame
     def test_resetGame(self):
         self.model.resetGame()
