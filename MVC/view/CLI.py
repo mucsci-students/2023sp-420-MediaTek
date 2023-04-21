@@ -10,7 +10,7 @@ from MVC.model.Highscores import loadHighScore
 #see bottom of file for an explanation on our usage of prompt_toolkit
 global controller 
 controller = ctrl.controller()
-class view:
+class view:        
     instance = None
     '''
     Creates a new single instance for the view if none exists already.
@@ -129,38 +129,41 @@ class view:
         this sends the game id, player name, and points to the highscore database to update the
         highscore for the puzzle referred to by the unique puzzle id.
         '''   
-        def giveUp(self):
+        def giveUp(self, puzzleFinished=False):
+            if not puzzleFinished:
+                while True:
+                    confirm = input("Are you sure you want to give up? (yes/no): ")
+                    if confirm.lower() == "yes":
+                        break
+                    elif confirm.lower() == "no":
+                        print("Continuing the game.")
+                        return
+                    else:
+                        print("Invalid input. Please enter 'yes' or 'no'.")
+
+            points = self.controller.controllerGetPoints()
+            game_id = self.controller.controllerGetGameID()
+            #ask for username
             while True:
-                confirm = input("Are you sure you want to give up? (yes/no): ")
-                if confirm.lower() == "yes":
-                    points = self.controller.controllerGetPoints()
-                    game_id = self.controller.controllerGetGameID()
-                    #ask for username
-                    while True:
-                        player_name = input("Please enter your 3-character username: ")
-                        if len(player_name) == 3 and player_name.isalnum():
-                            player_name = player_name.upper()
-                            break
-                        else:
-                            print("Invalid input. Please enter a 3-character alphanumeric username.")
-                    #save the highscore
-                    saveHighScore(game_id, player_name, points)
-                    #displays the highscores when giving up
-                    game_id = self.controller.controllerGetGameID()
-                    highScores = loadHighScore(game_id) 
-                    print(f"\nHIGH SCORES:\n")
-                    header = "NAME         SCORE"
-                    print(header)
-                    for row in highScores:
-                        padding = (len(header) - len(row[1])) // 2
-                        print(f"{row[1]:<13}{row[2]:^{padding}}")
-                    exit()
-                elif confirm.lower() == "no":
-                    print("Continuing the game.")
-                    return
+                player_name = input("Please enter your 3-character username: ")
+                if len(player_name) == 3 and player_name.isalnum():
+                    player_name = player_name.upper()
+                    break
                 else:
-                    print("Invalid input. Please enter 'yes' or 'no'.")
-                    
+                    print("Invalid input. Please enter a 3-character alphanumeric username.")
+            #save the highscore
+            saveHighScore(game_id, player_name, points)
+            #displays the highscores when giving up
+            game_id = self.controller.controllerGetGameID()
+            highScores = loadHighScore(game_id) 
+            print(f"\nHIGH SCORES:\n")
+            header = "NAME         SCORE"
+            print(header)
+            for row in highScores:
+                padding = (len(header) - len(row[1])) // 2
+                print(f"{row[1]:<13}{row[2]:^{padding}}")
+            exit()
+                                
         '''
         Displays the top ten local high scores
         '''
@@ -232,10 +235,10 @@ class view:
             "Register commands in the Invoker"
             self.commands[command_name] = command
 
-        def execute(self, command):
+        def execute(self, command, *args):
             "Execute any registered commands"
             if command in self.commands.keys():
-                self.commands[command].execute()
+                self.commands[command].execute(*args)
             else:
                 print(f"Command [{command}] not recognised")
 
@@ -296,8 +299,8 @@ class view:
     class giveUp:
         def __init__(self, receiver):
             self.receiver = receiver
-        def execute(self):
-            self.receiver.giveUp()
+        def execute(self, puzzleFinished=False):
+            self.receiver.giveUp(puzzleFinished)
     
     class showHighScore:
         def __init__(self, receiver):
@@ -447,6 +450,11 @@ To get started, you can type:
                             print("This word has already been guessed correctly.")
                         else:
                             self.controller.controllerUserGuess(userInput)
+                            
+                            #check if game is finished, if so call giveUp
+                            if self.controller.controllerGetPuzzleRank() == "Puzzle Finished! Good Job!":
+                                self.INVOKER.execute("giveup", True)
+   
 #singleton design pattern
 view = view()
 view.startGame()
