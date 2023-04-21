@@ -37,7 +37,7 @@ class Model_test (unittest.TestCase):
         
         self.wl = wordlist
     
-    def test_gameLoadEnc(self):
+    def test_gameLoad(self):
         self.testModel = Model.model()
         self.testModel2 = Model.model()
         with open("test/whiskeyENC.json","r") as jsonFile:
@@ -66,13 +66,30 @@ class Model_test (unittest.TestCase):
         # Assert that the game object is updated with the correct values
         self.assertEqual(self.testModel2.p1.author, "MediaTek")
         self.assertEqual(self.testModel2.p1.author, loaded['Author'])
-        self.assertEqual(self.testModel2.p1.encryptedList, None)
+        self.assertEqual(self.testModel2.p1.encryptedList, '')
         self.assertEqual(self.testModel2.p1.gaReqLetter, loaded['RequiredLetter'])
         self.assertEqual(self.testModel2.p1.gaUserLetters, loaded['PuzzleLetters'])
         self.assertEqual(self.testModel2.p1.points, loaded['CurrentPoints'])
         self.assertEqual(self.testModel2.p1.puzzleTotal, loaded['MaxPoints'])
         self.assertEqual(self.testModel2.p1.guessedList, loaded['GuessedWords'])
         self.assertEqual(self.testModel2.p1.puzzleStarted, 1)
+        
+        loaded = {
+        "RequiredLetter": "a",
+        "PuzzleLetters": "pangrms",
+        "CurrentPoints": 20,
+        "MaxPoints": 100,
+        "GuessedWords": [
+            "pangram",
+            "pangrams",
+            "grams",
+            "gram"
+        ],
+    "SecretWordList": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "Author": "MediaTek"
+        }
+        result = self.testModel2.gameLoad(loaded)
+        self.assertTrue(self.testModel2.p1.DecryptionFlag)
         
     #Tests resetGame
     def test_resetGame(self):
@@ -98,57 +115,45 @@ class Model_test (unittest.TestCase):
         self.testEncryptedList = list()
         self.testModel = Model.model()
         self.testModel.p1.getList = self.testList
+        self.testModel.p1.encryptedList = "gAAAAABkQcwJ58VC-xyeyDFLQbKh0S6aGpFk3xhmqY1XdXON88UJ7-pF_ASZcl_OmpGtdLQG5eCllKPWg3JU_h8ezdQvXarbGQ-u8mZqQwlhhCfNQr8eHbdhtYTlY8QEyKz_5bxrnEFg1_Va4L9TGx_Z6_69CFFKpGHptiDqIw3tjnyIAbMne0jMyvccN_jDTCE4kEPeMZtj8Z1vwOuy40MLU5PpbwyElQe9QC7tVudp_DUrjSduE9zmnfhGJ1zHD6SrP1EJ6m4W8XFTlp3fMdrxcAtg_YJobsQWjDwjMaqXtUC9Hoq2qJg8Zy2yKI8XqiPeX8odVFZPZKrmflG_pYt9FDqQlEJNrUc3d9kNdf6pJlTZ-xggm0kobRpagtoeadkMRwcRD213TbZDzV77gK-X8CTYuFiPNsbR74PJ1ymxq50F0fi7hH7zx_9ajrC7t1u-wQ2SqoqATyL4R8pN_RjNzr3dl6g1JpK0atsT3GkpGA_Ij53ZEQtFle119BMTGnhNqnEArUq5hk4CkwUNAy3beFeY_Y10zCJ8gIkUSIa3rvK_wzYcMXR8MWlgpm3lRfyYSIZXS4doLzWdzx6cCXHL_0vOH-sWauaigQtuxznx8h15oHGa7qapBL33gb-ppQHHKpr0fDMK-tnB5vnls5vyCbs33nw3ucEbtzF5G0PMpY79XxFD_v8lkLiDTTuG1Q3AtYvdcNwT3BB9HsCy6LIXIaGElNYtMhC5ljV8cByu6pXJ0VgruzAE1MTUFwgOk3kTsEv7p74TXKie6iZ0yG1LdsPvZEhxloFicjrSbADcXBQ4BQ7mAjcBu0p4H3DF0cLDH6KMpR7byySBIUob9x8MYbw3MxxTwOo7mFt6J5TrBlWaS2iU-8Qbo9VjaILQrAqUJ9SSzwbKTgyiEIzbgjgscOKeItwnJquWZo7KzYq-zas3j1Vn-xIBKfAZQA1VV9WjT7g9NJdqdLT4-ZBvfQYZMX399vFO9i1xhShWgtUiZR2SzBQUhcpOvenSeufWj_hq4Ibh2izXTkc4N88LUVtOllNhZqPSpL4pQRQC9QfPQNxqTJfmBT2XuVMFjOtvoSjWXIxxSXoe-2Lqu87U-6q3c42t7Wn-PCTsUgpfV8tO1V07oUJPr1mAq3TBE24EKIM--uzjEhZxxoNtDUtbs7pH901KW_CjHMVRsJs4PL8uxHypNixub63m8pzefYZ45TH9wDhU12c71TjerNAUfc0WKewGs-oYPHMo-UsuP8Mwn0Ee5UpMo345dE78vZDP5-bK46Z6hXgHLnQHZiXTLhNAHkJteMstsdaS36dV8e05FnRglrYb0HW8GcqsHgfpLAP1o-qd0TtxMyFds8gELuc0cDlR3MhlyUD1p-79mXUn53cwhdSAp6fwtd0-w14-yiQOZy9iLofp0H10cQOinf9YcygKBJ1B24S36pZ2YKmnePf1ftaFfuX3O9x6VfySuomfxUQNq0PzLcuFP9CRYMY_Ngq2DaPW_4CDKqOe4jEB-iSQlU2-XpngL9RWlrszBE1eIXNC7TKQHs71r1mIVLqJybg6MNfgSuBjZIL2vktnrlEILdEm9tHnNjv0XOd4tMIfxVI6OTG5HF9lcvMppP2P9tbFLZWBfTxYXgCY_hzvxYFw9kD2DbLM9nTWLqOEDAhgjI3rZtnzFbLQ26cqLmGE7BtfeGwrnITXrPXTzywZeG9LGd_38PRX5GZdtZTx-Jns-XTnvhkNa8qbc31bvDLaJKUKMgFTTRnDnCEQqBy7zO5aYdHTexB88KjYx6L1yIFwHxuciFdxDgVQAa-HGA8vydgZiyYKyvaOGRXjXLZnMntdcpYYIRq_3pcS7MSHO5_dT8fCQisCuAiifXv3aJ7ThQ789aOkmlCypjsBJEJITeEN1-_F2mw2Z6hB2rr-IdWP_6rUvaAl"
         
         self.testModel.encryptWords()
         f = fernet(self.testModel.p1.storeKey)
-        for x in self.testList:
-            toBytes = x.encode()
-            encryptBytes = f.encrypt(toBytes)
-            encryptString = encryptBytes.decode()
-            self.testEncryptedList.append(encryptString)
         
-        i = 0
-        while (i < len(self.testEncryptedList)):
-            x = f.decrypt(self.testEncryptedList[i]).decode()
-            y = f.decrypt(self.testModel.p1.encryptedList[i]).decode()
-            self.assertEqual(x, y)
-            i = i + 1
-    
+        x = ','.join(self.testModel.p1.getList)
+        toBytes = x.encode()
+        encryptBytes = f.encrypt(toBytes)
+        encryptString = encryptBytes.decode()
+        
+        byteString = f.decrypt(self.testModel.p1.encryptedList.encode()).decode()
+        secondString = f.decrypt(encryptString.encode()).decode()
+        self.assertEqual(byteString, secondString)
+        
     # Tests decryptWords
     def test_decryptWords(self):
         self.testList = ['word', 'words', 'only', 'head', 'variable', 'undermind', 'salty']
-        self.testEncryptedList = list()
+        self.testEncryptedString = str()
         self.testDecryptedList = list()
         self.testModel = Model.model()
         self.testModel.p1.getList = self.testList
         
         self.testModel.grabOurKey()
         f = fernet(self.testModel.p1.storeKey)
-        for x in self.testList:
-            toBytes = x.encode()
-            encryptBytes = f.encrypt(toBytes)
-            encryptString = encryptBytes.decode()
-            self.testModel.p1.encryptedList.append(encryptString)
         
-        f = fernet(self.testModel.p1.storeKey)
-        for x in self.testList:
-            toBytes = x.encode()
-            encryptBytes = f.encrypt(toBytes)
-            encryptString = encryptBytes.decode()
-            self.testEncryptedList.append(encryptString)
+        x = ','.join(self.testModel.p1.getList)
+        toBytes = x.encode()
+        encryptBytes = f.encrypt(toBytes)
+        encryptString = encryptBytes.decode()
+        self.testModel.p1.encryptedList = encryptString
+        self.testEncryptedString = encryptString
         
         self.testModel.decryptWords()
-        for x in self.testEncryptedList:
-            decryptByteString = f.decrypt(x)
-            decryptWord = decryptByteString.decode()
-            self.testDecryptedList.append(decryptWord)
+        self.testDecryptedList = f.decrypt(self.testEncryptedString.encode()).decode().split(',')
+        self.assertEqual(self.testModel.p1.getList, self.testDecryptedList)
         
-        i = 0
-        while (i < len(self.testDecryptedList)):
-            x = self.testModel.p1.getList[i]
-            y = self.testDecryptedList[i]
-            self.assertEqual(x, y)
-            i = i + 1
+        self.testModel.p1.encryptedList = 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        result = self.testModel.decryptWords()
+        self.assertFalse(result)
 
     # Tests authorField
     def test_AuthorField(self):
@@ -167,6 +172,12 @@ class Model_test (unittest.TestCase):
         self.model.grabOurKey()
         decodeString = self.model.p1.storeKey.decode()
         self.assertEqual(decodeString, "ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts=")
+    
+    # Tests getDecryptionFlag
+    def test_getDecryptionFlag(self):
+        self.decryptFlag = self.model.getDecryptionFlag()
+        self.testFlag = self.model.p1.DecryptionFlag
+        self.assertEqual(self.decryptFlag, self.testFlag)
         
     # Tests getGameState
     def test_getGameState(self):
@@ -284,7 +295,11 @@ class Model_test (unittest.TestCase):
         self.assertGreater(self.testmodel.p1.puzzleTotal, 0)
         self.assertEqual(len(self.testmodel.p1.guessedList), 0)
         
-        self.testPangram = "notapangram"
+    # Tests getGameID
+    def test_getGameID(self):
+        self.getID = self.model.getGameID()
+        self.testID = self.model.game_id
+        self.assertEqual(self.getID, self.testID)
     
     def test_lettersToList(self):
         self.testModel = Model.model()
@@ -386,6 +401,7 @@ class Model_test (unittest.TestCase):
         self.testModel.gameRank()
         self.assertEqual(self.testModel.p1.showRank, "Puzzle Finished! Good Job!")
 
+    # Tests displayLetters
     def test_displayLetters(self):
         self.testModel = Model.model()
         self.testModel.p1.gaUserLetters = "special"
@@ -416,6 +432,39 @@ class Model_test (unittest.TestCase):
         self.assertIn('R',self.testModel.p1.displayLetters)
         self.assertEqual(set(shuffledLetters),set(self.testModel.p1.gaUserLetters))
         self.assertEqual(set(self.wtf), set(self.testModel.p1.gaUserLetters))
+
+    # Tests saveGame
+    def test_saveGame(self):
+        self.testModel = Model.model()
+        self.testModel.p1.gaUserLetters = "pangrms"
+        self.testModel.p1.gaReqLetter = "a"
+        self.testModel.p1.guessedList = ["pangram", "pangrams", "grams", "gram"]
+        self.testModel.p1.getList = wordlist.generateWordList(self.testModel.p1.gaReqLetter, self.testModel.p1.gaUserLetters)
+        self.testModel.p1.points = 20
+        self.testModel.p1.puzzleTotal = 100
+        
+        # Unsure if this is the optimal way to test this but it's all I got with the knowlege I have.
+        self.testModel.saveGame("model_pangram")
+        with open("model_pangram.json", "r") as save:
+            self.assertTrue(json.load(save) != None)
+    
+    #Tests saveEncryotedGame
+    def test_saveEncryptedGame(self):
+        self.testModel = Model.model()
+        self.testModel.p1.gaUserLetters = "pangrms"
+        self.testModel.p1.gaReqLetter = "a"
+        self.testModel.p1.guessedList = ["pangram", "pangrams", "grams", "gram"]
+        self.testModel.p1.getList = wordlist.generateWordList(self.testModel.p1.gaReqLetter, self.testModel.p1.gaUserLetters)
+        self.testModel.p1.points = 20
+        self.testModel.p1.puzzleTotal = 100
+        self.testModel.p1.author = 'MediaTek'
+        
+        
+        # Unsure if this is the optimal way to test this but it's all I got with the knowlege I have.
+        self.testModel.saveEncryptedGame("model_pangram_enc")
+        with open("model_pangram_enc.json", "r") as save:
+            self.assertTrue(json.load(save) != None)
+            
 # Runs unittest.main() when prompted.
 if __name__ == '__main__':
     unittest.main()

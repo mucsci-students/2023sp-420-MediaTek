@@ -43,9 +43,11 @@ def checkWord(userInput):
         con.commit()
         con.close()
         return True
+    '''
     else:
         con.commit()
         con.close()
         return False
+    '''
 
 #checkWord("abdomen")
