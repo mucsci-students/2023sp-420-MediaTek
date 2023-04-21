@@ -13,6 +13,7 @@ def savegame(requiredLetter, userLetters, totalPoints, maxPoints, guessedWords, 
 Save function that is the encrypted version, believe I might have to add an author field (very minor)
 '''
 def saveencryptedgame(requiredLetter, userLetters, totalPoints, maxPoints, guessedWords, encryptedBank, author, inputFile):
+    
     try:
         # If file exists, write to it.
         with open(inputFile + ".json", "w") as save:

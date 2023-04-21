@@ -9,6 +9,15 @@ import json
 Player class with variables for the whole program.
 '''
 class player:
+    instance = None
+    '''
+    Creates a new single instance for the view if none exists already.
+    '''
+    def __new__(self):
+        if self.instance is None:
+              self.instance = super().__new__(self)
+        return self.instance
+        
     def __init__(self): 
         self.gaUserLetters = ""
         self.gaReqLetter = ""
@@ -32,9 +41,18 @@ class player:
 class model:
     #should be called before gameLoad function, becauese it will reset all of the variables to their default state, and then gameLoad will update them
     #with the loaded file.
+    instance = None
+    '''
+    Creates a new single instance for the view if none exists already.
+    '''
+    def __new__(self):
+        if self.instance is None:
+              self.instance = super().__new__(self)
+        return self.instance
+
     def resetGame(self):
         self.p1 = player()
-
+    
     def __init__(self):
         self.p1 = player()
 

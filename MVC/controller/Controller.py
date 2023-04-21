@@ -3,7 +3,9 @@ import sys
 import re
 import json
 import numpy
-
+from abc import ABC, abstractmethod
+global mdler
+mdler = mdl.model()
 class Observer:
     def update(self, subject):
         pass
@@ -21,11 +23,37 @@ class Subject:
     def notify(self):
         for observer in self._observers:
             observer.update(self)
+  
 
 class controller(Subject):
+
+
+    class Strategy(ABC):
+        @abstractmethod
+        def save(self,controller,file_name):
+            pass
+
+    class NonEncryptedSave(Strategy):
+        def __init__(self, controller):
+            self.controller = controller
+            self.model = mdler
+            
+            print("NonEncryptedSave controller:", self.controller)
+
+        def save(self, file_name):
+            controller.controllerSaveGame(self, file_name)
+
+    class EncryptedSave(Strategy):
+        def __init__(self, controller):
+            self.controller = controller
+            self.model = mdler
+
+        def save(self, file_name):
+            controller.controllerSaveEncryptedGame(self, file_name)
+
     def __init__(self):
         super().__init__()
-        self.model = mdl.model()
+        self.model = mdler
 
     '''
     Each function below is a getter that just returns the information stored/returns function values
