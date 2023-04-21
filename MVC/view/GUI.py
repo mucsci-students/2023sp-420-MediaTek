@@ -80,6 +80,7 @@ class GUI:
 
         self.controller = ctrl.controller()
         self.parent = parent
+        self.buttons = {}
 
         #assigns game_model instance passed to view
         self.game_controller = game_controller
@@ -152,6 +153,8 @@ class GUI:
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Export Score",command=self.screenShot)
         self.fileMenu.add_separator()
+        self.fileMenu.add_command(label = "High Scores",command= self.displayHighScores)
+        self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Give Up",command = self.giveUp)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Exit",command=self.exitPuzzle)
@@ -161,8 +164,6 @@ class GUI:
         self.helpMenu.add_command(label = "How to play",command = self.playInstructions)
         self.helpMenu.add_separator()
         self.helpMenu.add_command(label = "Hints",command = self.displayAll)
-        self.helpMenu.add_separator()
-        self.helpMenu.add_command(label = "High Scores",command= self.displayHighScores)
         
         #variables for displaying information to the screen
         self.hexagonLetters = []
@@ -233,6 +234,8 @@ class GUI:
     def createButton(self, hex, name, ex, why):
         name = tk.Button(self.canvas, text= hex, width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command= lambda: self.sendInput(hex))
         ViewFactory.placeButtons(self, name, ex, why)
+        #creates instance of the buttons that can be destroyed in resetGUI
+        self.buttons[name] = name
 
     '''
     Function creates the hexagons and buttons for the puzzles.
@@ -253,7 +256,7 @@ class GUI:
                 self.createButton(hexagonLetters[2], "btn3", 242, 270)
                 self.createButton(hexagonLetters[3], "btn4", 452, 270)
                 self.createButton(hexagonLetters[4], "btn5", 242, 158)
-                self.createButton(hexagonLetters[5], "btn5", 452, 158)
+                self.createButton(hexagonLetters[5], "btn6", 452, 158)
                 self.btn7 = tk.Button(self.canvas, text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
                 self.btn7.place(x=349, y=210)
                 self.btn7.configure(bg = "yellow")
@@ -306,6 +309,8 @@ class GUI:
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
         self.clearInput()
+        if self.controller.controllerGetPuzzleRank() == "Puzzle Finished! Good Job!":
+            self.giveUp()
 
     '''
     Function that creates the hexagons according to size.
@@ -592,6 +597,24 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         highScoreLabel = Label(highScoreMessage, text=message1, font=("Courier New",20))
         # Add padding
         highScoreLabel.pack(padx=40, pady=10)
+        
+    '''
+    Function that clears all of the buttons, words, etc. and sets the puzzle state back to 0
+    '''    
+    def resetGUI(self):
+        self.clearInput()
+        self.clearListbox()
+        self.hexagonLetters.clear()
+        self.points.set(0)
+        self.rank.set("")
+        self.e.unbind("<Return>")
+        self.canvas.delete("all")
+        self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
+        self.controller.controllerUpdatePuzzleState0()
+        self.btn7.destroy()
+        for button in self.buttons.values():
+            button.destroy()
+        self.buttons = {}
     
     '''
     give up function/command that allows the player to say they are finished with a puzzle.
@@ -600,11 +623,10 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     '''   
     def giveUp(self):
         if(self.controller.controllerGetPuzzleState() == 0):
-                messagebox.showinfo("Error!", "No game started!")
-                return
+            messagebox.showinfo("Error!", "No game started!")
+            return
         else:
-            confirm = messagebox.askyesno("Give up", "Are you sure you want to give up?")
-            if confirm:
+            if self.controller.controllerGetPuzzleRank() == "Puzzle Finished! Good Job!":
                 points = self.controller.controllerGetPoints()
                 game_id = self.controller.controllerGetGameID()
                 while True:
@@ -618,9 +640,30 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
                 saveHighScore(game_id, player_name, points)
                 # Display high scores
                 self.displayHighScores()
-                # Close the window
+                # Reset the GUI
+                self.resetGUI()
             else:
-                return
+                confirm = messagebox.askyesno("Give up", "Are you sure you want to give up?")
+                if confirm:
+                    points = self.controller.controllerGetPoints()
+                    game_id = self.controller.controllerGetGameID()
+                    while True:
+                        player_name = simpledialog.askstring("Username", "Please enter your 3-character username: ")
+                        if player_name and len(player_name) == 3 and player_name.isalnum():
+                            player_name = player_name.upper()
+                            break
+                        else:
+                            messagebox.showerror("Error", "Invalid input. Please enter a 3-character alphanumeric username.")
+                    # Save the highscore
+                    saveHighScore(game_id, player_name, points)
+                    # Display high scores
+                    self.displayHighScores()
+                    # Reset the GUI
+                    self.resetGUI()
+                else:
+                    return
+
+
     '''
     Function that returns the top ten local high scores
     '''
