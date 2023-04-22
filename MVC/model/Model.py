@@ -335,11 +335,6 @@ class model:
     def saveEncryptedGame(self, inputFile):
         self.encryptWords()
         Commands.saveSecretPuzzle(self.p1.gaReqLetter, self.p1.gaUserLetters, self.p1.points, self.p1.puzzleTotal, self.p1.guessedList, self.p1.encryptedList, self.p1.author,inputFile)
-
-#    def startCommands(self):
-#        Commands.commandsStart()
-#    def helpCommand(self):
-#        Commands.help()
     
 
     '''
