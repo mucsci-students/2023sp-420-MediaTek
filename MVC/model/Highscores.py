@@ -55,24 +55,6 @@ def loadHighScore(game_id):
     return rows
 
 '''
-Displays the contents of highscore table for testing purposes
-need to make sure the database is updating correctly
-'''
-def display_highscores():
-    con = cdb.highscoreConnect()
-    cursor = con.cursor()
-
-    cursor.execute("SELECT game_id, player_name, points FROM highscores")
-    rows = cursor.fetchall()
-
-    print("Highscores:")
-    for row in rows:
-        print(f"Game ID: {row[0]}, Player Name: {row[1]}, Points: {row[2]}")
-
-    con.close()
-
-
-'''
 Call create_highscores_table to ensure the table exists before any operations
 '''
 create_highscores_table()

@@ -2,8 +2,8 @@ from MVC.model import IdentifyBaseWord as np
 from MVC.model import wordlist as wl
 from MVC.model import Commands as Commands
 import random
-from MVC.model import loadgame as loadgame
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
+
 import json
 
 '''
@@ -15,7 +15,7 @@ class player:
         self.gaReqLetter = ""
         self.gameState = 0
         #this will be used for the CLI honeycomb.
-        self.displayLetters = []
+        self.displayLetters = list()
         self.points = 0
         self.puzzleStarted = 0
         #list of the word bank
@@ -24,10 +24,11 @@ class player:
         self.puzzleTotal = 0
         #list to store correctly guessed words.
         self.guessedList = list()
-        self.encryptedList = list()
+        self.encryptedList = str()
         self.storeKey = None
         self.author = "MediaTek"
         self.game_id = None
+        self.DecryptionFlag = None
 
 
 class model:
@@ -51,26 +52,25 @@ class model:
     def encryptWords(self):
         #if the user is trying to encrypt when theres already an encrypted list clear the list beforehand.
         if len(self.p1.encryptedList) > 0:
-            self.p1.encryptedList.clear()
+            self.p1.encryptedList = str()
         #ensure we grabbed the key for encryption.
         self.grabOurKey()
-        if (self.p1.storeKey == None):
-            print("Hey did you delete the secretkey.json? reclone the repo!")
-            return
         #create a Fernet object with the key.
         f = Fernet(self.p1.storeKey)
-        #iterate through the list of the word bank.
-        for x in self.p1.getList:
-            #convert each word (x) into bytes, by default uses utf-8.
-            toBytes = x.encode()
-            #encrypts the bytes using Fernet.
-            encryptedBytes = f.encrypt(toBytes)
-            #since we're storing strings into the json file, it's a must to use decode on the encrypted variable.
-            #this will give us a string version of the bytes, which can later be used for decryption.
-            encryptedString = encryptedBytes.decode()
-            #append each new encrypted word into the encrypted list
-            self.p1.encryptedList.append(encryptedString)
-        
+        #changes to our encryption from client feedback
+        #this will create one big string with all the words from our getList
+        x = ','.join(self.p1.getList)
+        #convert the whole string into bytes, by default uses utf-8.
+        toBytes = x.encode()
+        #encrypts the bytes
+        encryptedBytes = f.encrypt(toBytes)
+        #since we're storing strings into the json file, it's a must to use decode on the encrypted variable.
+        #this will give us a string version of the bytes, which can later be used for decryption.
+        encryptedString = encryptedBytes.decode()
+        #store this string inside of the encryptedList variable
+        self.p1.encryptedList = encryptedString
+
+
     '''
     Function will decrypt the loaded encrytped list and append it to the word bank.
     Run this only after a user loads in an encrypted puzzle.
@@ -78,22 +78,33 @@ class model:
     which then the function decrypts and gives us the original plaintext.
     '''
     def decryptWords(self):
-        #ensure we grabbed the key for decryption
-        self.grabOurKey()
-        if len(self.p1.getList) > 0:
-            self.p1.getList.clear()
-        #next create a Fernet object that takes in the key our json file.
-        f = Fernet(self.p1.storeKey)
-        #iterate through the encrypted list to decrypt each word.
-        for x in self.p1.encryptedList:
-            #decrypt each byte string that was stored
-            decryptByteString = f.decrypt(x)
-            #decode the bytes into its original string.
+        #create a temporary word bank variable.
+        try:
+            tempWordBank = None
+            #ensure we grabbed the key for decryption
+            self.grabOurKey()
+            #next create a Fernet object that takes in the key our json file.
+            f = Fernet(self.p1.storeKey) 
+            #since the encryptedList is now one big string we encode this string representation into bytes.
+            encryptedBytes  = self.p1.encryptedList.encode()
+            #decrypt the bytes
+            decryptByteString = f.decrypt(encryptedBytes)
+            #decode the entire string back into words
             decryptedWord = decryptByteString.decode()
-            #append this word into the word bank as it's a valid guess.
-            self.p1.getList.append(decryptedWord)
-        if len(self.p1.encryptedList) > 0:
-            self.p1.encryptedList.clear()
+            print(decryptedWord)
+            #After it gets decoded, its one big string with all the words with a ','
+            #Therefore we want to split with ',' as the seperator, tempWordbank will be a list of all of the decrypted words.
+            tempWordBank = decryptedWord.split(',')
+            #store this inside the users word bank.
+            self.p1.getList = tempWordBank
+            #since the string should now be decrypted set string to None (originally using clear however no longer a list)
+            if len(self.p1.encryptedList) > 0:
+                self.p1.encryptedList = str()
+        #When trying to load in another teams file that wasnt encrypted by us an error gets just kills the program called raise InvalidToken
+        #Once this error is caught we can display an error message to the user and force the program to return back to normal.
+        except InvalidToken:
+            print("Error, unable to decrypt this file!")
+            return False
 
 
     '''
@@ -104,21 +115,26 @@ class model:
     def grabOurKey(self):
         keyAsString = "ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts="
         self.p1.storeKey = keyAsString.encode()
+        
     '''
     Function used for loading a game.
     Just updates the player objects variable with the information inside the file.
     '''  
     def gameLoad(self, loaded):
         #checks the json file, if it has a field WordList we know that it's a regular file and not an encrypted one.
+        self.p1.DecryptionFlag = False
         if 'WordList' in loaded:
             self.p1.getList = loaded['WordList']
         else:
-            checkAuthor = loaded['author']
+            checkAuthor = loaded['Author']
             if checkAuthor != "MediaTek":
                 self.p1.author = checkAuthor
                 return
-            self.p1.encryptedList = loaded['secretwordlist']
-            self.decryptWords()
+            self.p1.encryptedList = loaded['SecretWordList']
+            check = self.decryptWords()
+            if check == False:
+                self.p1.DecryptionFlag = True
+                return
         self.p1.gaReqLetter = loaded['RequiredLetter']
         self.p1.gaUserLetters = loaded['PuzzleLetters']
         self.p1.points = loaded['CurrentPoints']
@@ -140,6 +156,8 @@ class model:
     '''
     All of the functions below just return the information that is stored inside of the player class.
     '''
+    def getDecryptionFlag(self):
+        return self.p1.DecryptionFlag
     def getGameState(self):
         return self.p1.gameState
     def getLetter(self):
@@ -162,6 +180,8 @@ class model:
         return self.p1.displayLetters
     def getAuthorField(self):
         return self.p1.author
+    def updateAuthorField(self):
+        self.p1.author = "MediaTek"
     
     '''
     Update the puzzleStarted variable so we can track if a game has been started or not.

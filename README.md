@@ -105,23 +105,23 @@ The game should now be properly installed and ready to play.
 ## Test File
 [![CodeCov][codecov-shield]][codecov-url]
   
-To run the test file, navigate to the test folder with  
+To run the test file, navigate to the main directory with
   WINDOWS:
    ```sh
-   cd path\to\folder\2023sp-420-MediaTek\test
+   cd path\to\folder\2023sp-420-MediaTek
    ```
   macOS:
    ```sh
-   cd path to folder 2023sp-420-MediaTek test
+   cd path to folder 2023sp-420-MediaTek
    ```
 then run the command  
   WINDOWS:
    ```sh
-   py run.py
+   py test/run.py
    ```
   macOS:
    ```sh
-   python3 run.py
+   python3 test/run.py
    ```  
 
 

@@ -38,8 +38,23 @@ class IdentifyBaseWord_test (unittest.TestCase):
         baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
         print(baseReqLetter)
         print(baseUserLetters)
-        self.assertEqual(len(baseReqLetter), 0)
-        self.assertEqual(len(baseUserLetters), 0)
+        self.assertEqual(baseReqLetter, "")
+        self.assertEqual(baseUserLetters, "")
+
+
+        userInput = "abcdefg"
+        baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
+        print(baseReqLetter)
+        print(baseUserLetters)
+        self.assertEqual(baseReqLetter, "")
+        self.assertEqual(baseUserLetters, "")
+
+        userInput = "aaabbbcccdddeeefffgg"
+        baseUserLetters, baseReqLetter = self.base.baseGame(userInput)
+        self.assertEqual(baseReqLetter, "")
+        self.assertEqual(baseUserLetters, "")
+
+
 
 if __name__ == '__main__':
     unittest.main()

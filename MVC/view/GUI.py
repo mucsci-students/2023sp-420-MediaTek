@@ -9,6 +9,12 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import filedialog
+from PIL import ImageGrab
+from tkinter import PhotoImage, Label, Canvas
+from MVC.model.Highscores import saveHighScore
+from MVC.model.Highscores import loadHighScore
+import time
+
 
 class ViewFactory:
 
@@ -74,6 +80,7 @@ class GUI:
 
         self.controller = ctrl.controller()
         self.parent = parent
+        self.buttons = {}
 
         #assigns game_model instance passed to view
         self.game_controller = game_controller
@@ -143,6 +150,12 @@ class GUI:
         self.fileMenu.add_command(label="Open",command = self.loadPuzzle)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Save",command = self.savePuzzle)
+        self.fileMenu.add_separator()
+        self.fileMenu.add_command(label="Export Score",command=self.screenShot)
+        self.fileMenu.add_separator()
+        self.fileMenu.add_command(label = "High Scores",command= self.displayHighScores)
+        self.fileMenu.add_separator()
+        self.fileMenu.add_command(label="Give Up",command = self.giveUp)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Exit",command=self.exitPuzzle)
         
@@ -221,6 +234,8 @@ class GUI:
     def createButton(self, hex, name, ex, why):
         name = tk.Button(self.canvas, text= hex, width=3, height=2, background="white", font=('Helvetica 18 bold'), relief=FLAT, command= lambda: self.sendInput(hex))
         ViewFactory.placeButtons(self, name, ex, why)
+        #creates instance of the buttons that can be destroyed in resetGUI
+        self.buttons[name] = name
 
     '''
     Function creates the hexagons and buttons for the puzzles.
@@ -241,7 +256,7 @@ class GUI:
                 self.createButton(hexagonLetters[2], "btn3", 242, 270)
                 self.createButton(hexagonLetters[3], "btn4", 452, 270)
                 self.createButton(hexagonLetters[4], "btn5", 242, 158)
-                self.createButton(hexagonLetters[5], "btn5", 452, 158)
+                self.createButton(hexagonLetters[5], "btn6", 452, 158)
                 self.btn7 = tk.Button(self.canvas, text = reqLetter, width=3, height=2, font=('Helvetica 18 bold'), relief=FLAT, command = lambda: self.sendInput(reqLetter))
                 self.btn7.place(x=349, y=210)
                 self.btn7.configure(bg = "yellow")
@@ -294,6 +309,8 @@ class GUI:
         self.points.set(self.controller.controllerGetPoints())
         self.rank.set(self.controller.controllerGetPuzzleRank())
         self.clearInput()
+        if self.controller.controllerGetPuzzleRank() == "Puzzle Finished! Good Job!":
+            self.giveUp()
 
     '''
     Function that creates the hexagons according to size.
@@ -315,15 +332,23 @@ class GUI:
          if(self.controller.controllerGetPuzzleState() == 0):
                 messagebox.showinfo("Error!", "No game started!")
                 return
-         else:   
+         else: 
             try:
+                answer = messagebox.askyesno("Save", "Would you like to encrypt your puzzle?")
                 filename = filedialog.asksaveasfilename(defaultextension="")
-                if filename:
+                if filename and (not answer):
+                    if filename == "":
+                        return
                     self.controller.controllerSaveGame(filename)
                     messagebox.showinfo("Saved", "Game saved successfully!")
+                else:
+                    if filename == "":
+                        return
+                    self.controller.controllerSaveEncryptedGame(filename)
+                    messagebox.showinfo("Saved", "Encrypted Game saved successfully!")
             except Exception as e:
                 messagebox.showerror("Error", f"Error saving game: {e}")
-
+                
     '''
     Function gets the filename from the user.
     '''
@@ -384,11 +409,16 @@ class GUI:
     '''
     Function asks if the user wants to save first, end result is loading data from a json file into the game.
     '''
-    def loadHelper(self,filename):
+    def loadHelper(self,filename): 
         self.controller.controllerGameLoadGUI(filename)
-        #Notify the observer when the game is loaded
-        self.game_controller.notify()
-        self.gameHelper(0, 0, 1, 0)
+        if(self.controller.controllerGetAuthorField() != "MediaTek") or (self.controller.controllerGetDecryptionFlag() == True):
+            messagebox.showinfo("Error", "Can't decrypt, author of the file must be MediaTek!")
+            self.controller.controllerUpdateAuthorField()
+            return
+        else:
+            #Notify the observer when the game is loaded
+            self.game_controller.notify()
+            self.gameHelper(0, 0, 1, 0)
 
     '''
     Passed as a callback to GameObserver; calls observerLoad which indicates the puzzle was loaded successfully.
@@ -469,9 +499,33 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
             self.drawPuzzleUI(self.reqLetter, self.hexagonLetters)
 
     '''
+    Function that takes screenshot of tkinter canvas
+    '''
+    def screenShot(self):
+        if (self.controller.controllerGetPuzzleState() == 0):
+            messagebox.showinfo("Error!", "No game started!")
+            return
+        else:
+            try:
+                x,y = self.canvas.winfo_rootx(),self.canvas.winfo_rooty()
+                w,h = x + self.canvas.winfo_width(), y + self.canvas.winfo_height()
+                time.sleep(.4)
+                img = ImageGrab.grab(bbox=(x, y, w, h))
+
+                file_path = filedialog.asksaveasfilename(defaultextension=".png")
+                if file_path:
+                    img.save(file_path)
+                    messagebox.showinfo("Screenshot Saved", "Screenshot saved successfully!")
+                else:
+                    messagebox.showinfo("Screenshot Canceled", "Screenshot was not saved.")
+            except Exception as e:
+                messagebox.showerror("Error", f"Error taking screenshot: {e}")
+
+
+    '''
     Function that creates the pop up windows for hints.
     '''
-    def hintDisplay(self,title,message1,message2,message3,width,height):
+    def hintDisplay(self,title, message1, message2, message3, width, height):
         # Creates top level message
         hintMessage = Toplevel()
         hintMessage.title(title)
@@ -518,13 +572,125 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
     Function that displays all hints
     '''
     def displayAll(self):
-        # Sets functions to variables
-        hint1 = self.grid()
-        hint2 = self.hintCount()
-        hint3 = self.totHint()
+        if(self.controller.controllerGetPuzzleState() == 0):
+                messagebox.showinfo("Error!", "No game started!")
+                return
+        else:
+            # Sets functions to variables
+            hint1 = self.grid()
+            hint2 = self.hintCount()
+            hint3 = self.totHint()
 
-        # Displays all hints
-        self.hintDisplay("Hints",hint1,hint2,hint3,1000,1000)
+            # Displays all hints
+            self.hintDisplay("Hints", hint1, hint2, hint3, 1000, 1000)
+    
+    '''
+    Function that creates the pop up windows for high scores.
+    '''
+    def highScoreWindow(self, title, message1, width, height):
+        # Creates top level message
+        highScoreMessage = Toplevel()
+        highScoreMessage.title(title)
+         # set the size of the message
+        highScoreMessage.geometry(f"{width}x{height}")
+        # create a label and change font
+        highScoreLabel = Label(highScoreMessage, text=message1, font=("Courier New",20))
+        # Add padding
+        highScoreLabel.pack(padx=40, pady=10)
+        
+    '''
+    Function that clears all of the buttons, words, etc. and sets the puzzle state back to 0
+    '''    
+    def resetGUI(self):
+        self.clearInput()
+        self.clearListbox()
+        self.hexagonLetters.clear()
+        self.points.set(0)
+        self.rank.set("")
+        self.e.unbind("<Return>")
+        self.canvas.delete("all")
+        self.canvas.create_text(375, 25, text="Welcome to MediaTek's Spelling Bee!", fill="black", font=('Helvetica 20 bold'))
+        self.controller.controllerUpdatePuzzleState0()
+        self.btn7.destroy()
+        for button in self.buttons.values():
+            button.destroy()
+        self.buttons = {}
+    
+    '''
+    give up function/command that allows the player to say they are finished with a puzzle.
+    this sends the game id, player name, and points to the highscore database to update the
+    highscore for the puzzle referred to by the unique puzzle id.
+    '''   
+    def giveUp(self):
+        if(self.controller.controllerGetPuzzleState() == 0):
+            messagebox.showinfo("Error!", "No game started!")
+            return
+        else:
+            if self.controller.controllerGetPuzzleRank() == "Puzzle Finished! Good Job!":
+                points = self.controller.controllerGetPoints()
+                game_id = self.controller.controllerGetGameID()
+                while True:
+                    player_name = simpledialog.askstring("Username", "Please enter your 3-character username: ")
+                    if player_name and len(player_name) == 3 and player_name.isalnum():
+                        player_name = player_name.upper()
+                        break
+                    else:
+                        messagebox.showerror("Error", "Invalid input. Please enter a 3-character alphanumeric username.")
+                # Save the highscore
+                saveHighScore(game_id, player_name, points)
+                # Display high scores
+                self.displayHighScores()
+                # Reset the GUI
+                self.resetGUI()
+            else:
+                confirm = messagebox.askyesno("Give up", "Are you sure you want to give up?")
+                if confirm:
+                    points = self.controller.controllerGetPoints()
+                    game_id = self.controller.controllerGetGameID()
+                    while True:
+                        player_name = simpledialog.askstring("Username", "Please enter your 3-character username: ")
+                        if player_name and len(player_name) == 3 and player_name.isalnum():
+                            player_name = player_name.upper()
+                            break
+                        else:
+                            messagebox.showerror("Error", "Invalid input. Please enter a 3-character alphanumeric username.")
+                    # Save the highscore
+                    saveHighScore(game_id, player_name, points)
+                    # Display high scores
+                    self.displayHighScores()
+                    # Reset the GUI
+                    self.resetGUI()
+                else:
+                    return
+
+
+    '''
+    Function that returns the top ten local high scores
+    '''
+    def getHighScores(self):
+        game_id = self.controller.controllerGetGameID()
+        highScores = loadHighScore(game_id)
+        display_scores = []
+        if highScores:
+            header = "NAME    SCORE"
+            display_scores.append(header)
+            for row in highScores:
+                display_scores.append(f"{row[1]:<7}{row[2]:>5}")
+        else:
+            display_scores.append("No high scores yet!")
+        return display_scores
+    
+    '''
+    Displays the top ten local high scores in the window
+    '''
+    def displayHighScores(self):
+        if(self.controller.controllerGetPuzzleState() == 0):
+                messagebox.showinfo("Error!", "No game started!")
+                return
+        else:
+            highScores = self.getHighScores()
+            highScores_str = "\n".join(highScores)
+            self.highScoreWindow("High Scores", highScores_str, 350, 300)
 
     '''
     Function is meant for automatically generating a puzzle for the user to play.
