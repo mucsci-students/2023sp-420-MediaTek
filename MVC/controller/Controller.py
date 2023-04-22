@@ -161,14 +161,14 @@ class controller(Subject):
     Calls the start commands function
     '''
     def controllerStartCommands(self):
-        self.model.startCommands()
+        controller.commandsStart()
 
     '''
     Calls the help command function
     '''
     def controllerHelpCommand(self):
-        self.model.helpCommand()
-
+        controller.help()
+        
     '''
     Calls the gameExit function
     '''
