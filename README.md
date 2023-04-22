@@ -168,9 +168,9 @@ Below is a list of design patterns used in our program and where to find them!
 * Singleton  
     MVC/view/CLI.py contains the singleton design pattern, where it only has one instance and returns the same object.  
 * Iterator  
-    MVC/view/winGUI.py contains the iterator design pattern, where an iterator object is used to loop through a list and restrict user inputs.  
+    MVC/view/GUI.py contains the iterator design pattern, where an iterator object is used to loop through a list and restrict user inputs.  
 * Observer  
-    MVC/controller/Controller.py contains the Observer and Subject classes that notify MVC/view/macGUI.py of changes to load.  
+    MVC/controller/Controller.py contains the Observer and Subject classes that notify MVC/view/GUI.py of changes to load.  
 * Factory  
     MVC/view/GUI.py contains a factory class, which supplies a basic implementation of several UI elements, and OS specific classes which alter the behavior of those elements using parameters.  
 * Strategy  
