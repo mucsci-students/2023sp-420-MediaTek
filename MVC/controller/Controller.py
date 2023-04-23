@@ -5,7 +5,8 @@ import json
 import numpy
 from abc import ABC, abstractmethod
 from MVC.model import wordlist as wl
-
+global mdler
+mdler = mdl.model()
 class Observer:
     def update(self, subject):
         pass
@@ -27,7 +28,7 @@ class Subject:
 class controller(Subject):
     def __init__(self):
         super().__init__()
-        self.model = mdl.model()
+        self.model = mdler
 
     class Strategy(ABC):
         @abstractmethod
@@ -37,7 +38,7 @@ class controller(Subject):
     class NonEncryptedSave(Strategy):
         def __init__(self, controller):
             self.controller = controller
-            self.model = mdl.model()
+            self.model = mdler
 
         def execute(self, file_name):
             controller.controllerSaveGame(self, file_name)
@@ -45,7 +46,7 @@ class controller(Subject):
     class EncryptedSave(Strategy):
         def __init__(self, controller):
             self.controller = controller
-            self.model = mdl.model()
+            self.model = mdler
 
         def execute(self, file_name):
             controller.controllerSaveEncryptedGame(self, file_name)
@@ -443,7 +444,7 @@ class controller(Subject):
             ''')
 
     def showFoundWords(self):
-        print(*wl.userWordList)
+        print(self.controllerGetGuessedWordsCLI())
 
 class GameObserver(Observer):
     def __init__(self, callback):
