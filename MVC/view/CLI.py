@@ -70,7 +70,7 @@ class view:
         inputFile = input("Enter the name of the file you want to load: ")
         checkFile = inputFile + ".json"
         if os.path.exists(checkFile):
-            self.controller.controllerGameLoadCLI(inputFile)
+            ctrl.controller.Load(self.controller)
             #*********************
             if(self.controller.controllerGetAuthorField() != "MediaTek"):
                 print("Hey, we can't decrypt this puzzle!")
@@ -305,27 +305,27 @@ We hope you enjoy playing!
                 case "newpuzzle":
                     self.newPuzzle()
                 case "showpuzzle":
-                    self.INVOKER.execute("showpuzzle")
+                    self.showPuzzle()
                 case "showfoundwords":
                     self.showFoundWords()
                 case "shuffleletters":
-                    self.INVOKER.execute("shuffleletters")
+                    self.shuffleLetters()
                 case "savepuzzle":
                     self.save()
                 case "loadpuzzle":
-                    self.INVOKER.execute("loadpuzzle")
+                    self.load()
                 case "showstatus":
-                        self.INVOKER.execute("showstatus")
+                        self.showStatus()
                 case "gamehelp":
-                      self.INVOKER.execute("gamehelp")
+                      self.showHelp()
                 case "giveup":
-                        self.INVOKER.execute("giveup")
+                        self.giveUp()
                 case "showhighscore":
-                        self.INVOKER.execute("showhighscore")
+                        self.showHighScore()
                 case "gameexit":
                         self.controller.controllerGameExit()
                 case "showhints":
-                   self.INVOKER.execute("showhints")
+                   self.hint*()
                 case _:
                     if self.controller.controllerGetPuzzleState() != 1:
                         print('''

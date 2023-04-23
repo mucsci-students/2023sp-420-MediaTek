@@ -27,10 +27,9 @@ class Subject:
 
 class controller(Subject):
 
-
     class Strategy(ABC):
         @abstractmethod
-        def save(self,controller,file_name):
+        def execute(self,controller,file_name):
             pass
 
     class NonEncryptedSave(Strategy):
@@ -40,7 +39,7 @@ class controller(Subject):
             
             print("NonEncryptedSave controller:", self.controller)
 
-        def save(self, file_name):
+        def execute(self, file_name):
             controller.controllerSaveGame(self, file_name)
 
     class EncryptedSave(Strategy):
@@ -48,8 +47,17 @@ class controller(Subject):
             self.controller = controller
             self.model = mdler
 
-        def save(self, file_name):
+        def execute(self, file_name):
             controller.controllerSaveEncryptedGame(self, file_name)
+
+    
+    class Load(Strategy):
+        def __init__(self, controller):
+            self.controller = controller
+            self.model = mdler
+
+        def execute(self, file_name):
+            controller.controllerGameLoadCLI(self, file_name)
 
     def __init__(self):
         super().__init__()
