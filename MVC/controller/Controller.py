@@ -3,7 +3,9 @@ import sys
 import re
 import json
 import numpy
-
+from abc import ABC, abstractmethod
+global mdler
+mdler = mdl.model()
 class Observer:
     def update(self, subject):
         pass
@@ -21,11 +23,45 @@ class Subject:
     def notify(self):
         for observer in self._observers:
             observer.update(self)
+  
 
 class controller(Subject):
+
+    class Strategy(ABC):
+        @abstractmethod
+        def execute(self,controller,file_name):
+            pass
+
+    class NonEncryptedSave(Strategy):
+        def __init__(self, controller):
+            self.controller = controller
+            self.model = mdler
+            
+            print("NonEncryptedSave controller:", self.controller)
+
+        def execute(self, file_name):
+            controller.controllerSaveGame(self, file_name)
+
+    class EncryptedSave(Strategy):
+        def __init__(self, controller):
+            self.controller = controller
+            self.model = mdler
+
+        def execute(self, file_name):
+            controller.controllerSaveEncryptedGame(self, file_name)
+
+    
+    class Load(Strategy):
+        def __init__(self, controller):
+            self.controller = controller
+            self.model = mdler
+
+        def execute(self, file_name):
+            controller.controllerGameLoadCLI(self, file_name)
+
     def __init__(self):
         super().__init__()
-        self.model = mdl.model()
+        self.model = mdler
 
     '''
     Each function below is a getter that just returns the information stored/returns function values
@@ -38,8 +74,7 @@ class controller(Subject):
     def controllerGetGuessedWordsCLI(self):
         words = self.model.getGuessedWords()
         return ', '.join(words)
-    def controllerGetDecryptionFlag(self):
-        return self.model.getDecryptionFlag()
+ 
     def controllerGetWordList(self):
         return self.model.getWordList()
     def controllerShuffleAuto(self):
@@ -161,14 +196,14 @@ class controller(Subject):
     Calls the start commands function
     '''
     def controllerStartCommands(self):
-        controller.commandsStart()
+        self.model.startCommands()
 
     '''
     Calls the help command function
     '''
     def controllerHelpCommand(self):
-        controller.help()
-        
+        self.model.helpCommand()
+
     '''
     Calls the gameExit function
     '''
@@ -379,48 +414,6 @@ class controller(Subject):
     def getTotalWords(self):
         wordSum =len (self.controllerGetWordList())
         return wordSum
-
-    #run function that displays all the commands the user can type
-    def help():
-        print('''
-
-    How To Play: 
-    - The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
-    - The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
-    - Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
-
-    Commands:
-        newpuzzle: Generates a new puzzle. You can even provide your own pangram for puzzle creation!
-        showpuzzle: Displays the current puzzle.
-        showfoundwords: Lists all of the correctly guessed words.
-        shuffleletters: Shuffles the given letters in a random arangement (except the required letter in the center).
-        savepuzzle: Saves your puzzle to your local machine.
-        loadpuzzle: Allows the you to load a saved puzzle from files, type the file name of the saved puzzle with this command.
-        showstatus: Shows your current status.
-        showhints: Shows hints for your current game.
-        giveup: 'Give up' on the puzzle and submit your score and provided username to the high scores board.
-        showhighscore: Displays the top ten local high scores for a given puzzle (if there are any existing scores).
-        gamehelp: You just typed this command. Congrats.
-        gameexit: Exits the game. You will be asked if you want to save your puzzle before exiting.
-            ''')
-
-    #list of commands at the beginning of the program
-    def commandsStart():
-        print('''
-
-    - The objective of the game is to guess words based of 7 letters, 1 of them being required in every word.
-    - The letters can be repeated, but all words are required to be between 4 and 15 letters long. 
-    - Each puzzle is based on a pangram, which is a word containing 7 unique letters and can be 7 to 15 letters long.
-
-    To get started, you can type:
-        newpuzzle: To generate a new puzzle. You can even provide your own pangram for puzzle creation!
-        loadpuzzle: To load a saved puzzle from a file. You will need to enter the file name of the saved puzzle.
-        gamehelp: To see the list of all the commands.
-        gameexit: To exit the program.
-            ''')
-
-def showFoundWords():
-    print(*wl.userWordList)
 
 class GameObserver(Observer):
     def __init__(self, callback):
