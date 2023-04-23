@@ -91,7 +91,6 @@ class model:
             decryptByteString = f.decrypt(encryptedBytes)
             #decode the entire string back into words
             decryptedWord = decryptByteString.decode()
-            print(decryptedWord)
             #After it gets decoded, its one big string with all the words with a ','
             #Therefore we want to split with ',' as the seperator, tempWordbank will be a list of all of the decrypted words.
             tempWordBank = decryptedWord.split(',')
