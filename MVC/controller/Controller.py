@@ -47,7 +47,7 @@ class controller(Subject):
         def __init__(self, controller):
             self.controller = controller
             self.model = mdler
-
+            print("I am using Noah's Strategy")
         def execute(self, file_name):
             controller.controllerSaveEncryptedGame(self, file_name)
 
