@@ -342,6 +342,7 @@ To get started, you can type:
 #singleton design pattern
 view = view()
 view.startGame()
+
 '''
 Documentation using prompt toolkit for tab-completion of commands
 Completion class:
