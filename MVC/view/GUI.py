@@ -642,6 +642,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
                 self.displayHighScores()
                 # Reset the GUI
                 self.resetGUI()
+                self.controller.controllerNewGame()
             else:
                 confirm = messagebox.askyesno("Give up", "Are you sure you want to give up?")
                 if confirm:
@@ -660,6 +661,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
                     self.displayHighScores()
                     # Reset the GUI
                     self.resetGUI()
+                    self.controller.controllerNewGame()
                 else:
                     return
 
