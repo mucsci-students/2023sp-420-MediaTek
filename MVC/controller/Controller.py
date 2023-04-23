@@ -1,4 +1,5 @@
 from MVC.model import Model as mdl
+from MVC.model import wordlist as wl
 import sys
 import re
 import json
@@ -419,8 +420,8 @@ class controller(Subject):
         gameexit: To exit the program.
             ''')
 
-def showFoundWords():
-    print(*wl.userWordList)
+    def showFoundWords():
+        print(*wl.userWordList)
 
 class GameObserver(Observer):
     def __init__(self, callback):
