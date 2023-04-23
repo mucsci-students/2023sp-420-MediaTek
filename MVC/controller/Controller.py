@@ -3,6 +3,8 @@ import sys
 import re
 import json
 import numpy
+from abc import ABC, abstractmethod
+from MVC.model import wordlist as wl
 
 class Observer:
     def update(self, subject):
@@ -26,6 +28,27 @@ class controller(Subject):
     def __init__(self):
         super().__init__()
         self.model = mdl.model()
+
+    class Strategy(ABC):
+        @abstractmethod
+        def execute(self,controller,file_name):
+            pass
+
+    class NonEncryptedSave(Strategy):
+        def __init__(self, controller):
+            self.controller = controller
+            self.model = mdl.model()
+
+        def execute(self, file_name):
+            controller.controllerSaveGame(self, file_name)
+
+    class EncryptedSave(Strategy):
+        def __init__(self, controller):
+            self.controller = controller
+            self.model = mdl.model()
+
+        def execute(self, file_name):
+            controller.controllerSaveEncryptedGame(self, file_name)
 
     '''
     Each function below is a getter that just returns the information stored/returns function values
@@ -381,7 +404,7 @@ class controller(Subject):
         return wordSum
 
     #run function that displays all the commands the user can type
-    def help():
+    def help(self):
         print('''
 
     How To Play: 
@@ -419,8 +442,8 @@ class controller(Subject):
         gameexit: To exit the program.
             ''')
 
-def showFoundWords():
-    print(*wl.userWordList)
+    def showFoundWords(self):
+        print(*wl.userWordList)
 
 class GameObserver(Observer):
     def __init__(self, callback):
