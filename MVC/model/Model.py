@@ -2,7 +2,9 @@ from MVC.model import IdentifyBaseWord as np
 from MVC.model import wordlist as wl
 from MVC.model import Commands as Commands
 import random
-from MVC.model import loadgame as loadgame
+from cryptography.fernet import Fernet, InvalidToken
+
+import json
 
 '''
 Player class with variables for the whole program.
@@ -13,7 +15,7 @@ class player:
         self.gaReqLetter = ""
         self.gameState = 0
         #this will be used for the CLI honeycomb.
-        self.displayLetters = []
+        self.displayLetters = list()
         self.points = 0
         self.puzzleStarted = 0
         #list of the word bank
@@ -22,6 +24,12 @@ class player:
         self.puzzleTotal = 0
         #list to store correctly guessed words.
         self.guessedList = list()
+        self.encryptedList = str()
+        self.storeKey = None
+        self.author = "MediaTek"
+        self.game_id = None
+        self.DecryptionFlag = None
+
 
 class model:
     #should be called before gameLoad function, becauese it will reset all of the variables to their default state, and then gameLoad will update them
@@ -32,24 +40,114 @@ class model:
     def __init__(self):
         self.p1 = player()
 
-    
+    '''
+    If you need more help understanding msg me in discord, or see documentation on functions below.
+    Plenty of examples online on using Fernet for encryption/decryption, encode and decode too (geeksforgeeks, tutorialspoint, crypotgraphy.io, programwiz, etc)
+    Function will encrypt the user word list
+    Fernet(key) - symmetric encryption, ensures that something can't be read without the key, the key will be used to encrypt and decrypt data.
+    encrypt(token) - this encrypts the data we pass into it, however the token MUST be in bytes. Our token variable is toBytes
+    encode() - converts python string to bytes. *Important because tokens MUST be in bytes.
+    decode() - converts the bytes back into the original string. *Important because we want to append the word BACK into the word bank after decrypting it.
+    '''
+    def encryptWords(self):
+        #if the user is trying to encrypt when theres already an encrypted list clear the list beforehand.
+        if len(self.p1.encryptedList) > 0:
+            self.p1.encryptedList = str()
+        #ensure we grabbed the key for encryption.
+        self.grabOurKey()
+        #create a Fernet object with the key.
+        f = Fernet(self.p1.storeKey)
+        #changes to our encryption from client feedback
+        #this will create one big string with all the words from our getList
+        x = ','.join(self.p1.getList)
+        #convert the whole string into bytes, by default uses utf-8.
+        toBytes = x.encode()
+        #encrypts the bytes
+        encryptedBytes = f.encrypt(toBytes)
+        #since we're storing strings into the json file, it's a must to use decode on the encrypted variable.
+        #this will give us a string version of the bytes, which can later be used for decryption.
+        encryptedString = encryptedBytes.decode()
+        #store this string inside of the encryptedList variable
+        self.p1.encryptedList = encryptedString
+
+
+    '''
+    Function will decrypt the loaded encrytped list and append it to the word bank.
+    Run this only after a user loads in an encrypted puzzle.
+    decrypt(token) - we are passing x (word in the list), which is going to be bytes after loading in an encrypted puzzle. 
+    which then the function decrypts and gives us the original plaintext.
+    '''
+    def decryptWords(self):
+        #create a temporary word bank variable.
+        try:
+            tempWordBank = None
+            #ensure we grabbed the key for decryption
+            self.grabOurKey()
+            #next create a Fernet object that takes in the key our json file.
+            f = Fernet(self.p1.storeKey) 
+            #since the encryptedList is now one big string we encode this string representation into bytes.
+            encryptedBytes  = self.p1.encryptedList.encode()
+            #decrypt the bytes
+            decryptByteString = f.decrypt(encryptedBytes)
+            #decode the entire string back into words
+            decryptedWord = decryptByteString.decode()
+            #After it gets decoded, its one big string with all the words with a ','
+            #Therefore we want to split with ',' as the seperator, tempWordbank will be a list of all of the decrypted words.
+            tempWordBank = decryptedWord.split(',')
+            #store this inside the users word bank.
+            self.p1.getList = tempWordBank
+            #since the string should now be decrypted set string to None (originally using clear however no longer a list)
+            if len(self.p1.encryptedList) > 0:
+                self.p1.encryptedList = str()
+        #When trying to load in another teams file that wasnt encrypted by us an error gets just kills the program called raise InvalidToken
+        #Once this error is caught we can display an error message to the user and force the program to return back to normal.
+        except InvalidToken:
+            print("Error, unable to decrypt this file!")
+            return False
+
+
+    '''
+    Function just grabs the key from the json file.
+    First I created a file that stored the generated key, however just hardcoding it in is fine.
+    String is just the ouput from generate_key() function using Fernet.
+    '''
+    def grabOurKey(self):
+        keyAsString = "ipqzBB-cFSlZ4Fu9t7MF6szSBt-iNetGruZba41lCts="
+        self.p1.storeKey = keyAsString.encode()
+        
     '''
     Function used for loading a game.
     Just updates the player objects variable with the information inside the file.
     '''  
     def gameLoad(self, loaded):
+        #checks the json file, if it has a field WordList we know that it's a regular file and not an encrypted one.
+        self.p1.DecryptionFlag = False
+        if 'WordList' in loaded:
+            self.p1.getList = loaded['WordList']
+        else:
+            checkAuthor = loaded['Author']
+            if checkAuthor != "MediaTek":
+                self.p1.author = checkAuthor
+                return
+            self.p1.encryptedList = loaded['SecretWordList']
+            check = self.decryptWords()
+            if check == False:
+                self.p1.DecryptionFlag = True
+                return
         self.p1.gaReqLetter = loaded['RequiredLetter']
         self.p1.gaUserLetters = loaded['PuzzleLetters']
         self.p1.points = loaded['CurrentPoints']
         self.p1.puzzleTotal = loaded['MaxPoints']
         self.p1.guessedList = loaded['GuessedWords']
-        self.p1.getList = loaded['WordList']
+        self.game_id = self.generateGameID()
 
         print("Required Letter: " + self.p1.gaReqLetter.upper())
         print("User Letters: " + self.p1.gaUserLetters.upper())
         print("Points Earned: " + str(self.p1.points))
         print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
         print("Guessed Words: " + ", ".join(self.p1.guessedList))
+        #added print statement below for testing encryption/decryption
+        #print(self.p1.getList)
         self.gameRank()
         self.p1.puzzleStarted = 1
 
@@ -57,6 +155,8 @@ class model:
     '''
     All of the functions below just return the information that is stored inside of the player class.
     '''
+    def getDecryptionFlag(self):
+        return self.p1.DecryptionFlag
     def getGameState(self):
         return self.p1.gameState
     def getLetter(self):
@@ -77,6 +177,10 @@ class model:
         return self.p1.showRank
     def getHoneyCombList(self):
         return self.p1.displayLetters
+    def getAuthorField(self):
+        return self.p1.author
+    def updateAuthorField(self):
+        self.p1.author = "MediaTek"
     
     '''
     Update the puzzleStarted variable so we can track if a game has been started or not.
@@ -112,7 +216,20 @@ class model:
             return ft
         else:
             return False
-        
+    
+    '''
+    Generates the unique game id by placing the required letter in front
+    followed by the rest of the letters sorted alphabetically, the required
+    letter in front each time accounts for the 7 unique puzzles that can be 
+    generated by having different required letters for the same 7 letters.
+    '''
+    def generateGameID(self):
+        user_letters = list(self.p1.gaUserLetters)
+        user_letters.remove(self.p1.gaReqLetter)
+        sorted_letters = sorted(user_letters)
+        game_id = f"{self.p1.gaReqLetter.upper()}{''.join(sorted_letters).upper()}"
+        return game_id
+
     '''
     Function will create an automatically generated puzzle for the user, and run the function to calculate the total points
     '''
@@ -120,6 +237,7 @@ class model:
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.autoGame()
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
+        self.game_id = self.generateGameID()
 
     '''
     Function will create a game based on the users input.
@@ -128,6 +246,13 @@ class model:
         self.p1.gaUserLetters, self.p1.gaReqLetter = np.baseGame(userInput)
         self.p1.getList = wl.generateWordList(self.p1.gaReqLetter, self.p1.gaUserLetters)
         self.calculateTotalPoints(self.p1.getList)
+        self.game_id = self.generateGameID()
+        
+    '''
+    Getter function to get the game_id
+    '''
+    def getGameID(self):
+        return self.game_id
 
     '''
     Function returns a list of the userLetters and removes the required letter from it.
@@ -206,10 +331,9 @@ class model:
     '''
     def saveGame(self, inputFile):
         Commands.savePuzzle(self.p1.gaReqLetter, self.p1.gaUserLetters, self.p1.points, self.p1.puzzleTotal, self.p1.guessedList, self.p1.getList,inputFile)
-    def startCommands(self):
-        Commands.commandsStart()
-    def helpCommand(self):
-        Commands.help()
+    def saveEncryptedGame(self, inputFile):
+        self.encryptWords()
+        Commands.saveSecretPuzzle(self.p1.gaReqLetter, self.p1.gaUserLetters, self.p1.points, self.p1.puzzleTotal, self.p1.guessedList, self.p1.encryptedList, self.p1.author,inputFile)
     
 
     '''

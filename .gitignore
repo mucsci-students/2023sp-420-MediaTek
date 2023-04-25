@@ -2,3 +2,5 @@
 *.pyc
 *.json
 !test/mediocre.json
+!test/anotherteam.json
+highscores.db

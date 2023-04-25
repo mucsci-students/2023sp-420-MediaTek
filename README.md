@@ -105,23 +105,23 @@ The game should now be properly installed and ready to play.
 ## Test File
 [![CodeCov][codecov-shield]][codecov-url]
   
-To run the test file, navigate to the test folder with  
+To run the test file, navigate to the main directory with
   WINDOWS:
    ```sh
-   cd path\to\folder\2023sp-420-MediaTek\test
+   cd path\to\folder\2023sp-420-MediaTek
    ```
   macOS:
    ```sh
-   cd path to folder 2023sp-420-MediaTek test
+   cd path to folder 2023sp-420-MediaTek
    ```
 then run the command  
   WINDOWS:
    ```sh
-   py run.py
+   py test/run.py
    ```
   macOS:
    ```sh
-   python3 run.py
+   python3 test/run.py
    ```  
 
 
@@ -147,6 +147,10 @@ See below for a list of CLI-specific commands and their functionality! All comma
   Shows your current rank, points earned, and total points possible.
 * ```showhints```  
   Shows useful stats for solving a puzzle, including how many words start with each letter.
+* ```giveup```  
+  'Give up' on the puzzle and submit your score and provided username to the high scores board.
+* ```showhighscore```  
+  Displays the top ten local high scores for a given puzzle (if there are any existing scores).
 * ```gamehelp```  
   Displays the list of commands currently accessible.
 * ```gameexit```  
@@ -164,9 +168,13 @@ Below is a list of design patterns used in our program and where to find them!
 * Singleton  
     MVC/view/CLI.py contains the singleton design pattern, where it only has one instance and returns the same object.  
 * Iterator  
-    MVC/view/winGUI.py contains the iterator design pattern, where an iterator object is used to loop through a list and restrict user inputs.  
+    MVC/view/GUI.py contains the iterator design pattern, where an iterator object is used to loop through a list and restrict user inputs.  
 * Observer  
-    MVC/Controller/controller.py contains the Observer and Subject classes that notify MVC/view/macGUI.py of changes to load.
+    MVC/controller/Controller.py contains the Observer and Subject classes that notify MVC/view/GUI.py of changes to load.  
+* Factory  
+    MVC/view/GUI.py contains a factory class, which supplies a basic implementation of several UI elements, and OS specific classes which alter the behavior of those elements using parameters.  
+* Strategy  
+    MVC/controller/Controller.py contains the strategy design pattern, which allows the program to use different variants of the saving algorithm for encrypted and non-encrypted saves.
     
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

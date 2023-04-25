@@ -43,3 +43,4 @@ class wordstuff_test (unittest.TestCase):
         wordFour = "ewioefwisf"
         testFour = self.ws.checkWord(wordFour)
         self.assertFalse(testFour)
+        
