@@ -336,7 +336,7 @@ To get started, you can type:
                             if self.controller.controllerGetReqLetter().lower() in userInput:
                                 self.controller.controllerUserGuessCLI(userInput)
                             else:
-                                print("Error required letter not used!")
+                                print("ERROR: Required letter not used!")
                             
                             #check if game is finished, if so call giveUp
                             if self.controller.controllerGetPuzzleRank() == "Puzzle Finished! Good Job!":
