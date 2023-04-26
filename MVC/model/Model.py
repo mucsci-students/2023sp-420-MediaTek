@@ -102,7 +102,6 @@ class model:
         #When trying to load in another teams file that wasnt encrypted by us an error gets just kills the program called raise InvalidToken
         #Once this error is caught we can display an error message to the user and force the program to return back to normal.
         except InvalidToken:
-            print("Error, unable to decrypt this file!")
             return False
 
 
@@ -140,12 +139,6 @@ class model:
         self.p1.puzzleTotal = loaded['MaxPoints']
         self.p1.guessedList = loaded['GuessedWords']
         self.game_id = self.generateGameID()
-
-        print("Required Letter: " + self.p1.gaReqLetter.upper())
-        print("User Letters: " + self.p1.gaUserLetters.upper())
-        print("Points Earned: " + str(self.p1.points))
-        print("Total Obtainable Points: " + str(self.p1.puzzleTotal)) 
-        print("Guessed Words: " + ", ".join(self.p1.guessedList))
         #added print statement below for testing encryption/decryption
         #print(self.p1.getList)
         self.gameRank()
@@ -304,9 +297,6 @@ class model:
 
                 #append to self.guessedList that I created, moved userWordList into the model.
                 self.p1.guessedList.append(userInput)
-
-                #print statements for testing
-                print("Word accepted!")
                 #remove the word from the word bank.
                 self.p1.getList.remove(userInput)
                 #generates user points based on the length, if it's a pangram then add an additional 7 points.
@@ -320,10 +310,8 @@ class model:
                 self.gameRank()
                 return True
             else:
-                print("Sorry! Couldn't find that word.")
                 return False
         else:
-            print("Hey! you didn't use the required letter!")
             return False
         
     '''
