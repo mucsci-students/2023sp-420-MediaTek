@@ -605,7 +605,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         self.clearInput()
         self.clearListbox()
         self.hexagonLetters.clear()
-        self.points.set(0)
+        self.points.set("")
         self.rank.set("")
         self.e.unbind("<Return>")
         self.canvas.delete("all")
