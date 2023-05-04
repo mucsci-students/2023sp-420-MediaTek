@@ -412,7 +412,7 @@ class GUI:
     def loadHelper(self,filename): 
         self.controller.controllerGameLoadGUI(filename)
         if(self.controller.controllerGetAuthorField() != "MediaTek") or (self.controller.controllerGetDecryptionFlag() == True):
-            messagebox.showinfo("Error", "Can't decrypt, author of the file must be MediaTek!")
+            messagebox.showinfo("Error", "Can't decrypt! This is because we didn't encrypt it to begin with!")
             self.controller.controllerUpdateAuthorField()
             return
         else:

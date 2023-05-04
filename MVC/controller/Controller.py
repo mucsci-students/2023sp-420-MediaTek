@@ -117,6 +117,15 @@ class controller(Subject):
     '''
     def controllerUserGuess(self,userInput):
         return self.model.userGuess(userInput)
+
+    def controllerUserGuessCLI(self,userInput):
+        check = self.model.userGuess(userInput)
+        if (check == False):
+            print("Sorry! Couldn't find that word.")
+            return check
+        else:
+            print("Word accepted!")
+            return check
     
     '''
     Calls the gameRank function that will update the rank of the player.
@@ -173,6 +182,12 @@ class controller(Subject):
         with open(inputFile + ".json", "r") as save:
             loaded = json.load(save)
         self.model.gameLoad(loaded)
+        if (self.controllerGetAuthorField() == "MediaTek") and (self.controllerGetDecryptionFlag() == False):
+            print("Required Letter: " + self.controllerGetReqLetter())
+            print("User Letters: " + self.controllerGetLetters().upper())
+            print("Points Earned: " + str(self.controllerGetPoints()))
+            print("Total Obtainable Points: " + str(self.controllerGetPuzzleTotal()))
+            print("Guessed Words: " + str(self.controllerGetGuessedWordsCLI()))
 
     '''
     Calls the resetGame function
@@ -249,8 +264,6 @@ class controller(Subject):
     Returns true or false.
     '''
     def checkInput(self,userInput, reqLetter):
-        print(userInput)
-        print(reqLetter)
         if re.match("^[a-zA-Z]*$", userInput) and reqLetter in userInput:
             return True
         else:
