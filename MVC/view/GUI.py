@@ -412,7 +412,7 @@ class GUI:
     def loadHelper(self,filename): 
         self.controller.controllerGameLoadGUI(filename)
         if(self.controller.controllerGetAuthorField() != "MediaTek") or (self.controller.controllerGetDecryptionFlag() == True):
-            messagebox.showinfo("Error", "Can't decrypt, author of the file must be MediaTek!")
+            messagebox.showinfo("Error", "Can't decrypt! This is because we didn't encrypt it to begin with!")
             self.controller.controllerUpdateAuthorField()
             return
         else:
@@ -605,7 +605,7 @@ Each puzzle is based off of a pangram, a 7 to 15 letter word that contains 7 uni
         self.clearInput()
         self.clearListbox()
         self.hexagonLetters.clear()
-        self.points.set(0)
+        self.points.set("")
         self.rank.set("")
         self.e.unbind("<Return>")
         self.canvas.delete("all")

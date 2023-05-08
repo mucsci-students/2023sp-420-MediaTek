@@ -333,7 +333,10 @@ To get started, you can type:
                         if userInput in self.controller.controllerGetGuessedWordsGUI():
                             print("This word has already been guessed correctly.")
                         else:
-                            self.controller.controllerUserGuess(userInput)
+                            if self.controller.controllerGetReqLetter().lower() in userInput:
+                                self.controller.controllerUserGuessCLI(userInput)
+                            else:
+                                print("You didn't use the required letter!")
                             
                             #check if game is finished, if so call giveUp
                             if self.controller.controllerGetPuzzleRank() == "Puzzle Finished! Good Job!":
